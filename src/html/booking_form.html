@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>IRCTC Tatkal Booking Form</title>
+	<link rel="stylesheet" href="../css/bootstrap.min.css" type="text/css"/>
+	<link rel="stylesheet" href="../css/custom-style.min.css" type="text/css"/>
+	<link rel="stylesheet" href="../libs/jquery-ui-1.12.1.custom/jquery-ui.min.css" type="text/css"/>
+	<link rel="stylesheet" href="../libs/fontawesome-free-5.1.1-web/css/all.min.css" type="text/css"/>
+</head>
+<body>
+	<div class="container mt-2">
+		<div class="row mb-3">
+			<div class="col">
+				<div class="row">
+					<div class="col-auto p-0 pl-3">
+						<i class="fa fa-subway fa-3x text-secondary"></i>
+						<!-- <img src="../images/logos/web_logo.png" class="img img-responsive" width="150px;"> -->
+					</div>
+					<div class="col">
+						<h2 class="font-weight-bold text-secondary">Super Tatkal</h2>
+						<p class="text-muted text-md">A IRCTC Train Tatkal Booking Extention by - <a href="http://patelworld.in/" target="_blank">patelworld.in</a></p>
+					</div>
+				</div>
+			</div>
+			<div class="col">
+				<div class="d-flex justify-content-end pt-4">
+					<label class="switch">
+						<input class="switch-input" type="checkbox" id="extention_status_booking" status="OFF">
+						<span class="switch-label" data-on="On" data-off="Off"></span>
+						<span class="switch-handle"></span>
+					</label>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="container">
+		<nav>
+			<div class="nav nav-tabs" id="nav-tab" role="tablist">
+				<a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-new" role="tab" aria-controls="nav-home" aria-selected="true">
+					<i class="fa fa-plus-circle mr-2"></i>New
+				</a>
+				<a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-pending" role="tab" aria-controls="nav-pending" aria-selected="false">
+					<i class="fa fa-bookmark mr-2"></i>Trips
+				</a>
+			</div>
+		</nav>
+		<div class="tab-content" id="nav-tabContent">
+			<div class="tab-pane fade border border-top-0 p-2 show active" id="nav-new" role="tabpanel" aria-labelledby="nav-home-tab" style="min-height: 80vh;">
+				<form id="booking_form" method="GET" action="#">
+					<div class="row mt-2">
+						<div class="col">
+							<div class="card border-info">
+								<div class="card-header font-weight-bold py-1 px-3 bg-info text-white">
+									<i class="fa fa-bookmark mr-2"></i>Save Booking Detail With Name
+								</div>
+								<div class="card-body">
+									<div class="form-row">
+										<div class="form-group col-md-6">
+											<label for="formName" class="col-form-label col-form-label-sm required">Form Name (Bookmark)</label>
+											<input type="text" class="form-control form-control-sm" id="formName" placeholder="Form Name" name="booking_form_name" maxlength="20" pattern="[\w\s]*" title="form name should be alphanumeric only">
+										</div>
+										<div class="form-group col-md-6">
+											<label for="formComment" class="col-form-label col-form-label-sm">Comment (optional)</label>
+											<input type="text" class="form-control form-control-sm" id="formComment" placeholder="Comment" name="booking_form_comment">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row mt-2">
+						<div class="col-sm-3">
+							<div class="card border-dark">
+								<div class="card-header py-1 px-3 bg-dark text-white font-weight-bold">
+									<i class="fa fa-lock mr-2"></i>IRCTC Login Details
+								</div>
+								<div class="card-body">
+									<div class="form-row">
+										<div class="form-group col-md-12">
+											<label for="IRCTC_username" class="col-form-label col-form-label-sm required">Username</label>
+											<input type="text" class="form-control form-control-sm" id="IRCTC_username" name="IRCTC_username" placeholder="User Name" required>
+										</div>
+										<div class="form-group col-md-12">
+											<label for="IRCTC_pwd" class="col-form-label col-form-label-sm required">Password</label>
+											<input type="password" class="form-control form-control-sm" id="IRCTC_pwd" name="IRCTC_pwd" placeholder="password" required>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-9">
+							<div class="card border-success">
+								<div class="card-header py-1 px-3 bg-success text-white font-weight-bold">
+									<i class="fa fa-subway mr-2"></i>Journey Planner
+									<span class="badge badge-dark float-right">Search Detail</span>
+								</div>
+								<div class="card-body">
+									<div class="form-row">
+										<div class="form-group col-md-4">
+											<label for="from_station" class="col-form-label col-form-label-sm required">FROM Station</label>
+											<input type="text" class="form-control form-control-sm station" id="from_station" name="from_station" placeholder="Station Name">
+										</div>
+										<div class="form-group col-md-4">
+											<label for="to_station" class="col-form-label col-form-label-sm required">TO Station</label>
+											<input type="text" class="form-control form-control-sm station" id="to_station" name="to_station" placeholder="Station Name">
+										</div>
+										<div class="form-group col-md-4">
+											<label for="j_date" class="col-form-label col-form-label-sm required">Journey Date</label>
+											<div class="input-group">
+												<input type="text" class="form-control form-control-sm" id="j_date" name="j_date" placeholder="Select Date" autocomplete="off" readonly required>
+												<div class="input-group-append calender">
+													<span class="input-group-text form-control-sm pointer bg-light"><i class="fa fa-calendar-alt text-dark"></i></span>
+												</div>
+											</div>
+										</div>
+										<div class="form-group col-md-4">
+											<label for="train" class="col-form-label col-form-label-sm required">Train No</label>
+											<input type="text" class="form-control form-control-sm train" id="train" name="train" placeholder="Train No" pattern="[\w\s:]+" title="train no and train name required">
+										</div>
+										<div class="form-group col-md-4">
+											<label for="coach_class" class="col-form-label col-form-label-sm required">Class</label>
+											<select class="form-control form-control-sm" id="coach_class" name="coach_class">
+												<option value="SL">Sleeper (SL)</option>
+												<option value="1A">First Class AC (1A)</option>
+												<option value="2A">Second Class AC (2A)</option>
+												<option value="3A">Third Class AC (3A)</option>
+											</select>
+										</div>
+										<div class="form-group col-md-4">
+											<label for="booking_quota" class="col-form-label col-form-label-sm required">Quota</label>
+											<select class="form-control form-control-sm" id="booking_quota" name="booking_quota">
+												<option value="GN">GENERAL</option>
+												<option value="TK">TATKAAL</option>
+												<option value="PT">PREMIUM TATKAAL</option>
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row mt-2">
+						<div class="col">
+							<div class="card border-primary">
+								<div class="card-header py-1 px-3 bg-primary text-white font-weight-bold">
+									<i class="fa fa-info-circle mr-2"></i>All Details
+								</div>
+								<div class="card-body">
+									<p class="font-weight-bold mb-1">Pasenger Details</p>
+									<table class="table table-bordered table-sm">
+										<thead>
+											<tr class="text-muted">
+												<th scope="col">Name</th>
+												<th scope="col">Age</th>
+												<th scope="col">Gender</th>
+												<th scope="col">Birth Prefrence</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>
+													<input name="psgn[0]['name']" class="form-control form-control-sm" placeholder="Passenger #1" maxlength="16" value="" type="text" pattern="[\w\s]*" title="Name should be alphanumeric only">
+												</td>
+												<td>
+													<input name="psgn[0]['age']" class="form-control form-control-sm" maxlength="2" value="" type="number" pattern="[\d]*" title="Age shoud be 5-99 only">
+												</td>
+												<td>
+													<select name="psgn[0]['gender']" class="form-control form-control-sm">
+														<option value="">Select</option>
+														<option value="M">Male</option>
+														<option value="F">Female</option>
+														<option value="T">Transgender</option>
+													</select>
+												</td>
+												<td>
+													<select name="psgn[0]['choice']" class="form-control form-control-sm">
+														<option value="">No Preference</option>
+														<optgroup label="(SL, 3A, 2A) seats">
+															<option value="LB">LOWER</option>
+															<option value="MB">MIDDLE</option>
+															<option value="UB">UPPER</option>
+															<option value="SL">SIDE LOWER</option>
+															<option value="SU">SIDE UPPER</option>
+														</optgroup>
+														<optgroup label="(2S, CC) seats">
+															<option value="WS">WINDOW SIDE</option>
+														</optgroup>
+														<optgroup label="(1A) seats">
+															<option value="CB">CABIN</option>
+															<option value="CP">COUPE</option>
+														</optgroup>
+													</select>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<input name="psgn[1]['name']" class="form-control form-control-sm" placeholder="Passenger #2" maxlength="16" value="" type="text" pattern="[\w\s]*" title="Name should be alphanumeric only">
+												</td>
+												<td>
+													<input name="psgn[1]['age']" class="form-control form-control-sm" maxlength="2" value="" type="number" pattern="[\d]*" title="Age shoud be 5-99 only">
+												</td>
+												<td>
+													<select name="psgn[1]['gender']" class="form-control form-control-sm">
+														<option value="">Select</option>
+														<option value="M">Male</option>
+														<option value="F">Female</option>
+														<option value="T">Transgender</option>
+													</select>
+												</td>
+												<td>
+													<select name="psgn[1]['choice']" class="form-control form-control-sm">
+														<option value="">No Preference</option>
+														<optgroup label="(SL, 3A, 2A) seats">
+															<option value="LB">LOWER</option>
+															<option value="MB">MIDDLE</option>
+															<option value="UB">UPPER</option>
+															<option value="SL">SIDE LOWER</option>
+															<option value="SU">SIDE UPPER</option>
+														</optgroup>
+														<optgroup label="(2S, CC) seats">
+															<option value="WS">WINDOW SIDE</option>
+														</optgroup>
+														<optgroup label="(1A) seats">
+															<option value="CB">CABIN</option>
+															<option value="CP">COUPE</option>
+														</optgroup>
+													</select>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<input name="psgn[2]['name']" class="form-control form-control-sm" placeholder="Passenger #3" maxlength="16" value="" type="text" pattern="[\w\s]*" title="Name should be alphanumeric only">
+												</td>
+												<td>
+													<input name="psgn[2]['age']" class="form-control form-control-sm" maxlength="2" value="" type="number" pattern="[\d]*" title="Age shoud be 5-99 only">
+												</td>
+												<td>
+													<select name="psgn[2]['gender']" class="form-control form-control-sm">
+														<option value="">Select</option>
+														<option value="M">Male</option>
+														<option value="F">Female</option>
+														<option value="T">Transgender</option>
+													</select>
+												</td>
+												<td>
+													<select name="psgn[2]['choice']" class="form-control form-control-sm">
+														<option value="">No Preference</option>
+														<optgroup label="(SL, 3A, 2A) seats">
+															<option value="LB">LOWER</option>
+															<option value="MB">MIDDLE</option>
+															<option value="UB">UPPER</option>
+															<option value="SL">SIDE LOWER</option>
+															<option value="SU">SIDE UPPER</option>
+														</optgroup>
+														<optgroup label="(2S, CC) seats">
+															<option value="WS">WINDOW SIDE</option>
+														</optgroup>
+														<optgroup label="(1A) seats">
+															<option value="CB">CABIN</option>
+															<option value="CP">COUPE</option>
+														</optgroup>
+													</select>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<input name="psgn[3]['name']" class="form-control form-control-sm" placeholder="Passenger #4" maxlength="16" value="" type="text" pattern="[\w\s]*" title="Name should be alphanumeric only">
+												</td>
+												<td>
+													<input name="psgn[3]['age']" class="form-control form-control-sm" maxlength="2" value="" type="number" pattern="[\d]*" title="Age shoud be 5-99 only">
+												</td>
+												<td>
+													<select name="psgn[3]['gender']" class="form-control form-control-sm">
+														<option value="">Select</option>
+														<option value="M">Male</option>
+														<option value="F">Female</option>
+														<option value="T">Transgender</option>
+													</select>
+												</td>
+												<td>
+													<select name="psgn[3]['choice']" class="form-control form-control-sm">
+														<option value="">No Preference</option>
+														<optgroup label="(SL, 3A, 2A) seats">
+															<option value="LB">LOWER</option>
+															<option value="MB">MIDDLE</option>
+															<option value="UB">UPPER</option>
+															<option value="SL">SIDE LOWER</option>
+															<option value="SU">SIDE UPPER</option>
+														</optgroup>
+														<optgroup label="(2S, CC) seats">
+															<option value="WS">WINDOW SIDE</option>
+														</optgroup>
+														<optgroup label="(1A) seats">
+															<option value="CB">CABIN</option>
+															<option value="CP">COUPE</option>
+														</optgroup>
+													</select>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<input name="psgn[4]['name']" class="form-control form-control-sm" placeholder="Passenger #5" maxlength="16" value="" type="text" pattern="[\w\s]*" title="Name should be alphanumeric only">
+												</td>
+												<td>
+													<input name="psgn[4]['age']" class="form-control form-control-sm" maxlength="2" value="" type="number" pattern="[\d]*" title="Age shoud be 5-99 only">
+												</td>
+												<td>
+													<select name="psgn[4]['gender']" class="form-control form-control-sm">
+														<option value="">Select</option>
+														<option value="M">Male</option>
+														<option value="F">Female</option>
+														<option value="T">Transgender</option>
+													</select>
+												</td>
+												<td>
+													<select name="psgn[4]['choice']" class="form-control form-control-sm">
+														<option value="">No Preference</option>
+														<optgroup label="(SL, 3A, 2A) seats">
+															<option value="LB">LOWER</option>
+															<option value="MB">MIDDLE</option>
+															<option value="UB">UPPER</option>
+															<option value="SL">SIDE LOWER</option>
+															<option value="SU">SIDE UPPER</option>
+														</optgroup>
+														<optgroup label="(2S, CC) seats">
+															<option value="WS">WINDOW SIDE</option>
+														</optgroup>
+														<optgroup label="(1A) seats">
+															<option value="CB">CABIN</option>
+															<option value="CP">COUPE</option>
+														</optgroup>
+													</select>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<input name="psgn[5]['name']" class="form-control form-control-sm" placeholder="Passenger #6" maxlength="16" value="" type="text" pattern="[\w\s]*" title="Name should be alphanumeric only">
+												</td>
+												<td>
+													<input name="psgn[5]['age']" class="form-control form-control-sm" maxlength="2" value="" type="number" pattern="[\d]*" title="Age shoud be 5-99 only">
+												</td>
+												<td>
+													<select name="psgn[5]['gender']" class="form-control form-control-sm">
+														<option value="">Select</option>
+														<option value="M">Male</option>
+														<option value="F">Female</option>
+														<option value="T">Transgender</option>
+													</select>
+												</td>
+												<td>
+													<select name="psgn[5]['choice']" class="form-control form-control-sm">
+														<option value="">No Preference</option>
+														<optgroup label="(SL, 3A, 2A) seats">
+															<option value="LB">LOWER</option>
+															<option value="MB">MIDDLE</option>
+															<option value="UB">UPPER</option>
+															<option value="SL">SIDE LOWER</option>
+															<option value="SU">SIDE UPPER</option>
+														</optgroup>
+														<optgroup label="(2S, CC) seats">
+															<option value="WS">WINDOW SIDE</option>
+														</optgroup>
+														<optgroup label="(1A) seats">
+															<option value="CB">CABIN</option>
+															<option value="CP">COUPE</option>
+														</optgroup>
+													</select>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<p class="font-weight-bold mb-1">Children Below 5 Years</p>
+									<table class="table table-bordered table-sm">
+										<thead>
+											<tr class="text-muted">
+												<th scope="col">Name</th>
+												<th scope="col">Age</th>
+												<th scope="col">Gender</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>
+													<input name="psgn_ch[0]['name']" class="form-control form-control-sm" placeholder="Passenger #1" maxlength="16" value="" type="text" pattern="[\w\s]*" title="Name should be alphanumeric only">
+												</td>
+												<td>
+													<select class="form-control form-control-sm" name="psgn_ch[0]['age']">
+														<option value="" selected>Age</option>
+														<option value="0">Below one year</option>
+														<option value="1">One year</option>
+														<option value="2">Two years</option>
+														<option value="3">Three years</option>
+														<option value="4">Four years</option>
+													</select>
+												</td>
+												<td>
+													<select name="psgn_ch[0]['gender']" class="form-control form-control-sm">
+														<option value="">Select</option>
+														<option value="M">Male</option>
+														<option value="F">Female</option>
+														<option value="T">Transgender</option>
+													</select>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<input name="psgn_ch[1]['name']" class="form-control form-control-sm" placeholder="Passenger #2" maxlength="16" value="" type="text" pattern="[\w\s]*" title="Name should be alphanumeric only">
+												</td>
+												<td>
+													<select class="form-control form-control-sm" name="psgn_ch[1]['age']">
+														<option value="" selected>Age</option>
+														<option value="0">Below one year</option>
+														<option value="1">One year</option>
+														<option value="2">Two years</option>
+														<option value="3">Three years</option>
+														<option value="4">Four years</option>
+													</select>
+												</td>
+												<td>
+													<select name="psgn_ch[1]['gender']" class="form-control form-control-sm">
+														<option value="">Select</option>
+														<option value="M">Male</option>
+														<option value="F">Female</option>
+														<option value="T">Transgender</option>
+													</select>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<p class="font-weight-bold mb-1">Other Details</p>
+									<div class="form-row">
+										<div class="form-group col-md-3">
+											<label for="boarding_stn" class="col-form-label col-form-label-sm">Boarding Station (Optional)</label>
+											<input type="text" class="form-control form-control-sm station" id="boarding_stn" name="boarding_stn" placeholder="Station Name">
+										</div>
+										<div class="form-group col-md-3">
+											<label for="mobile_no" class="col-form-label col-form-label-sm required">Mobile No.</label>
+											<input type="tel" class="form-control form-control-sm" id="mobile_no" name="mobile_no" placeholder="1234567890" maxlength="10" required>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row mt-2">
+						<div class="col">
+							<div class="card border-dark">
+								<div class="card-header py-1 px-3 bg-dark text-white font-weight-bold">
+									<i class="fa fa-credit-card mr-2"></i>Payment Option
+								</div>
+								<div class="card-body">
+									<div class="row">
+										<div class="col-sm-5">
+											<div class="card border-dark">
+												<div class="card-header">
+													Payment Method
+													<span class="badge badge-success">ABAILABLE</span>
+												</div>
+												<div class="card-body" id="payment-method-radio">
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-7">
+											<div class="card border-dark">
+												<div class="card-header">
+													Payment Details
+												</div>
+												<div class="card-body">
+													<div class="form-group col-md-12">
+														<label for="card_no" class="col-form-label col-form-label-sm required">Bank Name</label>
+														<select name="bank_name" id="bank_name" class="form-control form-control-sm">
+															<option value="NONE" selected>Select Bank</option>
+														</select>
+													</div>
+												</div>
+												<div class="card-footer p-1">
+													<span class="text-danger font-weight-bold text-md">NOTE :</span> <span class="text-muted text-md">We are only taking your basic <strong>Bank detail</strong> and rest of the detail you can fill on bank site only.</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row mt-2">
+						<div class="col">
+							<div class="card border-warning">
+								<div class="card-header bg-warning py-1 px-3 font-weight-bold">
+									<i class="fa fa-filter mr-2"></i>Booking Options
+								</div>
+								<div class="card-body">
+									<div class="row">
+										<div class="col">
+											<div class="form-check">
+												<input type="checkbox" class="form-check-input" id="auto_upgradation" name="auto_upgradation">
+												<label class="form-check-label" for="auto_upgradation">Consider for Auto Upgradation.</label>
+											</div>
+											<div class="form-check">
+												<input type="checkbox" class="form-check-input" id="confirm_berths" name="confirm_berths">
+												<label class="form-check-label" for="confirm_berths">Book only if confirm berths are allotted.</label>
+											</div>
+											<div class="form-check">
+												<input type="checkbox" class="form-check-input" id="coach_preferred" name="coach_preferred">
+												<label class="form-check-label" for="coach_preferred">Preferred Coach ID</label>
+												<input class="form-control" maxlength="4" placeholder="Coach ID no." size="8" type="text" id="coach_preferred_no" name="coach_preferred_no" readonly>
+											</div>
+										</div>
+										<div class="col border-left border-warning">
+											<span class="t_2">The berths will be allotted based on the system logic, depending on availability at that point of time. If you need assured Lower Berths or assured compact accommodation (in same coach), please select one of the options*.</span>
+											<div class="col-xs-12">
+												<input class="css-radio" formcontrolname="reservation_choice" id="r4" name="reservation_choice" type="radio" value="99" checked>
+												<label class="css-label_r t_cl" for="r4">None</label>
+											</div>
+											<div class="col-xs-12" style="padding: 0px;">
+												<input class="css-radio" formcontrolname="reservation_choice" id="r1" name="reservation_choice" type="radio" value="1">
+												<label class="css-label_r t_cl" for="r1">Book, only if all berths are allotted in same coach.</label>
+											</div>
+											<div class="col-xs-12" style="padding: 0px;">
+												<input class="css-radio" formcontrolname="reservation_choice" id="r2" name="reservation_choice" type="radio" value="2">
+												<label class="css-label_r t_cl" for="r2">Book, only if at least 1 lower berth is allotted.</label>
+											</div>
+											<div class="col-xs-12" style="padding: 0px;">
+												<input class="css-radio" formcontrolname="reservation_choice" id="r3" name="reservation_choice" type="radio" value="3">
+												<label class="css-label_r t_cl" for="r3">Book, only if 2 lower berths are allotted.</label>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row mt-2">
+						<div class="col">
+							<div class="card card-default">
+								<div class="card-body p-2">
+									<div class="form-check">
+										<input type="checkbox" class="form-check-input" id="auto_proceed" name="auto_proceed">
+										<label class="form-check-label text-danger font-weight-bold" for="auto_proceed">I agree to Proceed Automatically on each page to proceed on next page.</label>
+									</div>
+									<p class="text-italic text-md mb-0"><strong>Note: </strong>Make sure once you check this check-box you may not able to see filled form you page will process till bank payment landing page.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row mt-2">
+						<div class="col text-center">
+							<button class="btn btn-success" type="submit"><i class="far fa-save mr-2"></i>Save Form</button>
+							<button class="btn btn-warning" type="reset"><i class="fas fa-undo mr-2"></i>Reset Form</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="tab-pane fade border border-top-0 py-2" id="nav-pending" role="tabpanel" aria-labelledby="nav-pending-tab" style="min-height: 80vh;">
+				<div class="row px-4" id="booking_card"></div>
+			</div>
+		</div>
+	</div>
+	<div class="container footer mt-2">
+		<div class="row">
+			<div class="col text-center text-md">
+				<a href="javascript:void(0)" class="px-2">Disclaimer</a>|
+				<a href="javascript:void(0)" class="px-2">Privacy Policy</a>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col">
+				<p class="copytight text-center text-md">Copyright &copy; 2017-2018 <a href="http://patelworld.in/" target="_new">patelworld.in</a></p>
+			</div>
+		</div>
+	</div>
+	<script src="../js/jquery-3.3.1.min.js"></script>
+	<script src="../libs/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+	<script src="../js/popper.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="../libs/fontawesome-free-5.1.1-web/js/all.min.js"></script>
+	<script src="../js/constant.js"></script>
+	<script src="../js/stations.js"></script>
+	<script src="../js/trains.js"></script>
+	<script src="../js/formProcess.js"></script>
+</body>
+</html>

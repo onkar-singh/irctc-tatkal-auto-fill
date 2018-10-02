@@ -1,0 +1,57 @@
+<select class="ng-tns-c13-6" aria-hidden="true" tabindex="-1" aria-label="AC 3 Tier (3A)">
+    <!---->
+    <option class="ng-tns-c13-6 ng-star-inserted">Class</option>
+    <!---->
+    <!---->
+    <!---->
+    <!---->
+    <option class="ng-tns-c13-6 ng-star-inserted" value="">All Classes</option>
+    <option class="ng-tns-c13-6 ng-star-inserted" value="EA">Anubhuti Class (EA)</option>
+    <option class="ng-tns-c13-6 ng-star-inserted" value="1A">AC First Class (1A) </option>
+    <option class="ng-tns-c13-6 ng-star-inserted" value="EC">Exec. Chair Car (EC)</option>
+    <option class="ng-tns-c13-6 ng-star-inserted" value="2A">AC 2 Tier (2A)</option>
+    <option class="ng-tns-c13-6 ng-star-inserted" value="FC">First Class (FC)</option>
+    <option class="ng-tns-c13-6 ng-star-inserted" value="3A">AC 3 Tier (3A)</option>
+    <option class="ng-tns-c13-6 ng-star-inserted" value="3E">AC 3 Economy (3E)</option>
+    <option class="ng-tns-c13-6 ng-star-inserted" value="CC">AC Chair car (CC)</option>
+    <option class="ng-tns-c13-6 ng-star-inserted" value="SL">Sleeper (SL)</option>
+    <option class="ng-tns-c13-6 ng-star-inserted" value="2S">Second Sitting (2S)</option>
+    <!---->
+</select>
+
+["EA","1A","2A","3A","EC","FC","3E","CC","SL","2S"]
+
+var availableTrains = $('.train_avl_enq_box');
+        let regEx_TrainNo = new RegExp('\(12649\)');
+        var train_match_at = false;
+        $.each(availableTrains, function(k, v){
+            console.log(v.innerText);
+            /*if(true == v.innerText.match(regEx_TrainNo)){
+                train_match_at = k;
+                return true;
+            }*/
+        });
+        // if(train_match_at)
+        //  console.log(availableTrains[train_match_at]);
+        // $('#check-availability').click();
+
+
+
+
+
+
+<select class="ng-tns-c13-12" aria-hidden="true" tabindex="-1" aria-label="GENERAL">
+    <!---->
+    <option class="ng-tns-c13-12 ng-star-inserted">Select Quota</option>
+    <!---->
+    <!---->
+    <!---->
+    <!---->
+    <option class="ng-tns-c13-12 ng-star-inserted" value="GN">GENERAL</option>
+    <option class="ng-tns-c13-12 ng-star-inserted" value="SS">LOWER BERTH/SR.CITIZEN</option>
+    <option class="ng-tns-c13-12 ng-star-inserted" value="LD">LADIES</option>
+    <option class="ng-tns-c13-12 ng-star-inserted" value="HP">DIVYAANG</option>
+    <option class="ng-tns-c13-12 ng-star-inserted" value="TQ">TATKAL</option>
+    <option class="ng-tns-c13-12 ng-star-inserted" value="PT">PREMIUM TATKAL</option>
+    <!---->
+</select>

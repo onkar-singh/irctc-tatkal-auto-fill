@@ -1,0 +1,83 @@
+.required:after{
+	color: #e32;
+	content: '*';
+	display:inline;
+	margin-left: 2px;
+	font-weight: bold;
+}
+
+.pointer{
+	cursor: pointer;
+}
+
+.link{
+	text-decoration: none;
+	color:#1262C5 !important;
+}
+
+.link:hover{
+	text-decoration: underline !important;
+}
+
+.text-sm{
+	font-size: 10px;
+}
+
+.text-md{
+	font-size: 12px;
+}
+
+.ui-datepicker,.ui-autocomplete {
+	font-size: 11px !important;
+}
+
+/**
+ * Booking popup
+ */
+ .booking-popup{
+ 	background-color: yellow;
+ 	padding-top: 8px;
+ 	padding-bottom: 8px;
+ 	position: fixed;
+ 	bottom: 0px;
+ 	width: 100%;
+ }
+
+.m-badge{
+	display: inline-block;
+    padding: .4em .4em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .2rem;
+}
+
+
+.tatkal-popup{
+	position:fixed;
+	top:0;
+	background-color: #EDE015;
+	padding:5px;
+	width:100%;
+	.live-time{
+		label.time-node{
+			margin-bottom: 0px;
+			color: red;
+			font-size:30px;
+			font-weight:700;
+			background-color: #E4E4E4;
+			padding:2px 10px 2px 10px;
+			.time-minute:after{
+				content: ":";
+				margin-left:8px;
+			}
+			.time-minute:before{
+				content: ":";
+				margin-right:8px;
+			}
+		}
+	}
+}

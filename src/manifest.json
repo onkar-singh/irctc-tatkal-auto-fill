@@ -1,0 +1,43 @@
+{
+    "name": "Super Tatkal",
+    "short_name": "IRCTC Tatkal Auto fill",
+    "version": "0.1.2",
+    "manifest_version": 2,
+    "description": "A auto-fill extension to process IRCTC Tatkaal booking to avoid user form entry at Tatkaal booking. by [http://patelworld.in]",
+    "icons": {
+        "16": "images/icons/icon-16.png",
+        "32": "images/icons/icon-32.png",
+        "48": "images/icons/icon-48.png",
+        "64": "images/icons/icon-64.png",
+        "128": "images/icons/icon-128.png"
+    },
+    "browser_action": {
+        "default_title": "IRCTC Tatkal Booking",
+        "default_popup": "html/popup.html"
+    },
+    "permissions": [
+        "tabs",
+        "storage",
+        "activeTab"
+    ],
+    "background": {
+        "scripts": [
+            "js/jquery-3.3.1.min.js",
+            "js/background.js"
+        ],
+        "persistent": false
+    },
+    "content_scripts": [{
+        "run_at": "document_end",
+        "matches": ["http://*.irctc.co.in/*", "https://*.irctc.co.in/*"],
+        "js": [
+            "js/jquery-3.3.1.min.js",
+            "js/constant.js",
+            "js/stations.js",
+            "js/trains.js",
+            "js/booking_bot.js"
+        ],
+        "css": ["css/custom-style.min.css"]
+    }],
+    "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'"
+}
