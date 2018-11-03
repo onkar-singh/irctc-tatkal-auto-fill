@@ -14,7 +14,7 @@ document.body.onload = function(){
 				watcher == true;
 				// $('body').append($('<div/>').html(popup));
 				$.toast("Booking Started you need to <strong>click</strong> only three palce and two captcha");
-				gaEvent('BOOKING_STARTED');
+				// gaEvent("IRCTC_STATE", "clicked", "Bot Initiated");
 				waitLoop();
 			});
 		}
@@ -171,6 +171,7 @@ function fillSearchDetail(){
 	$("#journeyClass span:contains('"+ booking_data.coach_class +"')").parent().trigger('click');
 	// searchSubmit.click();
 	$.toast('Journey Detail Filled', "SUCCESS");
+	// gaEvent("IRCTC_STATE", "clicked", "journey detail filled");
 }
 
 function triggerSearchBtn(){
@@ -178,6 +179,7 @@ function triggerSearchBtn(){
 		searchSubmit = document.querySelectorAll('[type="submit"]')[3];
 		searchSubmit.click();
 		$.toast("Journey Search done");
+		// gaEvent("IRCTC_STATE", "clicked", "journey detail proceed");
 	}else{
 		$.toast('Proceed Manually [Search Journey]');
 		// console.log('Proceed Manually [Search Journey]');
@@ -195,6 +197,7 @@ function selectQuota(){
 		if(regEx_quota.test(quota_item[i].outerHTML)){
 			quota_item[i].click();
 			$.toast("Quota Selected", "SUCCESS");
+			// gaEvent("IRCTC_STATE", "clicked", "quota selected");
 			break;
 		}
 	}
@@ -220,6 +223,7 @@ function selectTrainCard(){
 		target_train_list.style = "background-color:yellow !important;border-color:#3C4637 !important;";
 		target_train_list.setAttribute('selected-train', true);
 		$.toast("Target Train Found");
+		// gaEvent("IRCTC_STATE", "clicked", "train selected");
 	}
 }
 
@@ -439,7 +443,7 @@ function waitLoop(){
 	// console.log(++loop);
 
 	step_need = detectStep();
-	// console.log(step_need);
+
 	if(step_need == 'login-open'){
 		fillLogin();
 	}else if(step_need == 'login-wait'){
@@ -448,6 +452,8 @@ function waitLoop(){
 		fillSearchDetail();
 	}else if(step_need == 'search-btn-trigger'){
 		triggerSearchBtn();
+	}else if(step_need == 'set-quota'){
+		selectQuota();
 	}else if(step_need == 'select-train'){
 		selectTrainCard();
 	}else if(step_need == 'select-coach-class'){

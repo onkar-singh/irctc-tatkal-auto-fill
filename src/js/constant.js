@@ -3,8 +3,11 @@ const STEP2_URL = "https://www.irctc.co.in/nget/train-list";
 const STEP3_URL = "https://www.irctc.co.in/nget/psgninput";
 const STEP4_URL = "https://www.irctc.co.in/nget/reviewBooking";
 const STEP5_URL = "https://www.irctc.co.in/nget/bkgPaymentOptions";
+
+const IRCTC_STATION_LIST = "https://www.irctc.co.in/eticketing/StationLinguisticNames?hl=en";
 // https://www.irctc.co.in/eticketing/StationLinguisticNames?hl=en_hi
 // https://www.irctc.co.in/eticketing/StationLinguisticNames?hl=en
+// http://www.indianrail.gov.in/mail_express_trn_list.html
 
 let weeks = ["", "Monday", "Tuesday", "Wednesday", "Thrusday", "Friday", "Saturday", "Sunday"];
 let M_to_month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];

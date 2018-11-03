@@ -188,7 +188,16 @@ function updatePendingView(renderHash = null){
 }
 
 function clearBookings(){
-	$('#booking_card').append($('<h1/>').html('Oops!!  Booking Data Not Found').addClass('text-center text-warning'));
+	$('#booking_card').append(
+		$('<div/>').addClass('card card-body bg-light')
+		.append($('<h1/>').text('No Booking Found').addClass('text-center'))
+		.append($('<button/>').text('Create New Booking').addClass('btn btn-primary').attr({'id':"createNewBooking"}))
+	);
+	$('#createNewBooking').click(openBlankForm);
+}
+
+function openBlankForm(){
+	$('#nav-home-tab').tab('show');
 }
 
 $(".station").autocomplete({
@@ -216,7 +225,9 @@ $('.calender').click(function(){
 
 $('#booking_form').submit(saveBookingForm);
 
-function saveBookingForm(){	;
+function saveBookingForm(){
+	// $('#confirmSave').modal('show');
+	// return false;
 	key = btoa($('#formName').val());
 	getBookingData(function(booking_data){
 		booking_data = booking_data || {};
