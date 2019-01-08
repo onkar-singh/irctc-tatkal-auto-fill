@@ -9,13 +9,18 @@ document.body.onload = function(){
 			watcher = result.extention_status;
 		if(true === watcher){
 			chrome.storage.sync.get(['booking_default'], function(result) {
+				hours = (new Date()).getHours();
 				booking_data = result.booking_default;
-				fillSearchDetail();
-				watcher == true;
+				if((booking_data.booking_quota == 'TK' && (hours == 10 || hours == 11)) || (booking_data.booking_quota != 'TK' && hours != 10 && hours != 11)){
+					fillSearchDetail();
+					watcher == true;
+					$.toast("Booking Started you need to <strong>click</strong> only three palce and two captcha");
+					waitLoop();
+				}else{
+					$.toast("Booking Can't Started because it's Tatkal Time and you are tring to book General ticke. please try after tatkal time.");
+				}
 				// $('body').append($('<div/>').html(popup));
-				$.toast("Booking Started you need to <strong>click</strong> only three palce and two captcha");
 				// gaEvent("IRCTC_STATE", "clicked", "Bot Initiated");
-				waitLoop();
 			});
 		}
 	});
@@ -146,8 +151,10 @@ function fillLogin(){
 
 // TODO: fill search detail
 function fillSearchDetail(){
-	fromStation = document.querySelectorAll("[placeholder='From*']")[0];
-	toStation = document.querySelectorAll("[placeholder='To*']")[0];
+	// fromStation = document.querySelectorAll("[placeholder='From*']")[0];
+	// toStation = document.querySelectorAll("[placeholder='To*']")[0];
+	fromStation = document.querySelectorAll("p-autocomplete[id='origin']")[0].querySelectorAll('input')[0];
+	toStation = document.querySelectorAll("p-autocomplete[id='destination']")[0].querySelectorAll('input')[0];
 	journeydate = document.querySelectorAll("[placeholder='Journey Date(dd-mm-yyyy)*']")[1];
 	classCaret = document.getElementById('journeyClass').querySelectorAll('.fa-caret-down')[0];
 
@@ -176,7 +183,8 @@ function fillSearchDetail(){
 
 function triggerSearchBtn(){
 	if(true === booking_data.auto_proceed){
-		searchSubmit = document.querySelectorAll('[type="submit"]')[3];
+		// searchSubmit = document.querySelectorAll('[type="submit"]')[3];
+		searchSubmit = document.querySelectorAll('[type="submit"][label="Find Trains"]')[0];
 		searchSubmit.click();
 		$.toast("Journey Search done");
 		// gaEvent("IRCTC_STATE", "clicked", "journey detail proceed");
@@ -443,8 +451,8 @@ function waitLoop(){
 	// console.log(++loop);
 
 	step_need = detectStep();
-
-	if(step_need == 'login-open'){
+	console.log(step_need);
+	if(step_need == 'login-open' || step_need == 'login-fill'){
 		fillLogin();
 	}else if(step_need == 'login-wait'){
 		$.toast("Proceed Manually [Fill Login Captcha and login]");
