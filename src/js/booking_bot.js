@@ -11,7 +11,7 @@ document.body.onload = function(){
 			chrome.storage.sync.get(['booking_default'], function(result) {
 				hours = (new Date()).getHours();
 				booking_data = result.booking_default;
-				if((booking_data.booking_quota == 'TK' && (hours == 10 || hours == 11)) || (booking_data.booking_quota != 'TK' && hours != 10 && hours != 11)){
+				if(((booking_data.booking_quota == 'TK' || booking_data.booking_quota == 'PT') && (hours == 10 || hours == 11)) || (booking_data.booking_quota != 'TK' && hours != 10 && hours != 11)){
 					fillSearchDetail();
 					watcher == true;
 					$.toast("Booking Started you need to <strong>click</strong> only three palce and two captcha");
