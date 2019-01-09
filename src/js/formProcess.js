@@ -2,6 +2,7 @@
 var extention_status = false;
 
 $(function(){
+	$('#app_version').text('version - 0.1.3');
 	renderPaymentBlock();
 	updatePendingView();
 	hash = $_GET('hash');
