@@ -12,16 +12,13 @@ document.body.onload = function(){
 			chrome.storage.sync.get(['booking_default'], function(result) {
 				hours = (new Date()).getHours();
 				booking_data = result.booking_default;
-				if(((booking_data.booking_quota == 'TK' || booking_data.booking_quota == 'PT') && (hours == 10 || hours == 11)) || (booking_data.booking_quota != 'TK' && hours != 10 && hours != 11)){
+				if(booking_data.booking_quota == 'GN' && (hours == 10 || hours == 11)){
+					$.toast("Booking Can't Started because it's Tatkal Time and you are tring to book General ticke. please try after tatkal time.");
+				}else{
 					fillSearchDetail();
-					// watcher == true;
 					$.toast("Booking Started you need to <strong>click</strong> only three palce and two captcha");
 					waitLoop();
-				}else{
-					$.toast("Booking Can't Started because it's Tatkal Time and you are tring to book General ticke. please try after tatkal time.");
 				}
-				// $('body').append($('<div/>').html(popup));
-				// gaEvent("IRCTC_STATE", "clicked", "Bot Initiated");
 			});
 		}
 	});
@@ -415,7 +412,8 @@ function fillPassengersDetail(){
 	$('[formcontrolname="reservationChoice"][value="'+ booking_data.reservation_choice +'"]').prop('checked', true);
 
 	// insurance mark ad YES
-	$('#travelInsuranceOptedYes').prop('checked', true).trigger('change');
+	// $('#travelInsuranceOptedYes').prop('checked', true).trigger('change');
+	document.querySelectorAll('#travelInsuranceOptedYes')[0].checked = true;
 	// $('#travelInsuranceOptedYes')[0].dispatchEvent(new Event('change'));
 
 	// Mark as done

@@ -1,7 +1,7 @@
 {
     "name": "Super Tatkal",
     "short_name": "IRCTC Tatkal Auto fill",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "manifest_version": 2,
     "description": "A auto-fill extension to process IRCTC Tatkaal booking to avoid user form entry at Tatkaal booking. by [http://patelworld.in]",
     "icons": {
