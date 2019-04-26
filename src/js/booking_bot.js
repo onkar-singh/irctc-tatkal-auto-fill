@@ -465,6 +465,9 @@ function selectPaymentMethod(){
 			document.querySelectorAll('.stepwizard-step')[2].setAttribute('selected-header', link.attributes['aria-controls'].value);
 			$.toast("Payment Method Selected");
 			return false;
+		}else{
+			console.log('payment method not matching');
+			console.log([link.innerText, payment_opt]);
 		}
 	});
 }

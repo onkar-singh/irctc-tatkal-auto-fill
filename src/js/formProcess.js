@@ -2,7 +2,7 @@
 var extention_status = false;
 
 $(function(){
-	$('#app_version').text('version - 0.1.3');
+	$('#app_version').text('version - 0.1.7');
 	renderPaymentBlock();
 	updatePendingView();
 	hash = $_GET('hash');
@@ -24,6 +24,15 @@ $(function(){
 	gaPage('/booking_form.html');
 
 	$('#formName').focus();
+
+	$('[data-action="reset-passenger-row"]').click(function(){
+		var row = $(this).parent().parent('tr');
+		row.find('input,select').val('');
+	});
+
+	$('[data-action="reset-passenger-all"]').click(function(){
+		var row = $(this).closest('table').find('input,select').val('');
+	});
 })
 
 function renderPaymentBlock(){
@@ -227,8 +236,6 @@ $('.calender').click(function(){
 $('#booking_form').submit(saveBookingForm);
 
 function saveBookingForm(){
-	// $('#confirmSave').modal('show');
-	// return false;
 	key = btoa($('#formName').val());
 	getBookingData(function(booking_data){
 		booking_data = booking_data || {};
@@ -242,12 +249,8 @@ function saveBookingForm(){
 		}
 		if(status === true){
 			booking_data[key] = formJSON();
-			// console.log(booking_data[key]);
 			chrome.storage.sync.set({booking_data: booking_data}, function() {
-				/*$('#msgBox').show();
-				$('#msgBox').alert();*/
 				chrome.storage.sync.set({booking_default: booking_data[key]});
-				// alert('Your Form successfully saved with "'+ $('#formName').val() +'"');
 				$.toast({
 					heading: 'Form Save',
 					text: 'Your Form successfully saved with <strong>'+ $('#formName').val() +'</strong>',
@@ -268,6 +271,46 @@ function saveBookingForm(){
 	return false;
 }
 
+function addPassenger(){
+	var row = `<tr>
+		<td>
+			<input name="psgn[0]['name']" class="form-control form-control-sm" placeholder="Passenger #1" maxlength="16" value="" type="text" pattern="[\w\s]*" title="Name should be alphanumeric only">
+		</td>
+		<td>
+			<input name="psgn[0]['age']" class="form-control form-control-sm" maxlength="2" value="" type="number" pattern="[\d]*" title="Age shoud be 5-99 only">
+		</td>
+		<td>
+			<select name="psgn[0]['gender']" class="form-control form-control-sm">
+				<option value="">Select</option>
+				<option value="M">Male</option>
+				<option value="F">Female</option>
+				<option value="T">Transgender</option>
+			</select>
+		</td>
+		<td>
+			<select name="psgn[0]['choice']" class="form-control form-control-sm">
+				<option value="">No Preference</option>
+				<optgroup label="(SL, 3A, 2A) seats">
+					<option value="LB">LOWER</option>
+					<option value="MB">MIDDLE</option>
+					<option value="UB">UPPER</option>
+					<option value="SL">SIDE LOWER</option>
+					<option value="SU">SIDE UPPER</option>
+				</optgroup>
+				<optgroup label="(2S, CC) seats">
+					<option value="WS">WINDOW SIDE</option>
+				</optgroup>
+				<optgroup label="(1A) seats">
+					<option value="CB">CABIN</option>
+					<option value="CP">COUPE</option>
+				</optgroup>
+			</select>
+		</td>
+	</tr>`;
+	$('#pasengers-table tbody').append(row);
+}
+
+
 function formJSON(){
 	var form_data = $('#booking_form').serializeArray();
 	var	formJson = {
@@ -275,7 +318,8 @@ function formJSON(){
 		"auto_proceed": false,
 		"confirm_berths": false,
 		"coach_preferred": false,
-		"psngr": {"C" :[], "A": []}
+		"psngr": {"C" :[], "A": []},
+		"seq_questions": {}
 	};
 	$.each(form_data, function(k,v){
 		psgn_ch_match = (v.name).match(new RegExp(/^(psgn_ch)(\[)([\d])(\])(\[\')([a-z]+)(\'\])$/i));
@@ -290,12 +334,6 @@ function formJSON(){
 			}
 		}
 		else{
-			/*console.log([
-				v.name,
-				v.value,
-				$.inArray(v.name,options),
-				'on' == v.value
-			]);*/
 			psgn_match = (v.name).match(new RegExp(/^(psgn)(\[)([\d])(\])(\[\')([a-z]+)(\'\])$/i));
 			if(null !== psgn_match && v.value != ''){
 				if(typeof formJson['psngr']['A'][psgn_match[3]] == 'undefined'){
@@ -310,14 +348,13 @@ function formJSON(){
 				formJson[v.name] = true;
 
 			}else if(null == psgn_match && null == psgn_ch_match){
-				// console.log(v.name+"="+v.value);
 				formJson[v.name] = v.value;
 			}
 		}
+		if(-1 != $.inArray(v.name, ['sqDob','sqLoginId','sqEmail','sqMobile','sqEWallet'])){
+			formJson['seq_questions'][v.name] = v.value;
+		}
 	});
-
-	// console.log('Form Json = ');
-	// console.log(formJson);
 	return formJson;
 }
 
@@ -375,6 +412,7 @@ $('#coach_preferred').click(function(e){
 		$('#coach_preferred_no').attr('readonly', true);
 	}
 });
+
 
 
 

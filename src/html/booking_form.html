@@ -148,13 +148,14 @@
 								</div>
 								<div class="card-body">
 									<p class="font-weight-bold mb-1">Pasenger Details</p>
-									<table class="table table-bordered table-sm">
+									<table class="table table-sm" id="pasengers-table">
 										<thead>
 											<tr class="text-muted">
 												<th scope="col">Name</th>
 												<th scope="col">Age</th>
 												<th scope="col">Gender</th>
 												<th scope="col">Birth Prefrence</th>
+												<th><i class="fa fa-trash mt-1 pointer" data-action="reset-passenger-all"></i></th>
 											</tr>
 										</thead>
 										<tbody>
@@ -192,6 +193,7 @@
 														</optgroup>
 													</select>
 												</td>
+												<td><i class="fa fa-trash mt-1 pointer text-muted" data-action="reset-passenger-row"></i></td>
 											</tr>
 											<tr>
 												<td>
@@ -227,6 +229,7 @@
 														</optgroup>
 													</select>
 												</td>
+												<td><i class="fa fa-trash mt-1 pointer text-muted" data-action="reset-passenger-row"></i></td>
 											</tr>
 											<tr>
 												<td>
@@ -262,6 +265,7 @@
 														</optgroup>
 													</select>
 												</td>
+												<td><i class="fa fa-trash mt-1 pointer text-muted" data-action="reset-passenger-row"></i></td>
 											</tr>
 											<tr>
 												<td>
@@ -297,6 +301,7 @@
 														</optgroup>
 													</select>
 												</td>
+												<td><i class="fa fa-trash mt-1 pointer text-muted" data-action="reset-passenger-row"></i></td>
 											</tr>
 											<tr>
 												<td>
@@ -332,6 +337,7 @@
 														</optgroup>
 													</select>
 												</td>
+												<td><i class="fa fa-trash mt-1 pointer text-muted" data-action="reset-passenger-row"></i></td>
 											</tr>
 											<tr>
 												<td>
@@ -367,16 +373,18 @@
 														</optgroup>
 													</select>
 												</td>
+												<td><i class="fa fa-trash mt-1 pointer text-muted" data-action="reset-passenger-row"></i></td>
 											</tr>
 										</tbody>
 									</table>
 									<p class="font-weight-bold mb-1">Children Below 5 Years</p>
-									<table class="table table-bordered table-sm">
+									<table class="table table-sm">
 										<thead>
 											<tr class="text-muted">
 												<th scope="col">Name</th>
 												<th scope="col">Age</th>
 												<th scope="col">Gender</th>
+												<th><i class="fa fa-trash mt-1 pointer" data-action="reset-passenger-all"></i></th>
 											</tr>
 										</thead>
 										<tbody>
@@ -402,6 +410,7 @@
 														<option value="T">Transgender</option>
 													</select>
 												</td>
+												<td><i class="fa fa-trash mt-1 pointer text-muted" data-action="reset-passenger-row"></i></td>
 											</tr>
 											<tr>
 												<td>
@@ -425,6 +434,7 @@
 														<option value="T">Transgender</option>
 													</select>
 												</td>
+												<td><i class="fa fa-trash mt-1 pointer text-muted" data-action="reset-passenger-row"></i></td>
 											</tr>
 										</tbody>
 									</table>
@@ -437,6 +447,49 @@
 										<div class="form-group col-md-3">
 											<label for="mobile_no" class="col-form-label col-form-label-sm required">Mobile No.</label>
 											<input type="tel" class="form-control form-control-sm" id="mobile_no" name="mobile_no" placeholder="1234567890" maxlength="10" required>
+										</div>
+									</div>
+									<div class="form-row form-check font-weight-bold mb-1">
+										<input type="checkbox" class="form-check-input" id="auto_fill_sequrity" name="auto_fill_sequrity" data-toggle='collapse' data-target='#seq-ques-block'>
+										<label class="form-check-label pointer" for="auto_fill_sequrity">Auto fill Security Question</label>
+									</div>
+									<div id="seq-ques-block" class="collapse pl-3">
+										<div class="form-row">
+											<p><i class="text-muted">Please fill answers for the following security questions if you want them to be autofilled during booking.</i></p>
+											<div class="sec-questions">
+												<ol>
+													<li class="mb-2">
+														<div class="sec-question" data-question="Please Enter your register date of birth in ddMMyyyy format">
+															Please Enter your register date of birth in ddMMyyyy format
+														</div>
+														<input type="text" id="sqDob" name="sqDob" class="form-control form-control-sm">
+													</li>
+													<li class="mb-2">
+														<div class="sec-question" data-question="Please Enter your register user login id">
+															Please Enter your register user login id
+														</div>
+														<input type="text" id="sqLoginId" name="sqLoginId" class="form-control form-control-sm">
+													</li>
+													<li class="mb-2">
+														<div class="sec-question" data-question="Please Enter your register email ID">
+															Please Enter your register email ID
+														</div>
+														<input type="text" id="sqEmail" name="sqEmail" class="form-control form-control-sm">
+													</li>
+													<li class="mb-2">
+														<div class="sec-question" data-question="Please Enter your register mobile number">
+															Please Enter your register mobile number
+														</div>
+														<input type="text" id="sqMobile" name="sqMobile" class="form-control form-control-sm">
+													</li>
+													<li class="mb-2">
+														<div class="sec-question" data-question="Did You registered for IRCTC Ewallet Feature">
+															Did You registered for IRCTC Ewallet Feature
+														</div>
+														<input type="text" id="sqEWallet" name="sqEWallet" class="form-control form-control-sm">
+													</li>
+												</ol>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -534,12 +587,17 @@
 					<div class="row mt-2">
 						<div class="col">
 							<div class="card card-default">
-								<div class="card-body p-2">
+								<!-- <div class="card-body p-2">
 									<div class="form-check">
 										<input type="checkbox" class="form-check-input" id="auto_proceed" name="auto_proceed">
 										<label class="form-check-label text-danger font-weight-bold" for="auto_proceed">I agree to Proceed Automatically on each page to proceed on next page.</label>
 									</div>
 									<p class="text-italic text-md mb-0"><strong>Note: </strong>Make sure once you check this check-box you may not able to see filled form you page will process till bank payment landing page.</p>
+								</div> -->
+								<div class="card-body p-2">
+									<div class="form-check text-center">
+										<span class="text-danger">Note:</span> To proceed with command use <kbd>Ctrl + Shift + A</kbd>
+									</div>
 								</div>
 							</div>
 						</div>
