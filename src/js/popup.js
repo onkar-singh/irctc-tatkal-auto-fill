@@ -1,4 +1,5 @@
 $(function(){
+	$('#version').text('version - '+ chrome.app.getDetails().version);
 	// TODO: get current targeted ticket in UI
 	chrome.storage.sync.get(['booking_default'], function(result) {
 		v = result.booking_default;

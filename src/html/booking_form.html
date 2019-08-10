@@ -13,11 +13,10 @@
 			<div class="col">
 				<div class="row">
 					<div class="col-auto p-0 pl-3">
-						<i class="fa fa-subway fa-3x text-secondary"></i>
-						<!-- <img src="../images/logos/web_logo.png" class="img img-responsive" width="150px;"> -->
+						<a href="./booking_form.html?tab=new"><i class="fa fa-subway fa-3x text-secondary"></i></a>
 					</div>
 					<div class="col">
-						<h2 class="font-weight-bold text-secondary">Super Tatkal</h2>
+						<h2 class="font-weight-bold text-secondary">SuperFast Tatkal</h2>
 						<p class="text-muted text-md">A IRCTC Train Tatkal Booking Extention by - <a href="http://patelworld.in/" target="_blank">patelworld.in</a></p>
 					</div>
 				</div>
@@ -30,7 +29,7 @@
 						<span class="switch-handle"></span>
 					</label>
 				</div>
-				<div id="app_version" class="float-right text-md"></div>
+				<div id="app_version" class="float-right app-version"></div>
 			</div>
 		</div>
 	</div>
@@ -101,11 +100,14 @@
 											<label for="from_station" class="col-form-label col-form-label-sm required">FROM Station</label>
 											<input type="text" class="form-control form-control-sm station" id="from_station" name="from_station" placeholder="Station Name">
 										</div>
+										<div class="form-group col-md-1 text-center">
+											<i class="fas fa-exchange-alt fa-2x"></i>
+										</div>
 										<div class="form-group col-md-4">
 											<label for="to_station" class="col-form-label col-form-label-sm required">TO Station</label>
 											<input type="text" class="form-control form-control-sm station" id="to_station" name="to_station" placeholder="Station Name">
 										</div>
-										<div class="form-group col-md-4">
+										<div class="form-group col-md-3">
 											<label for="j_date" class="col-form-label col-form-label-sm required">Journey Date</label>
 											<div class="input-group">
 												<input type="text" class="form-control form-control-sm" id="j_date" name="j_date" placeholder="Select Date" autocomplete="off" readonly required>
@@ -118,6 +120,7 @@
 											<label for="train" class="col-form-label col-form-label-sm required">Train No</label>
 											<input type="text" class="form-control form-control-sm train" id="train" name="train" placeholder="Train No" pattern="[\w\s:]+" title="train no and train name required">
 										</div>
+										<div class="form-group col-md-1"></div>
 										<div class="form-group col-md-4">
 											<label for="coach_class" class="col-form-label col-form-label-sm required">Class</label>
 											<select class="form-control form-control-sm" id="coach_class" name="coach_class">
@@ -127,7 +130,7 @@
 												<option value="3A">Third Class AC (3A)</option>
 											</select>
 										</div>
-										<div class="form-group col-md-4">
+										<div class="form-group col-md-3">
 											<label for="booking_quota" class="col-form-label col-form-label-sm required">Quota</label>
 											<select class="form-control form-control-sm" id="booking_quota" name="booking_quota">
 												<option value="GN">GENERAL</option>
@@ -148,14 +151,14 @@
 								</div>
 								<div class="card-body">
 									<p class="font-weight-bold mb-1">Pasenger Details</p>
-									<table class="table table-sm" id="pasengers-table">
+									<table class="table table-bordered table-sm" id="pasenger-table">
 										<thead>
 											<tr class="text-muted">
 												<th scope="col">Name</th>
 												<th scope="col">Age</th>
 												<th scope="col">Gender</th>
 												<th scope="col">Birth Prefrence</th>
-												<th><i class="fa fa-trash mt-1 pointer" data-action="reset-passenger-all"></i></th>
+												<th scope="col"><span class="fa fa-undo" aria-hidden="true"></span></th>
 											</tr>
 										</thead>
 										<tbody>
@@ -168,7 +171,7 @@
 												</td>
 												<td>
 													<select name="psgn[0]['gender']" class="form-control form-control-sm">
-														<option value="">Select</option>
+														<option value="NONE">Select</option>
 														<option value="M">Male</option>
 														<option value="F">Female</option>
 														<option value="T">Transgender</option>
@@ -176,7 +179,7 @@
 												</td>
 												<td>
 													<select name="psgn[0]['choice']" class="form-control form-control-sm">
-														<option value="">No Preference</option>
+														<option value="NONE">No Preference</option>
 														<optgroup label="(SL, 3A, 2A) seats">
 															<option value="LB">LOWER</option>
 															<option value="MB">MIDDLE</option>
@@ -193,7 +196,9 @@
 														</optgroup>
 													</select>
 												</td>
-												<td><i class="fa fa-trash mt-1 pointer text-muted" data-action="reset-passenger-row"></i></td>
+												<td>
+													<span class="fa fa-undo" aria-hidden="true"></span>
+												</td>
 											</tr>
 											<tr>
 												<td>
@@ -204,7 +209,7 @@
 												</td>
 												<td>
 													<select name="psgn[1]['gender']" class="form-control form-control-sm">
-														<option value="">Select</option>
+														<option value="NONE">Select</option>
 														<option value="M">Male</option>
 														<option value="F">Female</option>
 														<option value="T">Transgender</option>
@@ -212,7 +217,7 @@
 												</td>
 												<td>
 													<select name="psgn[1]['choice']" class="form-control form-control-sm">
-														<option value="">No Preference</option>
+														<option value="NONE">No Preference</option>
 														<optgroup label="(SL, 3A, 2A) seats">
 															<option value="LB">LOWER</option>
 															<option value="MB">MIDDLE</option>
@@ -229,7 +234,9 @@
 														</optgroup>
 													</select>
 												</td>
-												<td><i class="fa fa-trash mt-1 pointer text-muted" data-action="reset-passenger-row"></i></td>
+												<td>
+													<span class="fa fa-undo" aria-hidden="true"></span>
+												</td>
 											</tr>
 											<tr>
 												<td>
@@ -240,7 +247,7 @@
 												</td>
 												<td>
 													<select name="psgn[2]['gender']" class="form-control form-control-sm">
-														<option value="">Select</option>
+														<option value="NONE">Select</option>
 														<option value="M">Male</option>
 														<option value="F">Female</option>
 														<option value="T">Transgender</option>
@@ -248,7 +255,7 @@
 												</td>
 												<td>
 													<select name="psgn[2]['choice']" class="form-control form-control-sm">
-														<option value="">No Preference</option>
+														<option value="NONE">No Preference</option>
 														<optgroup label="(SL, 3A, 2A) seats">
 															<option value="LB">LOWER</option>
 															<option value="MB">MIDDLE</option>
@@ -265,7 +272,9 @@
 														</optgroup>
 													</select>
 												</td>
-												<td><i class="fa fa-trash mt-1 pointer text-muted" data-action="reset-passenger-row"></i></td>
+												<td>
+													<span class="fa fa-undo" aria-hidden="true"></span>
+												</td>
 											</tr>
 											<tr>
 												<td>
@@ -276,7 +285,7 @@
 												</td>
 												<td>
 													<select name="psgn[3]['gender']" class="form-control form-control-sm">
-														<option value="">Select</option>
+														<option value="NONE">Select</option>
 														<option value="M">Male</option>
 														<option value="F">Female</option>
 														<option value="T">Transgender</option>
@@ -284,7 +293,7 @@
 												</td>
 												<td>
 													<select name="psgn[3]['choice']" class="form-control form-control-sm">
-														<option value="">No Preference</option>
+														<option value="NONE">No Preference</option>
 														<optgroup label="(SL, 3A, 2A) seats">
 															<option value="LB">LOWER</option>
 															<option value="MB">MIDDLE</option>
@@ -301,7 +310,9 @@
 														</optgroup>
 													</select>
 												</td>
-												<td><i class="fa fa-trash mt-1 pointer text-muted" data-action="reset-passenger-row"></i></td>
+												<td>
+													<span class="fa fa-undo" aria-hidden="true"></span>
+												</td>
 											</tr>
 											<tr>
 												<td>
@@ -312,7 +323,7 @@
 												</td>
 												<td>
 													<select name="psgn[4]['gender']" class="form-control form-control-sm">
-														<option value="">Select</option>
+														<option value="NONE">Select</option>
 														<option value="M">Male</option>
 														<option value="F">Female</option>
 														<option value="T">Transgender</option>
@@ -320,7 +331,7 @@
 												</td>
 												<td>
 													<select name="psgn[4]['choice']" class="form-control form-control-sm">
-														<option value="">No Preference</option>
+														<option value="NONE">No Preference</option>
 														<optgroup label="(SL, 3A, 2A) seats">
 															<option value="LB">LOWER</option>
 															<option value="MB">MIDDLE</option>
@@ -337,7 +348,9 @@
 														</optgroup>
 													</select>
 												</td>
-												<td><i class="fa fa-trash mt-1 pointer text-muted" data-action="reset-passenger-row"></i></td>
+												<td>
+													<span class="fa fa-undo" aria-hidden="true"></span>
+												</td>
 											</tr>
 											<tr>
 												<td>
@@ -348,7 +361,7 @@
 												</td>
 												<td>
 													<select name="psgn[5]['gender']" class="form-control form-control-sm">
-														<option value="">Select</option>
+														<option value="NONE">Select</option>
 														<option value="M">Male</option>
 														<option value="F">Female</option>
 														<option value="T">Transgender</option>
@@ -356,7 +369,7 @@
 												</td>
 												<td>
 													<select name="psgn[5]['choice']" class="form-control form-control-sm">
-														<option value="">No Preference</option>
+														<option value="NONE">No Preference</option>
 														<optgroup label="(SL, 3A, 2A) seats">
 															<option value="LB">LOWER</option>
 															<option value="MB">MIDDLE</option>
@@ -373,18 +386,20 @@
 														</optgroup>
 													</select>
 												</td>
-												<td><i class="fa fa-trash mt-1 pointer text-muted" data-action="reset-passenger-row"></i></td>
+												<td>
+													<span class="fa fa-undo" aria-hidden="true"></span>
+												</td>
 											</tr>
 										</tbody>
 									</table>
 									<p class="font-weight-bold mb-1">Children Below 5 Years</p>
-									<table class="table table-sm">
+									<table class="table table-bordered table-sm" id="pasenger-child-table">
 										<thead>
 											<tr class="text-muted">
 												<th scope="col">Name</th>
 												<th scope="col">Age</th>
 												<th scope="col">Gender</th>
-												<th><i class="fa fa-trash mt-1 pointer" data-action="reset-passenger-all"></i></th>
+												<th scope="col"><span class="fa fa-undo" aria-hidden="true"></span></th>
 											</tr>
 										</thead>
 										<tbody>
@@ -394,7 +409,7 @@
 												</td>
 												<td>
 													<select class="form-control form-control-sm" name="psgn_ch[0]['age']">
-														<option value="" selected>Age</option>
+														<option value="NONE" selected>Age</option>
 														<option value="0">Below one year</option>
 														<option value="1">One year</option>
 														<option value="2">Two years</option>
@@ -404,13 +419,15 @@
 												</td>
 												<td>
 													<select name="psgn_ch[0]['gender']" class="form-control form-control-sm">
-														<option value="">Select</option>
+														<option value="NONE">Select</option>
 														<option value="M">Male</option>
 														<option value="F">Female</option>
 														<option value="T">Transgender</option>
 													</select>
 												</td>
-												<td><i class="fa fa-trash mt-1 pointer text-muted" data-action="reset-passenger-row"></i></td>
+												<td>
+													<span class="fa fa-undo" aria-hidden="true"></span>
+												</td>
 											</tr>
 											<tr>
 												<td>
@@ -418,7 +435,7 @@
 												</td>
 												<td>
 													<select class="form-control form-control-sm" name="psgn_ch[1]['age']">
-														<option value="" selected>Age</option>
+														<option value="NONE" selected>Age</option>
 														<option value="0">Below one year</option>
 														<option value="1">One year</option>
 														<option value="2">Two years</option>
@@ -428,13 +445,15 @@
 												</td>
 												<td>
 													<select name="psgn_ch[1]['gender']" class="form-control form-control-sm">
-														<option value="">Select</option>
+														<option value="NONE">Select</option>
 														<option value="M">Male</option>
 														<option value="F">Female</option>
 														<option value="T">Transgender</option>
 													</select>
 												</td>
-												<td><i class="fa fa-trash mt-1 pointer text-muted" data-action="reset-passenger-row"></i></td>
+												<td>
+													<span class="fa fa-undo" aria-hidden="true"></span>
+												</td>
 											</tr>
 										</tbody>
 									</table>
@@ -447,49 +466,6 @@
 										<div class="form-group col-md-3">
 											<label for="mobile_no" class="col-form-label col-form-label-sm required">Mobile No.</label>
 											<input type="tel" class="form-control form-control-sm" id="mobile_no" name="mobile_no" placeholder="1234567890" maxlength="10" required>
-										</div>
-									</div>
-									<div class="form-row form-check font-weight-bold mb-1">
-										<input type="checkbox" class="form-check-input" id="auto_fill_sequrity" name="auto_fill_sequrity" data-toggle='collapse' data-target='#seq-ques-block'>
-										<label class="form-check-label pointer" for="auto_fill_sequrity">Auto fill Security Question</label>
-									</div>
-									<div id="seq-ques-block" class="collapse pl-3">
-										<div class="form-row">
-											<p><i class="text-muted">Please fill answers for the following security questions if you want them to be autofilled during booking.</i></p>
-											<div class="sec-questions">
-												<ol>
-													<li class="mb-2">
-														<div class="sec-question" data-question="Please Enter your register date of birth in ddMMyyyy format">
-															Please Enter your register date of birth in ddMMyyyy format
-														</div>
-														<input type="text" id="sqDob" name="sqDob" class="form-control form-control-sm">
-													</li>
-													<li class="mb-2">
-														<div class="sec-question" data-question="Please Enter your register user login id">
-															Please Enter your register user login id
-														</div>
-														<input type="text" id="sqLoginId" name="sqLoginId" class="form-control form-control-sm">
-													</li>
-													<li class="mb-2">
-														<div class="sec-question" data-question="Please Enter your register email ID">
-															Please Enter your register email ID
-														</div>
-														<input type="text" id="sqEmail" name="sqEmail" class="form-control form-control-sm">
-													</li>
-													<li class="mb-2">
-														<div class="sec-question" data-question="Please Enter your register mobile number">
-															Please Enter your register mobile number
-														</div>
-														<input type="text" id="sqMobile" name="sqMobile" class="form-control form-control-sm">
-													</li>
-													<li class="mb-2">
-														<div class="sec-question" data-question="Did You registered for IRCTC Ewallet Feature">
-															Did You registered for IRCTC Ewallet Feature
-														</div>
-														<input type="text" id="sqEWallet" name="sqEWallet" class="form-control form-control-sm">
-													</li>
-												</ol>
-											</div>
 										</div>
 									</div>
 								</div>
@@ -586,23 +562,81 @@
 					</div>
 					<div class="row mt-2">
 						<div class="col">
-							<div class="card card-default">
-								<!-- <div class="card-body p-2">
-									<div class="form-check">
-										<input type="checkbox" class="form-check-input" id="auto_proceed" name="auto_proceed">
-										<label class="form-check-label text-danger font-weight-bold" for="auto_proceed">I agree to Proceed Automatically on each page to proceed on next page.</label>
-									</div>
-									<p class="text-italic text-md mb-0"><strong>Note: </strong>Make sure once you check this check-box you may not able to see filled form you page will process till bank payment landing page.</p>
-								</div> -->
-								<div class="card-body p-2">
-									<div class="form-check text-center">
-										<span class="text-danger">Note:</span> To proceed with command use <kbd>Ctrl + Shift + A</kbd>
+							<div class="card border-info">
+								<div class="card-header bg-info py-1 px-3 font-weight-bold">
+									<input type="checkbox" name="enable_sq"><i class="fas fa-question mr-2"></i>Sequrity Questions (optional)
+								</div>
+								<div class="card-body">
+									<div class="row">
+										<div class="col-6">
+											<ol>
+												<li>
+													<div class="form-group">
+														<label for="">Please Enter your register date of birth in <b>ddMMyyyy</b> format</label>
+														<input type="text" class="form-control">
+													</div>
+												</li>
+												<li>
+													<div class="form-group">
+														<label for="">Please Enter your register user <b>login id</b></label>
+														<input type="text" class="form-control">
+													</div>
+												</li>
+												<li>
+													<div class="form-group">
+														<label for="">Please Enter your register <b>email ID</b></label>
+														<input type="text" class="form-control">
+													</div>
+												</li>
+												<li>
+													<div class="form-group">
+														<label for="">Please Enter your register <b>mobile number</b></label>
+														<input type="text" class="form-control">
+													</div>
+												</li>
+												<li>
+													<div class="form-group">
+														<label for="">Did You registered for IRCTC Ewallet Feature ?</label>
+														<div class="radio">
+															<label class="">
+																<input type="radio" class="" name="ewallet" value="Y"> Yes
+															</label>
+														</div>
+														<div class="radio">
+															<label class="">
+																<input type="radio" class="" name="ewallet" value="N"> No
+															</label>
+														</div>
+													</div>
+												</li>
+											</ol>
+										</div>
+										<div class="col-6">
+											<label class="switch float-right">
+												<input class="switch-input" type="checkbox" id="enable_sq" status="OFF">
+												<span class="switch-label" data-on="On" data-off="Off"></span>
+												<span class="switch-handle"></span>
+											</label>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="row mt-2">
+					<!-- <div class="row mt-2">
+						<div class="col">
+							<div class="card card-default">
+								<div class="card-body p-2">
+									<div class="form-check">
+										<input type="checkbox" class="form-check-input" id="auto_proceed" name="auto_proceed">
+										<label class="form-check-label text-danger font-weight-bold" for="auto_proceed">I agree to Proceed Automatically on each page to proceed on next page.</label>
+									</div>
+									<p class="text-italic text-md mb-0"><strong>Note: </strong>Make sure once you check this check-box you may not able to see filled form you page will process till bank payment landing page.</p>
+								</div>
+							</div>
+						</div>
+					</div> -->
+					<div class="row my-4">
 						<div class="col text-center">
 							<button class="btn btn-success" type="submit"><i class="far fa-save mr-2"></i>Save Form</button>
 							<button class="btn btn-warning" type="reset"><i class="fas fa-undo mr-2"></i>Reset Form</button>
@@ -616,15 +650,17 @@
 		</div>
 	</div>
 	<div class="container footer mt-2">
-		<div class="row">
+		<div class="row mt-5">
 			<div class="col text-center text-md">
+				<!-- <a href="http://patelworld.in" target="_new"><img src="../images/logos/web_logo.png" class="img img-responsive" width="120px;"></a><br> -->
 				<a href="javascript:void(0)" class="px-2">Disclaimer</a>|
 				<a href="javascript:void(0)" class="px-2">Privacy Policy</a>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col">
-				<p class="copytight text-center text-md">Copyright &copy; 2017-2018 <a href="http://patelworld.in/" target="_new" class="text-dark">patelworld.in</a></p>
+				<p class="copytight text-center text-md">Copyright &copy; 2017-2019 <a href="http://patelworld.in/" target="_new" class="text-dark">patelworld.in</a></p>
+				<p class="text-center app-version"></p>
 			</div>
 		</div>
 	</div>

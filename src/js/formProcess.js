@@ -2,10 +2,8 @@
 var extention_status = false;
 
 $(function(){
-	$('#app_version').text('version - 0.1.7');
-	renderPaymentBlock();
-	updatePendingView();
-	hash = $_GET('hash');
+	// chrome.storage.sync.set({booking_data: {}});
+	$('.app-version').text('version - '+ chrome.app.getDetails().version);
 	$('#extention_status_booking').click(function(){
 		if($(this).is(':checked') === true){
 			setExtentionStatus('ON');
@@ -15,38 +13,46 @@ $(function(){
 			gaEvent("BOOKING_FORM", "clicked", "Extention OFF");
 		}
 	});
+
+	let hash = $_GET('hash');
+
+	renderPaymentBlock();
+	updatePendingView();
 	checkExtentionSwitch();
+
 	if(null !== hash){
 		$.toast("Now you can edit existing form");
 		getBookingData(renderFormWithData, $_GET('hash'));
 	}
 
+	$('#pasenger-table svg,#pasenger-child-table svg').on('click', resetPassengerRow);
+
 	gaPage('/booking_form.html');
-
 	$('#formName').focus();
-
-	$('[data-action="reset-passenger-row"]').click(function(){
-		var row = $(this).parent().parent('tr');
-		row.find('input,select').val('');
-	});
-
-	$('[data-action="reset-passenger-all"]').click(function(){
-		var row = $(this).closest('table').find('input,select').val('');
-	});
 })
+
+function resetPassengerRow(this_){
+	if($(this_.target).closest('tr').find('th').length == 0){
+		$(this_.target).closest('tr').find('input').val('');
+		$(this_.target).closest('tr').find('select').val('NONE');
+	}else{
+		$(this_.target).closest('table').find('input').val('');
+		$(this_.target).closest('table').find('select').val('NONE');
+	}
+}
 
 function renderPaymentBlock(){
 	$('#payment-method-radio').html('');
 	$.each(payment_opt, function(pc, ptext){
 		// time_now = (new Date()).getTime();
-		input_radio = $('<input/>').addClass('form-check-input').attr({
+		let input_radio = $('<input/>').addClass('form-check-input').attr({
 			'type': "radio",
 			"name": "pay_mod",
 			"id": "pay_mod_"+pc,
 			"value": pc,
 		});
 
-		radio_label = $('<label/>').addClass('form-check-label').attr({
+		let radio_label = $('<label/>').addClass('form-check-label').attr({
 			"for": "pay_mod_"+pc
 		}).text(ptext);
 		// console.log(['Inarray = ',$.inArray(pc, permit_payment)]);
@@ -58,7 +64,7 @@ function renderPaymentBlock(){
 			radio_label.addClass('text-success font-weight-bold');
 		}
 
-		p_opt = $('<div/>').addClass('form-check disabled')
+		let p_opt = $('<div/>').addClass('form-check disabled')
 		.append(input_radio)
 		.append(radio_label);
 
@@ -78,7 +84,6 @@ function renderPaymentBank(payment_mode){
 }
 
 function setExtentionStatus(status = 'OFF'){
-	// if($('#extention_status').is(':checked') === true)
 	if(status === "ON"){
 		chrome.storage.sync.set({extention_status: true}, function(){
 			chrome.browserAction.setBadgeText({text: "ON"});
@@ -103,9 +108,9 @@ function checkExtentionSwitch(){
 }
 
 function $_GET(key){
-	var url = new URL(window.location.href);
-	var c = url.searchParams.get(key);
-	return c;
+	let url = new URL(window.location.href);
+	let c = url.searchParams.get(key);
+	return (c == null || c == "")? null : c;
 }
 
 function updatePendingView(renderHash = null){
@@ -115,9 +120,9 @@ function updatePendingView(renderHash = null){
 			// console.log(b_data);
 			$.each(b_data, function(k,v){
 				// console.log(v.booking_form_name);
-				html_temp = card_tmpl;
+				let html_temp = card_tmpl;
 				jd_parts = v.j_date.split('-');
-				temp = {
+				let temp = {
 					hash: k,
 					form_name: v.booking_form_name,
 					from: ((v.from_station || '-').split('-')[1]).trim(),
@@ -133,8 +138,8 @@ function updatePendingView(renderHash = null){
 				};
 
 				$.each(temp, function(k,v){
-					pattern = '{{' + k + '}}';
-					regEx = new RegExp(pattern, 'g');
+					let pattern = '{{' + k + '}}';
+					let regEx = new RegExp(pattern, 'g');
 					html_temp = html_temp.replace(regEx, v);
 				});
 
@@ -143,7 +148,7 @@ function updatePendingView(renderHash = null){
 
 			$('[data-action="edit"]').click(function(){
 				if(true === extention_status){
-					hash = $(this).attr('data-hash');
+					let hash = $(this).attr('data-hash');
 					window.location.href = window.location.origin + window.location.pathname + "?hash=" + hash;
 				}
 				// getBookingData(renderFormWithData, hash);
@@ -152,15 +157,15 @@ function updatePendingView(renderHash = null){
 
 			$('[data-action="delete"]').click(function(){
 				if(true === extention_status){
-					hash = $(this).attr('data-hash');
+					let hash = $(this).attr('data-hash');
 					this_ = this;
 					getBookingData(function(resp){
-						last_node = (Object.keys(resp).length == 1)? true : false;
+						let last_node = (Object.keys(resp).length == 1)? true : false;
 						delete resp[hash];
 						chrome.storage.sync.get(['booking_default'], function(result) {
-							updateJson = {"booking_data": resp};
+							let updateJson = {"booking_data": resp};
 							if(hash == btoa(result.booking_default.booking_form_name)){
-								keys = Object.keys(resp);
+								let keys = Object.keys(resp);
 								defaultJson = null;
 								if(keys.length > 0){
 									active_hash = keys[keys.length - 1];
@@ -180,7 +185,7 @@ function updatePendingView(renderHash = null){
 
 			$('[data-action="triggerBooking"]').click(function(){
 				if(true === extention_status){
-					hash = $(this).attr('data-hash');
+					let hash = $(this).attr('data-hash');
 					getBookingData(function(booking_json){
 						chrome.tabs.create({
 							url:'https://www.irctc.co.in/nget/train-search',
@@ -204,6 +209,30 @@ function clearBookings(){
 		.append($('<button/>').text('Create New Booking').addClass('btn btn-primary').attr({'id':"createNewBooking"}))
 	);
 	$('#createNewBooking').click(openBlankForm);
+}
+
+// $('[name="from_station"],[name="to_station"]').change(getAvailableTrains);
+
+function getAvailableTrains(){
+	let stn1 = $('[name="from_station"]').val();//.split('-')[1].trim();
+	let stn2 = $('[name="to_station"]').val();//.split('-')[1].trim();
+	console.log(stn1);
+	console.log(stn2);
+	if(stn1!== "" && stn2 !== ""){
+		$.ajax({
+			type: 'GET',
+			url: 'https://erail.in/rail/getTrains.aspx?Station_From=GAYA&Station_To=PNBE&Cache=true',
+			// data: {'stn1': stn1,'stn2':stn2},
+			dataType: 'JSONP',
+			// crossDomain : true,
+			success: function(resp){
+				console.log(resp);
+			},
+			eror: function(xhr){
+				console.log(xhr);
+			}
+		});
+	}
 }
 
 function openBlankForm(){
@@ -236,21 +265,23 @@ $('.calender').click(function(){
 $('#booking_form').submit(saveBookingForm);
 
 function saveBookingForm(){
-	key = btoa($('#formName').val());
+	let key = btoa($('#formName').val());
 	getBookingData(function(booking_data){
 		booking_data = booking_data || {};
-		var status=true;
-		var old = false;
+		let status=true;
+		let old = false;
 		if(typeof booking_data[key]!=='undefined'){
-			//take user consent to proceed overriding data
 			old = true;
 			status = confirm('Form Name already present. Do you want to update?');
-
 		}
 		if(status === true){
 			booking_data[key] = formJSON();
+			// console.log(booking_data[key]);
 			chrome.storage.sync.set({booking_data: booking_data}, function() {
+				/*$('#msgBox').show();
+				$('#msgBox').alert();*/
 				chrome.storage.sync.set({booking_default: booking_data[key]});
+				// alert('Your Form successfully saved with "'+ $('#formName').val() +'"');
 				$.toast({
 					heading: 'Form Save',
 					text: 'Your Form successfully saved with <strong>'+ $('#formName').val() +'</strong>',
@@ -271,58 +302,17 @@ function saveBookingForm(){
 	return false;
 }
 
-function addPassenger(){
-	var row = `<tr>
-		<td>
-			<input name="psgn[0]['name']" class="form-control form-control-sm" placeholder="Passenger #1" maxlength="16" value="" type="text" pattern="[\w\s]*" title="Name should be alphanumeric only">
-		</td>
-		<td>
-			<input name="psgn[0]['age']" class="form-control form-control-sm" maxlength="2" value="" type="number" pattern="[\d]*" title="Age shoud be 5-99 only">
-		</td>
-		<td>
-			<select name="psgn[0]['gender']" class="form-control form-control-sm">
-				<option value="">Select</option>
-				<option value="M">Male</option>
-				<option value="F">Female</option>
-				<option value="T">Transgender</option>
-			</select>
-		</td>
-		<td>
-			<select name="psgn[0]['choice']" class="form-control form-control-sm">
-				<option value="">No Preference</option>
-				<optgroup label="(SL, 3A, 2A) seats">
-					<option value="LB">LOWER</option>
-					<option value="MB">MIDDLE</option>
-					<option value="UB">UPPER</option>
-					<option value="SL">SIDE LOWER</option>
-					<option value="SU">SIDE UPPER</option>
-				</optgroup>
-				<optgroup label="(2S, CC) seats">
-					<option value="WS">WINDOW SIDE</option>
-				</optgroup>
-				<optgroup label="(1A) seats">
-					<option value="CB">CABIN</option>
-					<option value="CP">COUPE</option>
-				</optgroup>
-			</select>
-		</td>
-	</tr>`;
-	$('#pasengers-table tbody').append(row);
-}
-
-
 function formJSON(){
-	var form_data = $('#booking_form').serializeArray();
-	var	formJson = {
+	let form_data = $('#booking_form').serializeArray();
+	let	formJson = {
 		"auto_upgradation": false,
 		"auto_proceed": false,
 		"confirm_berths": false,
 		"coach_preferred": false,
-		"psngr": {"C" :[], "A": []},
-		"seq_questions": {}
+		"psngr": {"C" :[], "A": []}
 	};
 	$.each(form_data, function(k,v){
-		psgn_ch_match = (v.name).match(new RegExp(/^(psgn_ch)(\[)([\d])(\])(\[\')([a-z]+)(\'\])$/i));
+		let psgn_ch_match = (v.name).match(new RegExp(/^(psgn_ch)(\[)([\d])(\])(\[\')([a-z]+)(\'\])$/i));
 		if(null !== psgn_ch_match && v.value != ''){
 			if(typeof formJson['psngr']['C'][psgn_ch_match[3]] == 'undefined'){
 				formJson['psngr']['C'][psgn_ch_match[3]] = {"name": "", "age" : "", "gender" : ""};
@@ -334,7 +324,13 @@ function formJSON(){
 			}
 		}
 		else{
-			psgn_match = (v.name).match(new RegExp(/^(psgn)(\[)([\d])(\])(\[\')([a-z]+)(\'\])$/i));
+			/*console.log([
+				v.name,
+				v.value,
+				$.inArray(v.name,options),
+				'on' == v.value
+			]);*/
+			let psgn_match = (v.name).match(new RegExp(/^(psgn)(\[)([\d])(\])(\[\')([a-z]+)(\'\])$/i));
 			if(null !== psgn_match && v.value != ''){
 				if(typeof formJson['psngr']['A'][psgn_match[3]] == 'undefined'){
 					formJson['psngr']['A'][psgn_match[3]] = {"name": "", "age" : "", "gender" : "", "choice":""};
@@ -348,13 +344,14 @@ function formJSON(){
 				formJson[v.name] = true;
 
 			}else if(null == psgn_match && null == psgn_ch_match){
+				// console.log(v.name+"="+v.value);
 				formJson[v.name] = v.value;
 			}
 		}
-		if(-1 != $.inArray(v.name, ['sqDob','sqLoginId','sqEmail','sqMobile','sqEWallet'])){
-			formJson['seq_questions'][v.name] = v.value;
-		}
 	});
+
+	// console.log('Form Json = ');
+	// console.log(formJson);
 	return formJson;
 }
 
@@ -412,7 +409,6 @@ $('#coach_preferred').click(function(e){
 		$('#coach_preferred_no').attr('readonly', true);
 	}
 });
-
 
 
 
