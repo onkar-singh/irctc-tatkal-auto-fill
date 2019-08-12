@@ -65,7 +65,7 @@ let card_tmpl = `
 								<div class="col"><i class="fa fa-train"></i></div>
 								<div class="col">{{to}}</div>
 							</div>
-							<p class="text-center p-0 m-0 text-md text-secondary"><strong>{{train_no}}</strong> : {{train_name}}</p>
+							<p class="text-center p-0 m-0 text-md text-secondary"><strong>{{train_no}}</strong> : <span>{{train_name}}</span></p>
 							<div class="border-bottom my-2"></div>
 							<div class="row">
 								<div class="col text-center">
@@ -93,6 +93,76 @@ let card_tmpl = `
 					</div>
 				</div>
 				`;
+
+let passenger_row = `
+<tr>
+	<td>
+		<input data-field="p_name" class="form-control form-control-sm" placeholder="Passenger #{{pcount}}" maxlength="16" value="" type="text" pattern="[\w\s]*" title="Name should be alphanumeric only">
+	</td>
+	<td>
+		<input data-field="p_age" class="form-control form-control-sm" value="" type="number" pattern="[\d]*" title="Age shoud be 5-99 only" min="5" max="99">
+	</td>
+	<td>
+		<select data-field="p_gender" class="form-control form-control-sm">
+			<option value="NONE">Select</option>
+			<option value="M">Male</option>
+			<option value="F">Female</option>
+			<option value="T">Transgender</option>
+		</select>
+	</td>
+	<td>
+		<select data-field="p_choice" class="form-control form-control-sm">
+			<option value="NONE">No Preference</option>
+			<optgroup label="(SL, 3A, 2A) seats">
+				<option value="LB">LOWER</option>
+				<option value="MB">MIDDLE</option>
+				<option value="UB">UPPER</option>
+				<option value="SL">SIDE LOWER</option>
+				<option value="SU">SIDE UPPER</option>
+			</optgroup>
+			<optgroup label="(2S, CC) seats">
+				<option value="WS">WINDOW SIDE</option>
+			</optgroup>
+			<optgroup label="(1A) seats">
+				<option value="CB">CABIN</option>
+				<option value="CP">COUPE</option>
+			</optgroup>
+		</select>
+	</td>
+	<td>
+		<span data-action="reset_row"><i class="fa fa-undo" aria-hidden="true"></i></span>
+	</td>
+</tr>
+`;
+
+let child_passenger_row = `
+	<tr>
+		<td>
+			<input data-field="p_name" class="form-control form-control-sm" placeholder="Passenger #{{pcount}}" maxlength="16" value="" type="text" pattern="[\w\s]*" title="Name should be alphanumeric only">
+		</td>
+		<td>
+			<select class="form-control form-control-sm" data-field="age">
+				<option value="NONE" selected>Age</option>
+				<option value="0">Below one year</option>
+				<option value="1">One year</option>
+				<option value="2">Two years</option>
+				<option value="3">Three years</option>
+				<option value="4">Four years</option>
+			</select>
+		</td>
+		<td>
+			<select data-field="gender" class="form-control form-control-sm">
+				<option value="NONE">Select</option>
+				<option value="M">Male</option>
+				<option value="F">Female</option>
+				<option value="T">Transgender</option>
+			</select>
+		</td>
+		<td>
+			<span data-action="reset_row"><i class="fa fa-undo" aria-hidden="true"></i></span>
+		</td>
+	</tr>
+`;
 
 
 (function($){
@@ -141,12 +211,14 @@ ga('create', 'UA-54657154-2', 'auto');
 ga('send', 'pageview', '/booking_form.html');
 */
 function gaPage(pageName){
+	return;
 	console.debug("PageView Logged =", pageName);
 	 _gaq.push(['_trackPageview', pageName]);
 	// ga('send', 'pageview', pageName);
 }
 
 function gaEvent(categoryName, actionName, labelName){
+	return;
 	console.debug([categoryName, actionName, labelName]);
 	_gaq.push(['_trackEvent', categoryName, actionName, labelName]);
 	// _trackEvent(category, action, opt_label, opt_value, opt_noninteraction)

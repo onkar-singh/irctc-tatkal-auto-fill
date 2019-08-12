@@ -3,7 +3,44 @@ var extention_status = false;
 
 $(function(){
 	// chrome.storage.sync.set({booking_data: {}});
+	let hash = $_GET('hash');
+	initApp();
+	renderPaymentBlock();
+	updatePendingView();
+	checkExtentionSwitch();
+
+	if(null !== hash){
+		console.log('hash');
+		// $.toast("Now you can edit existing form");
+		getBookingData(renderFormWithData, hash);
+	}else if($_GET('tab') == 'trips'){
+		console.log('Trips');
+		$('.nav-tabs a[aria-controls="nav-pending"]').tab('show');
+	}else if($_GET('tab') == 'new'){
+		console.log('New');
+		$('.nav-tabs a[aria-controls="nav-new"]').tab('show');
+		// gaPage('/booking_form.html');
+		// $('#formName').focus();
+	}
+});
+
+function initApp(){
 	$('.app-version').text('version - '+ chrome.app.getDetails().version);
+
+	$('#nav-home-tab, #nav-pending-tab').on('click', redirectTab);
+
+	for(let i=1; i<=6; i++){
+		let r = passenger_row.replace('{{pcount}}', i);
+		$('#pasenger-table tbody').append(r);
+	}
+
+	for(let j=1; j<=2; j++){
+		let r = child_passenger_row.replace('{{pcount}}', j);
+		$('#pasenger-child-table tbody').append(r);
+	}
+	$('#pasenger-table span[data-action="reset_row"],#pasenger-child-table span[data-action="reset_row"]').on('click', resetPassengerRow);
+
+
 	$('#extention_status_booking').click(function(){
 		if($(this).is(':checked') === true){
 			setExtentionStatus('ON');
@@ -14,22 +51,18 @@ $(function(){
 		}
 	});
 
-	let hash = $_GET('hash');
+	$('[data-action="switchjd"]').click(function(){
+		let s_stn = $('[name="from_station"]').val();
+		let d_stn = $('[name="to_station"]').val();
+		$('[name="from_station"]').val(d_stn);
+		$('[name="to_station"]').val(s_stn);
+	});
+}
 
-	renderPaymentBlock();
-	updatePendingView();
-	checkExtentionSwitch();
+function redirectTab(this_){
+	window.location.href = './booking_form.html?tab='+$(this_.target).attr('aria-tab');
+}
 
-	if(null !== hash){
-		$.toast("Now you can edit existing form");
-		getBookingData(renderFormWithData, $_GET('hash'));
-	}
-
-	$('#pasenger-table svg,#pasenger-child-table svg').on('click', resetPassengerRow);
-
-	gaPage('/booking_form.html');
-	$('#formName').focus();
-})
 
 function resetPassengerRow(this_){
 	if($(this_.target).closest('tr').find('th').length == 0){
@@ -186,12 +219,16 @@ function updatePendingView(renderHash = null){
 			$('[data-action="triggerBooking"]').click(function(){
 				if(true === extention_status){
 					let hash = $(this).attr('data-hash');
+
 					getBookingData(function(booking_json){
+						console.log(booking_json);
+						chrome.storage.sync.set({booking_default: booking_json});
 						chrome.tabs.create({
 							url:'https://www.irctc.co.in/nget/train-search',
 							active: true
 						});
 					}, hash);
+
 					gaEvent("BOOKING_FORM", "clicked", "Booking Trigger");
 				}
 			});
@@ -309,9 +346,14 @@ function formJSON(){
 		"auto_proceed": false,
 		"confirm_berths": false,
 		"coach_preferred": false,
+		"seq_question": false,
 		"psngr": {"C" :[], "A": []}
 	};
+
 	$.each(form_data, function(k,v){
+		if($.inArray(v.name, ['dob','email_id','mob_no','login_id','ewallet']) !== -1){
+			return true;
+		}
 		let psgn_ch_match = (v.name).match(new RegExp(/^(psgn_ch)(\[)([\d])(\])(\[\')([a-z]+)(\'\])$/i));
 		if(null !== psgn_ch_match && v.value != ''){
 			if(typeof formJson['psngr']['C'][psgn_ch_match[3]] == 'undefined'){
@@ -322,14 +364,7 @@ function formJSON(){
 			}else{
 				delete formJson['psngr']['C'][psgn_ch_match[3]];
 			}
-		}
-		else{
-			/*console.log([
-				v.name,
-				v.value,
-				$.inArray(v.name,options),
-				'on' == v.value
-			]);*/
+		}else{
 			let psgn_match = (v.name).match(new RegExp(/^(psgn)(\[)([\d])(\])(\[\')([a-z]+)(\'\])$/i));
 			if(null !== psgn_match && v.value != ''){
 				if(typeof formJson['psngr']['A'][psgn_match[3]] == 'undefined'){
@@ -344,14 +379,20 @@ function formJSON(){
 				formJson[v.name] = true;
 
 			}else if(null == psgn_match && null == psgn_ch_match){
-				// console.log(v.name+"="+v.value);
 				formJson[v.name] = v.value;
 			}
 		}
 	});
 
-	// console.log('Form Json = ');
-	// console.log(formJson);
+	if($('#enable_sq').is(":checked") === true){
+		formJson.seq_question = {};
+		$('#seq_card input:text').each(function(k,v){
+			formJson.seq_question[$(this).attr('name')] = $(this).val();
+		});
+		formJson.seq_question[$('#seq_card input[type="email"]').attr('name')] = $('#seq_card input[type="email"]').val();
+		formJson.seq_question[$('#seq_card input:radio:checked').attr('name')] = $('#seq_card input:radio:checked').val();
+	}
+
 	return formJson;
 }
 
@@ -371,6 +412,7 @@ function getBookingData(callback = false, key = false){
 
 function renderFormWithData(json){
 	$('[type="reset"]').trigger('click');
+	console.log(json);
 	$.each(json, function(k,v){
 		if(k == 'psngr'){
 			$.each(v, function(pk,pr){
@@ -397,8 +439,17 @@ function renderFormWithData(json){
 			renderPaymentBank(v);
 			$('[name="bank_name"]').val(json.bank_name);
 		}
+
+		if(k === 'seq_question' && v !== false){
+			$('#enable_sq').prop('checked', true);
+			$('[name="dob"]').val(v.dob);
+			$('[name="login_id"]').val(v.login_id);
+			$('[name="email_id"]').val(v.email_id);
+			$('[name="mob_no"]').val(v.mob_no);
+			$('[name="ewallet"][value="'+v.ewallet+'"]').prop('checked', true);
+		}
 	});
-	$('[href="#nav-new"]').trigger('click');
+	// $('[href="#nav-new"]').trigger('click');
 }
 
 $('#coach_preferred').click(function(e){

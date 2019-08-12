@@ -36,11 +36,11 @@
 	<div class="container">
 		<nav>
 			<div class="nav nav-tabs" id="nav-tab" role="tablist">
-				<a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-new" role="tab" aria-controls="nav-home" aria-selected="true">
+				<a class="nav-item nav-link active" id="nav-home-tab" href="#nav-new" role="tab" aria-controls="nav-home" aria-selected="true" aria-tab="new">
 					<i class="fa fa-plus-circle mr-2"></i>New
 				</a>
-				<a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-pending" role="tab" aria-controls="nav-pending" aria-selected="false">
-					<i class="fa fa-bookmark mr-2"></i>Trips
+				<a class="nav-item nav-link" id="nav-pending-tab" href="#nav-pending" role="tab" aria-controls="nav-pending" aria-selected="false" aria-tab="trips">
+					<i class="fa fa-bookmark mr-2"></i>Saved Trips
 				</a>
 			</div>
 		</nav>
@@ -100,8 +100,8 @@
 											<label for="from_station" class="col-form-label col-form-label-sm required">FROM Station</label>
 											<input type="text" class="form-control form-control-sm station" id="from_station" name="from_station" placeholder="Station Name">
 										</div>
-										<div class="form-group col-md-1 text-center">
-											<i class="fas fa-exchange-alt fa-2x"></i>
+										<div class="form-group col-md-1 mt-4 pt-1 text-center">
+											<i class="fas fa-exchange-alt fa-2x pointer" data-action="switchjd"></i>
 										</div>
 										<div class="form-group col-md-4">
 											<label for="to_station" class="col-form-label col-form-label-sm required">TO Station</label>
@@ -158,238 +158,10 @@
 												<th scope="col">Age</th>
 												<th scope="col">Gender</th>
 												<th scope="col">Birth Prefrence</th>
-												<th scope="col"><span class="fa fa-undo" aria-hidden="true"></span></th>
+												<th scope="col"><span data-action="reset_row"><i class="fa fa-undo" aria-hidden="true"></i></span></th>
 											</tr>
 										</thead>
 										<tbody>
-											<tr>
-												<td>
-													<input name="psgn[0]['name']" class="form-control form-control-sm" placeholder="Passenger #1" maxlength="16" value="" type="text" pattern="[\w\s]*" title="Name should be alphanumeric only">
-												</td>
-												<td>
-													<input name="psgn[0]['age']" class="form-control form-control-sm" maxlength="2" value="" type="number" pattern="[\d]*" title="Age shoud be 5-99 only">
-												</td>
-												<td>
-													<select name="psgn[0]['gender']" class="form-control form-control-sm">
-														<option value="NONE">Select</option>
-														<option value="M">Male</option>
-														<option value="F">Female</option>
-														<option value="T">Transgender</option>
-													</select>
-												</td>
-												<td>
-													<select name="psgn[0]['choice']" class="form-control form-control-sm">
-														<option value="NONE">No Preference</option>
-														<optgroup label="(SL, 3A, 2A) seats">
-															<option value="LB">LOWER</option>
-															<option value="MB">MIDDLE</option>
-															<option value="UB">UPPER</option>
-															<option value="SL">SIDE LOWER</option>
-															<option value="SU">SIDE UPPER</option>
-														</optgroup>
-														<optgroup label="(2S, CC) seats">
-															<option value="WS">WINDOW SIDE</option>
-														</optgroup>
-														<optgroup label="(1A) seats">
-															<option value="CB">CABIN</option>
-															<option value="CP">COUPE</option>
-														</optgroup>
-													</select>
-												</td>
-												<td>
-													<span class="fa fa-undo" aria-hidden="true"></span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<input name="psgn[1]['name']" class="form-control form-control-sm" placeholder="Passenger #2" maxlength="16" value="" type="text" pattern="[\w\s]*" title="Name should be alphanumeric only">
-												</td>
-												<td>
-													<input name="psgn[1]['age']" class="form-control form-control-sm" maxlength="2" value="" type="number" pattern="[\d]*" title="Age shoud be 5-99 only">
-												</td>
-												<td>
-													<select name="psgn[1]['gender']" class="form-control form-control-sm">
-														<option value="NONE">Select</option>
-														<option value="M">Male</option>
-														<option value="F">Female</option>
-														<option value="T">Transgender</option>
-													</select>
-												</td>
-												<td>
-													<select name="psgn[1]['choice']" class="form-control form-control-sm">
-														<option value="NONE">No Preference</option>
-														<optgroup label="(SL, 3A, 2A) seats">
-															<option value="LB">LOWER</option>
-															<option value="MB">MIDDLE</option>
-															<option value="UB">UPPER</option>
-															<option value="SL">SIDE LOWER</option>
-															<option value="SU">SIDE UPPER</option>
-														</optgroup>
-														<optgroup label="(2S, CC) seats">
-															<option value="WS">WINDOW SIDE</option>
-														</optgroup>
-														<optgroup label="(1A) seats">
-															<option value="CB">CABIN</option>
-															<option value="CP">COUPE</option>
-														</optgroup>
-													</select>
-												</td>
-												<td>
-													<span class="fa fa-undo" aria-hidden="true"></span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<input name="psgn[2]['name']" class="form-control form-control-sm" placeholder="Passenger #3" maxlength="16" value="" type="text" pattern="[\w\s]*" title="Name should be alphanumeric only">
-												</td>
-												<td>
-													<input name="psgn[2]['age']" class="form-control form-control-sm" maxlength="2" value="" type="number" pattern="[\d]*" title="Age shoud be 5-99 only">
-												</td>
-												<td>
-													<select name="psgn[2]['gender']" class="form-control form-control-sm">
-														<option value="NONE">Select</option>
-														<option value="M">Male</option>
-														<option value="F">Female</option>
-														<option value="T">Transgender</option>
-													</select>
-												</td>
-												<td>
-													<select name="psgn[2]['choice']" class="form-control form-control-sm">
-														<option value="NONE">No Preference</option>
-														<optgroup label="(SL, 3A, 2A) seats">
-															<option value="LB">LOWER</option>
-															<option value="MB">MIDDLE</option>
-															<option value="UB">UPPER</option>
-															<option value="SL">SIDE LOWER</option>
-															<option value="SU">SIDE UPPER</option>
-														</optgroup>
-														<optgroup label="(2S, CC) seats">
-															<option value="WS">WINDOW SIDE</option>
-														</optgroup>
-														<optgroup label="(1A) seats">
-															<option value="CB">CABIN</option>
-															<option value="CP">COUPE</option>
-														</optgroup>
-													</select>
-												</td>
-												<td>
-													<span class="fa fa-undo" aria-hidden="true"></span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<input name="psgn[3]['name']" class="form-control form-control-sm" placeholder="Passenger #4" maxlength="16" value="" type="text" pattern="[\w\s]*" title="Name should be alphanumeric only">
-												</td>
-												<td>
-													<input name="psgn[3]['age']" class="form-control form-control-sm" maxlength="2" value="" type="number" pattern="[\d]*" title="Age shoud be 5-99 only">
-												</td>
-												<td>
-													<select name="psgn[3]['gender']" class="form-control form-control-sm">
-														<option value="NONE">Select</option>
-														<option value="M">Male</option>
-														<option value="F">Female</option>
-														<option value="T">Transgender</option>
-													</select>
-												</td>
-												<td>
-													<select name="psgn[3]['choice']" class="form-control form-control-sm">
-														<option value="NONE">No Preference</option>
-														<optgroup label="(SL, 3A, 2A) seats">
-															<option value="LB">LOWER</option>
-															<option value="MB">MIDDLE</option>
-															<option value="UB">UPPER</option>
-															<option value="SL">SIDE LOWER</option>
-															<option value="SU">SIDE UPPER</option>
-														</optgroup>
-														<optgroup label="(2S, CC) seats">
-															<option value="WS">WINDOW SIDE</option>
-														</optgroup>
-														<optgroup label="(1A) seats">
-															<option value="CB">CABIN</option>
-															<option value="CP">COUPE</option>
-														</optgroup>
-													</select>
-												</td>
-												<td>
-													<span class="fa fa-undo" aria-hidden="true"></span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<input name="psgn[4]['name']" class="form-control form-control-sm" placeholder="Passenger #5" maxlength="16" value="" type="text" pattern="[\w\s]*" title="Name should be alphanumeric only">
-												</td>
-												<td>
-													<input name="psgn[4]['age']" class="form-control form-control-sm" maxlength="2" value="" type="number" pattern="[\d]*" title="Age shoud be 5-99 only">
-												</td>
-												<td>
-													<select name="psgn[4]['gender']" class="form-control form-control-sm">
-														<option value="NONE">Select</option>
-														<option value="M">Male</option>
-														<option value="F">Female</option>
-														<option value="T">Transgender</option>
-													</select>
-												</td>
-												<td>
-													<select name="psgn[4]['choice']" class="form-control form-control-sm">
-														<option value="NONE">No Preference</option>
-														<optgroup label="(SL, 3A, 2A) seats">
-															<option value="LB">LOWER</option>
-															<option value="MB">MIDDLE</option>
-															<option value="UB">UPPER</option>
-															<option value="SL">SIDE LOWER</option>
-															<option value="SU">SIDE UPPER</option>
-														</optgroup>
-														<optgroup label="(2S, CC) seats">
-															<option value="WS">WINDOW SIDE</option>
-														</optgroup>
-														<optgroup label="(1A) seats">
-															<option value="CB">CABIN</option>
-															<option value="CP">COUPE</option>
-														</optgroup>
-													</select>
-												</td>
-												<td>
-													<span class="fa fa-undo" aria-hidden="true"></span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<input name="psgn[5]['name']" class="form-control form-control-sm" placeholder="Passenger #6" maxlength="16" value="" type="text" pattern="[\w\s]*" title="Name should be alphanumeric only">
-												</td>
-												<td>
-													<input name="psgn[5]['age']" class="form-control form-control-sm" maxlength="2" value="" type="number" pattern="[\d]*" title="Age shoud be 5-99 only">
-												</td>
-												<td>
-													<select name="psgn[5]['gender']" class="form-control form-control-sm">
-														<option value="NONE">Select</option>
-														<option value="M">Male</option>
-														<option value="F">Female</option>
-														<option value="T">Transgender</option>
-													</select>
-												</td>
-												<td>
-													<select name="psgn[5]['choice']" class="form-control form-control-sm">
-														<option value="NONE">No Preference</option>
-														<optgroup label="(SL, 3A, 2A) seats">
-															<option value="LB">LOWER</option>
-															<option value="MB">MIDDLE</option>
-															<option value="UB">UPPER</option>
-															<option value="SL">SIDE LOWER</option>
-															<option value="SU">SIDE UPPER</option>
-														</optgroup>
-														<optgroup label="(2S, CC) seats">
-															<option value="WS">WINDOW SIDE</option>
-														</optgroup>
-														<optgroup label="(1A) seats">
-															<option value="CB">CABIN</option>
-															<option value="CP">COUPE</option>
-														</optgroup>
-													</select>
-												</td>
-												<td>
-													<span class="fa fa-undo" aria-hidden="true"></span>
-												</td>
-											</tr>
 										</tbody>
 									</table>
 									<p class="font-weight-bold mb-1">Children Below 5 Years</p>
@@ -399,62 +171,10 @@
 												<th scope="col">Name</th>
 												<th scope="col">Age</th>
 												<th scope="col">Gender</th>
-												<th scope="col"><span class="fa fa-undo" aria-hidden="true"></span></th>
+												<th scope="col"><span data-action="reset_row"><i class="fa fa-undo" aria-hidden="true"></i></span></th>
 											</tr>
 										</thead>
 										<tbody>
-											<tr>
-												<td>
-													<input name="psgn_ch[0]['name']" class="form-control form-control-sm" placeholder="Passenger #1" maxlength="16" value="" type="text" pattern="[\w\s]*" title="Name should be alphanumeric only">
-												</td>
-												<td>
-													<select class="form-control form-control-sm" name="psgn_ch[0]['age']">
-														<option value="NONE" selected>Age</option>
-														<option value="0">Below one year</option>
-														<option value="1">One year</option>
-														<option value="2">Two years</option>
-														<option value="3">Three years</option>
-														<option value="4">Four years</option>
-													</select>
-												</td>
-												<td>
-													<select name="psgn_ch[0]['gender']" class="form-control form-control-sm">
-														<option value="NONE">Select</option>
-														<option value="M">Male</option>
-														<option value="F">Female</option>
-														<option value="T">Transgender</option>
-													</select>
-												</td>
-												<td>
-													<span class="fa fa-undo" aria-hidden="true"></span>
-												</td>
-											</tr>
-											<tr>
-												<td>
-													<input name="psgn_ch[1]['name']" class="form-control form-control-sm" placeholder="Passenger #2" maxlength="16" value="" type="text" pattern="[\w\s]*" title="Name should be alphanumeric only">
-												</td>
-												<td>
-													<select class="form-control form-control-sm" name="psgn_ch[1]['age']">
-														<option value="NONE" selected>Age</option>
-														<option value="0">Below one year</option>
-														<option value="1">One year</option>
-														<option value="2">Two years</option>
-														<option value="3">Three years</option>
-														<option value="4">Four years</option>
-													</select>
-												</td>
-												<td>
-													<select name="psgn_ch[1]['gender']" class="form-control form-control-sm">
-														<option value="NONE">Select</option>
-														<option value="M">Male</option>
-														<option value="F">Female</option>
-														<option value="T">Transgender</option>
-													</select>
-												</td>
-												<td>
-													<span class="fa fa-undo" aria-hidden="true"></span>
-												</td>
-											</tr>
 										</tbody>
 									</table>
 									<p class="font-weight-bold mb-1">Other Details</p>
@@ -562,9 +282,9 @@
 					</div>
 					<div class="row mt-2">
 						<div class="col">
-							<div class="card border-info">
+							<div class="card border-info" id="seq_card">
 								<div class="card-header bg-info py-1 px-3 font-weight-bold">
-									<input type="checkbox" name="enable_sq"><i class="fas fa-question mr-2"></i>Sequrity Questions (optional)
+									<i class="fas fa-question mr-2"></i>Sequrity Questions (optional)
 								</div>
 								<div class="card-body">
 									<div class="row">
@@ -573,25 +293,25 @@
 												<li>
 													<div class="form-group">
 														<label for="">Please Enter your register date of birth in <b>ddMMyyyy</b> format</label>
-														<input type="text" class="form-control">
+														<input type="text" class="form-control form-control-sm" name="dob" maxlength="8">
 													</div>
 												</li>
 												<li>
 													<div class="form-group">
 														<label for="">Please Enter your register user <b>login id</b></label>
-														<input type="text" class="form-control">
+														<input type="text" class="form-control form-control-sm" name="login_id">
 													</div>
 												</li>
 												<li>
 													<div class="form-group">
 														<label for="">Please Enter your register <b>email ID</b></label>
-														<input type="text" class="form-control">
+														<input type="email" class="form-control form-control-sm" name="email_id">
 													</div>
 												</li>
 												<li>
 													<div class="form-group">
 														<label for="">Please Enter your register <b>mobile number</b></label>
-														<input type="text" class="form-control">
+														<input type="text" class="form-control form-control-sm" name="mob_no" maxlength="10">
 													</div>
 												</li>
 												<li>
@@ -604,7 +324,7 @@
 														</div>
 														<div class="radio">
 															<label class="">
-																<input type="radio" class="" name="ewallet" value="N"> No
+																<input type="radio" class="" name="ewallet" value="N" checked="true"> No
 															</label>
 														</div>
 													</div>

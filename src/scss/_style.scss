@@ -70,6 +70,12 @@ table#pasenger-child-table{
 	color: #B7B4B4;
 }
 
+[data-action="switchjd"]{
+	color: #D1D1D1;
+	&:hover{
+		color: #2D930E;
+	}
+}
 
 
 
