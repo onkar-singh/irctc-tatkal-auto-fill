@@ -100,7 +100,7 @@ let passenger_row = `
 		<input data-field="p_name" class="form-control form-control-sm" placeholder="Passenger #{{pcount}}" maxlength="16" value="" type="text" pattern="[\w\s]*" title="Name should be alphanumeric only">
 	</td>
 	<td>
-		<input data-field="p_age" class="form-control form-control-sm" value="" type="number" pattern="[\d]*" title="Age shoud be 5-99 only" min="5" max="99">
+		<input data-field="p_age" class="form-control form-control-sm" value="" type="text" pattern="[\d]*" title="Age shoud be 5-99 only" min="1" max="3">
 	</td>
 	<td>
 		<select data-field="p_gender" class="form-control form-control-sm">
@@ -129,6 +129,22 @@ let passenger_row = `
 			</optgroup>
 		</select>
 	</td>
+	<td>
+		<select data-field="p_food" class="form-control form-control-sm">
+		    <option selected value="V">Veg</option>
+		    <option value="NV">Non-Veg</option>
+		    <option value="D">No Food</option>
+		</select>
+	</td>
+	<td><input type="checkbox" data-field="p_bedroll"></td>
+	<td>
+	    <select data-feild="p_senior" disabled="true" class="form-control form-control-sm">
+	        <option selected value="1">Avail Concession</option>
+	        <option value="2">Forgo 50% Concession</option>
+	        <option value="3">Forgo Full Concession</option>
+	    </select>
+	</td>
+	<td><input type="checkbox" data-field="opt_berth" checked="checked" disabled="true">
 	<td>
 		<span data-action="reset_row"><i class="fa fa-undo" aria-hidden="true"></i></span>
 	</td>

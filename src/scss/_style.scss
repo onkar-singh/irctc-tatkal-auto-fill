@@ -1,9 +1,13 @@
 table#pasenger-table{
+	font-size:12px;
 	td:nth-child(2){
 		width: 70px;
 	}
-
-	th:nth-child(5),td:nth-child(5){
+	td:nth-child(6),td:nth-child(8){
+		text-align:center;
+		padding-top:12px;
+	}
+	th:last-child,td:last-child{
 		text-align: center;
 		padding-top: 8px;
 		color:#F9C3C3;
@@ -16,6 +20,7 @@ table#pasenger-table{
 	}
 }
 table#pasenger-child-table{
+	font-size:12px;
 	td:nth-child(2){
 		width: 150px;
 	}
@@ -30,6 +35,11 @@ table#pasenger-child-table{
 			}
 		}
 	}
+}
+
+.t_2{
+	font-size: 14px;
+	font-style: italic;
 }
 
 .required:after{

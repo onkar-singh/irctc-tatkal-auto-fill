@@ -38,6 +38,7 @@ function initApp(){
 		let r = child_passenger_row.replace('{{pcount}}', j);
 		$('#pasenger-child-table tbody').append(r);
 	}
+
 	$('#pasenger-table span[data-action="reset_row"],#pasenger-child-table span[data-action="reset_row"]').on('click', resetPassengerRow);
 
 
@@ -66,11 +67,23 @@ function redirectTab(this_){
 
 function resetPassengerRow(this_){
 	if($(this_.target).closest('tr').find('th').length == 0){
-		$(this_.target).closest('tr').find('input').val('');
-		$(this_.target).closest('tr').find('select').val('NONE');
+		$(this_.target).closest('tr').find('input:text').val(''); // Name,Age
+		$(this_.target).closest('tr').find('[data-field="p_gender"]').val('NONE');
+		$(this_.target).closest('tr').find('[data-field="p_choice"]').val('NONE');
+		$(this_.target).closest('tr').find('[data-field="p_food"]').val('V');
+		$(this_.target).closest('tr').find('[data-field="p_bedroll"]').prop('checked', false);
+		// Child passenger
+		$(this_.target).closest('tr').find('[data-field="age"]').val('NONE');
+		$(this_.target).closest('tr').find('[data-field="gender"]').val('NONE');
 	}else{
-		$(this_.target).closest('table').find('input').val('');
-		$(this_.target).closest('table').find('select').val('NONE');
+		$(this_.target).closest('table').find('input:text').val(''); // Name,Age
+		$(this_.target).closest('table').find('[data-field="p_gender"]').val('NONE');
+		$(this_.target).closest('table').find('[data-field="p_choice"]').val('NONE');
+		$(this_.target).closest('table').find('[data-field="p_food"]').val('V');
+		$(this_.target).closest('table').find('[data-field="p_bedroll"]').prop('checked', false);
+		// Child passenger
+		$(this_.target).closest('table').find('[data-field="age"]').val('NONE');
+		$(this_.target).closest('table').find('[data-field="gender"]').val('NONE');
 	}
 }
 
@@ -150,7 +163,7 @@ function updatePendingView(renderHash = null){
 	$('#booking_card').html('');
 	getBookingData(function(b_data){
 		if(typeof b_data !== 'undefined' && Object.keys(b_data).length > 0){
-			// console.log(b_data);
+			console.log(b_data);
 			$.each(b_data, function(k,v){
 				// console.log(v.booking_form_name);
 				let html_temp = card_tmpl;
@@ -299,10 +312,17 @@ $('.calender').click(function(){
 	$(this).prev().focus();
 });
 
-$('#booking_form').submit(saveBookingForm);
+$('#booking_form').submit(openAlertModel);
+$('#finalSave').on('click',saveBookingForm);
+
+function openAlertModel(){
+	$('#note-alert').modal('show');
+	return false;
+}
 
 function saveBookingForm(){
 	let key = btoa($('#formName').val());
+	$('#note-alert').modal('hide');
 	getBookingData(function(booking_data){
 		booking_data = booking_data || {};
 		let status=true;

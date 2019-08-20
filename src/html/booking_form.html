@@ -2,10 +2,22 @@
 <html>
 <head>
 	<title>IRCTC Tatkal Booking Form</title>
+	<meta charset="utf-8"/>
 	<link rel="stylesheet" href="../css/bootstrap.min.css" type="text/css"/>
 	<link rel="stylesheet" href="../css/custom-style.min.css" type="text/css"/>
 	<link rel="stylesheet" href="../libs/jquery-ui-1.12.1.custom/jquery-ui.min.css" type="text/css"/>
 	<link rel="stylesheet" href="../libs/fontawesome-free-5.1.1-web/css/all.min.css" type="text/css"/>
+
+	<script src="../js/jquery-3.3.1.min.js"></script>
+	<script src="../libs/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+	<script src="../js/popper.min.js"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="../libs/fontawesome-free-5.1.1-web/js/all.min.js"></script>
+	<script src="../js/aes.js"></script>
+	<script src="../js/constant.js"></script>
+	<script src="../js/stations.js"></script>
+	<script src="../js/trains.js"></script>
+	<script src="../js/formProcess.js"></script>
 </head>
 <body>
 	<div class="container mt-2">
@@ -124,18 +136,27 @@
 										<div class="form-group col-md-4">
 											<label for="coach_class" class="col-form-label col-form-label-sm required">Class</label>
 											<select class="form-control form-control-sm" id="coach_class" name="coach_class">
-												<option value="SL">Sleeper (SL)</option>
-												<option value="1A">First Class AC (1A)</option>
-												<option value="2A">Second Class AC (2A)</option>
-												<option value="3A">Third Class AC (3A)</option>
+												<option value="EA">Anubhuti Class (EA)</option>
+												<option value="1A">AC First Class (1A)</option>
+												<option value="EC">Exec. Chair Car (EC)</option>
+												<option value="2A">AC 2 Tier (2A)</option>
+												<option value="FC">First Class (FC)</option>
+												<option value="3A">AC 3 Tier (3A)</option>
+												<option value="3E">AC 3 Economy (3E)</option>
+												<option value="CC">AC Chair car (CC)</option>
+												<option value="SL" selected>Sleeper (SL)</option>
+												<option value="2S">Second Sitting (2S)</option>
 											</select>
 										</div>
 										<div class="form-group col-md-3">
 											<label for="booking_quota" class="col-form-label col-form-label-sm required">Quota</label>
 											<select class="form-control form-control-sm" id="booking_quota" name="booking_quota">
-												<option value="GN">GENERAL</option>
-												<option value="TK" selected>TATKAAL</option>
-												<option value="PT">PREMIUM TATKAAL</option>
+												<option selected value="TQ">Tatkal</option>
+												<option value="PT">Premium Tatkal</option>
+												<option value="GN">General</option>
+												<option value="LD">Ladies</option>
+												<option value="SS">Lower Berth / Sr. Citizen Quota</option>
+												<option value="HP">Physically Handicap</option>
 											</select>
 										</div>
 									</div>
@@ -147,84 +168,55 @@
 						<div class="col">
 							<div class="card border-primary">
 								<div class="card-header py-1 px-3 bg-primary text-white font-weight-bold">
-									<i class="fa fa-info-circle mr-2"></i>All Details
+									<i class="fa fa-id-card mr-2"></i>All Details
 								</div>
 								<div class="card-body">
-									<p class="font-weight-bold mb-1">Pasenger Details</p>
-									<table class="table table-bordered table-sm" id="pasenger-table">
-										<thead>
-											<tr class="text-muted">
-												<th scope="col">Name</th>
-												<th scope="col">Age</th>
-												<th scope="col">Gender</th>
-												<th scope="col">Birth Prefrence</th>
-												<th scope="col"><span data-action="reset_row"><i class="fa fa-undo" aria-hidden="true"></i></span></th>
-											</tr>
-										</thead>
-										<tbody>
-										</tbody>
-									</table>
-									<p class="font-weight-bold mb-1">Children Below 5 Years</p>
-									<table class="table table-bordered table-sm" id="pasenger-child-table">
-										<thead>
-											<tr class="text-muted">
-												<th scope="col">Name</th>
-												<th scope="col">Age</th>
-												<th scope="col">Gender</th>
-												<th scope="col"><span data-action="reset_row"><i class="fa fa-undo" aria-hidden="true"></i></span></th>
-											</tr>
-										</thead>
-										<tbody>
-										</tbody>
-									</table>
-									<p class="font-weight-bold mb-1">Other Details</p>
-									<div class="form-row">
-										<div class="form-group col-md-3">
-											<label for="boarding_stn" class="col-form-label col-form-label-sm">Boarding Station (Optional)</label>
-											<input type="text" class="form-control form-control-sm station" id="boarding_stn" name="boarding_stn" placeholder="Station Name">
-										</div>
-										<div class="form-group col-md-3">
-											<label for="mobile_no" class="col-form-label col-form-label-sm required">Mobile No.</label>
-											<input type="tel" class="form-control form-control-sm" id="mobile_no" name="mobile_no" placeholder="1234567890" maxlength="10" required>
-										</div>
+									<div id="adult-passenger">
+										<p class="font-weight-bold mb-1">Pasenger Details</p>
+										<table class="table table-bordered table-sm" id="pasenger-table">
+											<thead>
+												<tr class="text-muted">
+													<th scope="col">Name</th>
+													<th scope="col">Age</th>
+													<th scope="col">Gender</th>
+													<th scope="col">Birth</th>
+													<th scope="col">Food</th>
+													<th scope="col">Bed Roll</th>
+													<th scope="col">Senior Citizen</th>
+													<th scope="col">Opt Berth</th>
+													<th scope="col"><span data-action="reset_row"><i class="fa fa-undo" aria-hidden="true"></i></span></th>
+												</tr>
+											</thead>
+											<tbody>
+											</tbody>
+										</table>
 									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="row mt-2">
-						<div class="col">
-							<div class="card border-dark">
-								<div class="card-header py-1 px-3 bg-dark text-white font-weight-bold">
-									<i class="fa fa-credit-card mr-2"></i>Payment Option
-								</div>
-								<div class="card-body">
 									<div class="row">
-										<div class="col-sm-5">
-											<div class="card border-dark">
-												<div class="card-header">
-													Payment Method
-													<span class="badge badge-success">ABAILABLE</span>
-												</div>
-												<div class="card-body" id="payment-method-radio">
-												</div>
-											</div>
+										<div id="child-passenger" class="col">
+											<p class="font-weight-bold mb-1">Children Below 5 Years</p>
+											<table class="table table-bordered table-sm" id="pasenger-child-table">
+												<thead>
+													<tr class="text-muted">
+														<th scope="col">Name</th>
+														<th scope="col">Age</th>
+														<th scope="col">Gender</th>
+														<th scope="col"><span data-action="reset_row"><i class="fa fa-undo" aria-hidden="true"></i></span></th>
+													</tr>
+												</thead>
+												<tbody>
+												</tbody>
+											</table>
 										</div>
-										<div class="col-sm-7">
-											<div class="card border-dark">
-												<div class="card-header">
-													Payment Details
+										<div id="bording-mob" class="col">
+											<p class="font-weight-bold mb-1">Other Details</p>
+											<div class="form-row">
+												<div class="form-group col">
+													<label for="boarding_stn" class="col-form-label col-form-label-sm">Boarding Station (Optional)</label>
+													<input type="text" class="form-control form-control-sm station" id="boarding_stn" name="boarding_stn" placeholder="Station Name">
 												</div>
-												<div class="card-body">
-													<div class="form-group col-md-12">
-														<label for="card_no" class="col-form-label col-form-label-sm required">Bank Name</label>
-														<select name="bank_name" id="bank_name" class="form-control form-control-sm">
-															<option value="NONE" selected>Select Bank</option>
-														</select>
-													</div>
-												</div>
-												<div class="card-footer p-1">
-													<span class="text-danger font-weight-bold text-md">NOTE :</span> <span class="text-muted text-md">We are only taking your basic <strong>Bank detail</strong> and rest of the detail you can fill on bank site only.</span>
+												<div class="form-group col">
+													<label for="mobile_no" class="col-form-label col-form-label-sm required">Mobile No.</label>
+													<input type="tel" class="form-control form-control-sm" id="mobile_no" name="mobile_no" placeholder="7857849652" maxlength="10" required>
 												</div>
 											</div>
 										</div>
@@ -241,7 +233,7 @@
 								</div>
 								<div class="card-body">
 									<div class="row">
-										<div class="col">
+										<div class="col-lg-7 col-md-7">
 											<div class="form-check">
 												<input type="checkbox" class="form-check-input" id="auto_upgradation" name="auto_upgradation">
 												<label class="form-check-label" for="auto_upgradation">Consider for Auto Upgradation.</label>
@@ -255,8 +247,20 @@
 												<label class="form-check-label" for="coach_preferred">Preferred Coach ID</label>
 												<input class="form-control" maxlength="4" placeholder="Coach ID no." size="8" type="text" id="coach_preferred_no" name="coach_preferred_no" readonly>
 											</div>
+											<div class="border-top my-3"></div>
+											<div class="col-xs-12">
+												Do you want to take Travel Insurance (Rs 0.49 / person)?
+											</div>
+											<div class="col-xs-12">
+												<input class="css-radio" formcontrolname="insurance_choice" id="insuranceY" name="insurance_choice" type="radio" value="Y" checked>
+												<label class="css-label_r t_cl" for="insuranceY" name="insurance_choice">Yes And I Accept the <a href="http://contents.irctc.co.in/en/InsuranceTermCondition.pdf" target="_blank">Terms & Conditions</a> of the Travel Insurance Policy.</label>
+											</div>
+											<div class="col-xs-12">
+												<input class="css-radio" formcontrolname="insurance_choice" id="insuranceN" name="insurance_choice" type="radio" value="N">
+												<label class="css-label_r t_cl" for="insuranceN" name="insurance_choice">No</label>
+											</div>
 										</div>
-										<div class="col border-left border-warning">
+										<div class="col-lg-5 col-md-5 border-left border-warning">
 											<span class="t_2">The berths will be allotted based on the system logic, depending on availability at that point of time. If you need assured Lower Berths or assured compact accommodation (in same coach), please select one of the options*.</span>
 											<div class="col-xs-12">
 												<input class="css-radio" formcontrolname="reservation_choice" id="r4" name="reservation_choice" type="radio" value="99" checked>
@@ -343,6 +347,47 @@
 							</div>
 						</div>
 					</div>
+					<div class="row mt-2">
+						<div class="col">
+							<div class="card border-dark">
+								<div class="card-header py-1 px-3 bg-dark text-white font-weight-bold">
+									<i class="fa fa-credit-card mr-2"></i>Payment Option
+								</div>
+								<div class="card-body">
+									<div class="row">
+										<div class="col-sm-5">
+											<div class="card border-dark">
+												<div class="card-header">
+													Payment Method
+													<span class="badge badge-success">ABAILABLE</span>
+												</div>
+												<div class="card-body" id="payment-method-radio">
+												</div>
+											</div>
+										</div>
+										<div class="col-sm-7">
+											<div class="card border-dark">
+												<div class="card-header">
+													Payment Details
+												</div>
+												<div class="card-body">
+													<div class="form-group col-md-12">
+														<label for="card_no" class="col-form-label col-form-label-sm required">Bank Name</label>
+														<select name="bank_name" id="bank_name" class="form-control form-control-sm">
+															<option value="NONE" selected>Select Bank</option>
+														</select>
+													</div>
+												</div>
+												<div class="card-footer p-1">
+													<span class="text-danger font-weight-bold text-md">NOTE :</span> <span class="text-muted text-md">We are only taking your basic <strong>Bank detail</strong> and rest of the detail you can fill on bank site only.</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 					<!-- <div class="row mt-2">
 						<div class="col">
 							<div class="card card-default">
@@ -384,6 +429,29 @@
 			</div>
 		</div>
 	</div>
+	<div class="modal fade" id="note-alert" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalCenterTitle"><span class="text-secondary">Knowledge Base</span> Shortcuts</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="col">
+						<p class="text-italic">Please keep in mind we are supporting two shortcuts while booking to fill the forms.</p>
+						<p><kbd><kbd>Alt</kbd> + <kbd>A</kbd></kbd> <span><strong class="text-primary"> [Simple Fill]</strong> : which fill the area one step</span></p>
+						<p><kbd><kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>A</kbd></kbd><span><strong class="text-primary"> [Force Fill]</strong> : which fill the all input once with updated value on current url</span></p>
+						<p class="text-danger mt-5">Note: Please make sure <kbd><kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>A</kbd></kbd> sortcut should be pressed once any changes done in SuperFast Tatkal Booking form while booking.</p>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" id="finalSave">Final Save</button>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="modal fade" id="confirmSave" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 			<div class="modal-content">
@@ -421,14 +489,5 @@
 			</div>
 		</div>
 	</div>
-	<script src="../js/jquery-3.3.1.min.js"></script>
-	<script src="../libs/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
-	<script src="../js/popper.min.js"></script>
-	<script src="../js/bootstrap.min.js"></script>
-	<script src="../libs/fontawesome-free-5.1.1-web/js/all.min.js"></script>
-	<script src="../js/constant.js"></script>
-	<script src="../js/stations.js"></script>
-	<script src="../js/trains.js"></script>
-	<script src="../js/formProcess.js"></script>
 </body>
 </html>
