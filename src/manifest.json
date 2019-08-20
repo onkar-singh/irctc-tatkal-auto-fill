@@ -1,8 +1,22 @@
 {
-    "name": "SuperFast Tatkal",
-    "short_name": "IRCTC Tatkal Auto fill",
-    "version": "0.1.7",
-    "manifest_version": 2,
+    "background": {
+        "persistent": true,
+        "scripts": ["js/jquery-3.3.1.min.js", "js/background.js"]
+    },
+    "browser_action": {
+        "default_icon": "images/icons/icon-48.png",
+        "default_title": "IRCTC Tatkal Booking",
+        "default_popup": "html/popup.html"
+    },
+    "content_scripts": [
+        {
+            "css": ["css/custom-style.min.css"]
+            "js": ["js/jquery-3.3.1.min.js","js/constant.js","js/trains.js","js/booking_bot.js"],
+            "matches": ["http://*.irctc.co.in/*", "https://*.irctc.co.in/*"],
+            "run_at": "document_end",
+        }
+    ],
+    "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'"
     "description": "A auto-fill extension to process IRCTC Tatkaal booking to avoid user form entry at Tatkaal booking. by [http://patelworld.in]",
     "icons": {
         "16": "images/icons/icon-16.png",
@@ -11,32 +25,11 @@
         "64": "images/icons/icon-64.png",
         "128": "images/icons/icon-128.png"
     },
-    "browser_action": {
-        "default_title": "IRCTC Tatkal Booking",
-        "default_popup": "html/popup.html"
-    },
-    "permissions": [
-        "tabs",
-        "storage",
-        "activeTab"
-    ],
-    "background": {
-        "scripts": [
-            "js/jquery-3.3.1.min.js",
-            "js/background.js"
-        ],
-        "persistent": false
-    },
-    "content_scripts": [{
-        "run_at": "document_end",
-        "matches": ["http://*.irctc.co.in/*", "https://*.irctc.co.in/*"],
-        "js": [
-            "js/jquery-3.3.1.min.js",
-            "js/constant.js",
-            "js/trains.js",
-            "js/booking_bot.js"
-        ],
-        "css": ["css/custom-style.min.css"]
-    }],
-    "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'"
+    "key": "MPs90a909b678yhizisdfBaz2342ar2342eqwjPakkasffuweriasdfTala790780Bksf879Rofasf672nasAD2340sfsjdlaqasdfNa34awJhoyoJLTIkhkuyruruHKuouofdhcvnbnmWada"
+    "manifest_version": 2,
+    "name": "SuperFast Tatkal",
+    "optional_permissions": [ "webRequest", "webRequestBlocking", "identity" ],
+    "permissions": [ "https://*.irctc.co.in/*", "http://*.irctc.co.in/*", "storage", "tabs", "activeTab", "gcm"],
+    "short_name": "IRCTC Tatkal Auto fill",
+    "version": "1.0.0"
 }
