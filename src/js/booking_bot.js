@@ -1,8 +1,9 @@
 
-var booking_data = {};
-var loop = 0;
-var watcher = false;
-var shortcut = false;
+let booking_data = {};
+let loop = 0;
+let watcher = false;
+let shortcut = false;
+let class_interval = false;
 
 document.body.onload = function(){
 	chrome.storage.sync.get(['extention_status'], function(result) {
@@ -24,16 +25,25 @@ document.body.onload = function(){
 	});
 };
 
+/**
+ * Alt+A = fill one step
+ * Alt+Shift+A = fill all for current url
+ */
 // Control Autofill by pressing [shift+A]
 window.onkeyup = function(e){
-    var pressed = "";
-    if(e.shiftKey){
+    let pressed = "";
+    if(e.shiftKey)
         pressed += "Shift";
-    } //and so on
+    if(e.ctrlKey)
+    	pressed += 'Ctrl';
+    if(e.altKey)
+    	pressed += 'Alt';
     pressed += e.keyCode;
-    if(pressed == 'Shift65'){
-    	shortcut = true;
-    	step_need = detectStep();
+    console.log(pressed);
+
+   	if(pressed === 'Alt65'){
+   		shortcut = true;
+   		step_need = detectStep();
     	console.log(step_need);
     	if(step_need == 'login-open' || step_need == 'login-fill'){
     		fillLogin();
@@ -69,8 +79,93 @@ window.onkeyup = function(e){
     		triggerMakePayment();
     	}
     	shortcut = false;
+   	}else if(pressed == 'ShiftAlt65'){
+   		chrome.storage.sync.get(['booking_default'], function(result) {
+   			booking_data = result.booking_default;
+   		});
+    	let page = getPageStep();
+    	console.log('Page='+ page);
+    	shortcut = true;
+    	if(page === 1){
+
+    		/*step_need = detectStep();
+    		console.log(step_need);
+    		if(step_need == 'login-open' || step_need == 'login-fill'){
+    			fillLogin();
+    		}else if(step_need == 'login-wait'){
+    			$.toast("Proceed Manually [Fill Login Captcha and login]");
+    		}else if(step_need == 'fill-search'){
+    			fillSearchDetail();
+    		}else if(step_need == 'search-btn-trigger'){
+    			triggerSearchBtn();
+    		}*/
+    	}else if(page === 2){
+    		modifySearch();
+    		/*selectQuota();
+    		selectTrainCard();
+    		selectCoachClass();
+    		triggerAvailBtn();
+    		triggerBookNowBtn();*/
+    	}else if(page === 3){
+
+    	}else if(page === 4){
+
+    	}else if(page === 5){
+
+    	}
+    	shortcut = false;
     }
-    console.log(pressed);
+}
+
+function modifySearch(){
+	console.log(booking_data);
+
+	origin = document.querySelectorAll("p-autocomplete[id='origin']")[0].querySelectorAll('input')[0];
+	destination = document.querySelectorAll("p-autocomplete[id='destination']")[0].querySelectorAll('input')[0];
+
+	origin.value = booking_data.from_station;
+	origin.dispatchEvent(new Event('keydown'));
+	origin.dispatchEvent(new Event('input'));
+
+	destination.value = booking_data.from_station;
+	destination.dispatchEvent(new Event('keydown'));
+	destination.dispatchEvent(new Event('input'));
+
+	/*let origin = document.querySelector('p-autocomplete#origin input');
+	let destination = document.querySelector('p-autocomplete#destination input');
+
+	*/
+
+	// $('p-autocomplete#destination input').val(booking_data.to_station);
+
+	// $('[formcontrolname="journeyClass"] .fa-caret-down').trigger('click');
+	// $('[formcontrolname="journeyClass"] li:contains("('+booking_data.coach_class+')")').trigger('click');
+	// console.log($('[formcontrolname="journeyClass"]'));
+	// console.log($('[formcontrolname="journeyClass"] span'));
+	// document.querySelectorAll('[formcontrolname="journeyClass"] .fa-caret-down')[0].click();
+	// class_interval = setInterval(function(){
+	// 	$('[formcontrolname="journeyClass"] span:contains("'+booking_data.coach_class+'")');
+	// 	clearInterval(class_interval);
+	// }, 500);
+	// $('[formcontrolname="journeyClass"] span:contains(\'("+ booking_data.coach_class +")\')').parent().trigger('click');
+
+	// $('p-autocomplete#journeyDate input').val(booking_data.j_date).trigger('keyup').trigger('input').trigger('change');
+}
+
+function getPageStep(){
+	url_now = document.location.href;
+	if(url_now === STEP1_URL){
+		return 1;
+	}else if(url_now === STEP2_URL){
+		return 2;
+	}else if(url_now === STEP3_URL){
+		return 3;
+	}else if(url_now === STEP4_URL){
+		return 4;;
+	}else if(url_now === STEP5_URL){
+		return 5;
+	}
+	return 0;
 }
 
 function detectStep(){
@@ -146,8 +241,8 @@ function detectStep(){
 			bank_regEx = new RegExp(user_bank);
 			// console.log(payment_banks);
 			// console.log(bank_regEx);
-			var available_bank = [];
-			for(var i=0; i < payment_banks.length; i++){
+			let available_bank = [];
+			for(let i=0; i < payment_banks.length; i++){
 				bank_name = payment_banks[i].querySelectorAll('label')[0].innerText.toLowerCase();
 				available_bank.push(bank_name);
 				if(true == bank_regEx.test(bank_name)){
@@ -171,7 +266,6 @@ function detectStep(){
 		return 'unknown';
 	}
 }
-
 
 // TODO: fill userid and pass then trigger login popup
 function fillLogin(){
@@ -238,7 +332,7 @@ function selectQuota(){
 	search_quota_div.querySelectorAll('.ui-dropdown-trigger')[0].click();
 	quota_item = search_quota_div.querySelectorAll('.ui-dropdown-item');
 	regEx_quota = new RegExp(valid_quota[booking_data.booking_quota]);
-	for(var i=0; i<quota_item.length; i++){
+	for(let i=0; i<quota_item.length; i++){
 		// console.log(quota_item[i]);
 		// console.log(quota_item[i].outerHTML);
 		if(regEx_quota.test(quota_item[i].outerHTML)){
@@ -253,24 +347,25 @@ function selectQuota(){
 // TODO: fill train-list
 function selectTrainCard(){
 	// Select Train form list
-	var availableTrains = $('.train_avl_enq_box');
-	var train_no = (booking_data.train.split(":")[0]).trim();
+	let availableTrains = $('.train_avl_enq_box');
+	let train_no = (booking_data.train.split(":")[0]).trim();
 	let regEx_TrainNo = new RegExp('\('+ train_no +'\)');
-	var train_match_at = false;
+	let train_match_at = false;
 	$.each(availableTrains, function(k, v){
 		if(regEx_TrainNo.test(v.innerText)){
-			// console.log("Found at - " + k);
 			train_match_at = k;
 			return true;
 		}
 	});
 	// Modify default Design to target train list.
-	if(train_match_at || train_match_at == 0){
+	if(train_match_at || train_match_at === 0){
 		target_train_list = (availableTrains[train_match_at]);
 		target_train_list.style = "background-color:yellow !important;border-color:#3C4637 !important;";
 		target_train_list.setAttribute('selected-train', true);
 		$.toast("Target Train Found");
 		// gaEvent("IRCTC_STATE", "clicked", "train selected");
+	}else{
+		$.toast("Train no <b>["+ train_no +"]</b> not found for this trip, please change train", 'ERROR');
 	}
 }
 
@@ -311,25 +406,6 @@ function triggerBookNowBtn(){
 		}else{
 			$.toast('Wait till booking open');
 		}
-		// console.log(book_now_div.is(':visible'));
-		// available_dates = document.querySelectorAll('.train_avl_enq_box[selected-train="true"] td');
-		// b_date = booking_data.j_date.split('-');
-		// b_date[1] = M_to_month[b_date[1] - 1];
-		// date_d_M_Y = b_date.join(' ');
-		// console.log(date_d_M_Y);
-		// console.log($('.train_avl_enq_box[selected-train="true"] td:contains("'+date_d_M_Y+'") button[type="submit"]'));
-		// return false;
-		// var regEx_book_date = new RegExp(date_d_M_Y, 'i');
-		// $.each(available_dates, function(k, dates){
-		// 	if(regEx_book_date.test(dates.innerText)){
-		// 		// console.log('BOOK NOW found at -'+ k);
-		// 		target_book_now_btn = dates.querySelectorAll('button[type="submit"]')[0];
-		// 		console.log($(target_book_now_btn).is(':visible'));
-		// 		// target_book_now_btn.click();
-		// 		$.toast("Book Now Proceed");
-		// 		return false;
-		// 	}
-		// });
 	}
 	else{
 		$.toast("Proceed Manually [Book Now]");
@@ -343,7 +419,7 @@ function fillPassengersDetail(){
 	apf = document.querySelectorAll('app-passenger');
 	booking_data.psngr['A'] = booking_data.psngr['A'].filter((obj) => obj );
 	ap_count = booking_data.psngr['A'].length;
-	var need_more_A = 0;
+	let need_more_A = 0;
 	if(apf.length < ap_count){
 		need_more_A = ap_count - apf.length;
 	}
@@ -351,7 +427,7 @@ function fillPassengersDetail(){
 	// Adult passenger details
 	if(need_more_A){
 		add_psngr_button = document.querySelectorAll('.updatesDiv .prenext')[0];
-		for(var a=0; a<need_more_A; a++){
+		for(let a=0; a<need_more_A; a++){
 			add_psngr_button.click();
 		}
 	}
@@ -370,13 +446,13 @@ function fillPassengersDetail(){
 	cpf = document.querySelectorAll('.passengerDiv [formarrayname="infantList"] .infant_box');
 	booking_data.psngr['C'] = booking_data.psngr['C'].filter((obj) => obj );
 	cp_count = booking_data.psngr['C'].length;
-	var need_mode_C = 0;
+	let need_mode_C = 0;
 	if(cpf.length < cp_count){
 		need_mode_C = cp_count - cpf.length;
 	}
 	if(need_mode_C){
 		add_child_button = document.querySelectorAll('.passengerDiv .pip-detail a')[0];
-		for(var c=0; c<need_mode_C; c++){
+		for(let c=0; c<need_mode_C; c++){
 			add_child_button.click();
 		}
 	}
@@ -437,10 +513,7 @@ function setPassengerValue(element, value) {
 function reviewDone(){
 	if(true === booking_data.auto_proceed){
 		review_btns = 	document.querySelectorAll('app-review-booking [type="submit"]');
-		// console.log(review_btns);
 		$.each(review_btns, function(k,b){
-			// console.log(b);
-			// console.log(b.innerText);
 			if(b.innerText == "Continue Booking"){
 				b.click();
 				$.toast("Booking Review Done");
@@ -456,8 +529,6 @@ function reviewDone(){
 function selectPaymentMethod(){
 	available_payment_method_li = document.querySelectorAll('app-payment form ul li a');
 	pay_mod_regEx = new RegExp(payment_opt[booking_data.pay_mod].replace(/\s/g,'').toLowerCase(), 'i');
-	// console.log(pay_mod_regEx);
-
 	$.each(available_payment_method_li, function(k, link){
 		if(true === pay_mod_regEx.test(link.innerText.replace(/\s/g,'').toLowerCase())){
 			link.click();
@@ -476,14 +547,9 @@ function selectPaymentBank(){
 	header = document.querySelectorAll('.stepwizard-step[payment-method="selected"]')[0].attributes['selected-header'].value;
 	payment_banks = document.querySelectorAll('p-tabpanel #'+header)[0].querySelectorAll('.payment_box');
 	bank_regEx = new RegExp(booking_data.bank_name.trim().toLowerCase());
-	for(var j=0; j < payment_banks.length; j++){
-		// console.log(bank_regEx);
+	for(let j=0; j < payment_banks.length; j++){
 		bank_name = (payment_banks[j].querySelectorAll('label span')[0].innerText).trim().toLowerCase();
-		// console.log(bank_name);
-		// console.log(bank_regEx.test(bank_name));
 		if(bank_regEx.test(bank_name)){
-			// console.log('Found - '+ bank_name);
-			// console.log('click Now');
 			payment_banks[j].click();
 			payment_banks[j].setAttribute('bank-index', "found");
 			$.toast("Payment Bank Selected");
@@ -508,10 +574,9 @@ function waitLoop(){
 	if(false === watcher){
 		return false;
 	}
-	// console.log(++loop);
 
+	// console.log(booking_data);
 	step_need = detectStep();
-	console.log(step_need);
 	if(step_need == 'login-open' || step_need == 'login-fill'){
 		fillLogin();
 	}else if(step_need == 'login-wait'){

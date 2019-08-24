@@ -5,36 +5,7 @@
 	<link rel="stylesheet" href="../css/bootstrap.min.css" type="text/css"/>
 	<link rel="stylesheet" href="../css/custom-style.min.css" type="text/css"/>
 	<link rel="stylesheet" href="../libs/fontawesome-free-5.1.1-web/css/all.min.css" type="text/css"/>
-</head>
-<body style="min-width: 300px;">
-	<div class="container-fluid" id="container-popup">
-		<div class="row py-2">
-			<div class="col-auto p-0 pl-3">
-				<i class="fa fa-subway fa-3x text-secondary"></i>
-			</div>
-			<div class="col">
-				<h4 class="font-weight-bold text-secondary text-center">SuperFast Tatkal</h4>
-				<span id="version" class="text-muted float-right"></span>
-			</div>
-		</div>
-		<div class="row border-bottom border-top border-light pt-2">
-			<div class="col">
-				<div class="d-flex justify-content-end">
-					<label class="switch">
-						<input class="switch-input" type="checkbox" id="extention_status_popup" status="OFF">
-						<span class="switch-label" data-on="On" data-off="Off"></span>
-						<span class="switch-handle"></span>
-					</label>
-				</div>
-			</div>
-			<div class="col">
-				<button class="btn btn-primary btn-block" id="openNew"><i class="fa fa-plus-circle mr-2"></i>Add New</button>
-			</div>
-		</div>
-		<div class="row mt-3" id="active_booking">
 
-		</div>
-	</div>
 	<script src="../js/jquery-3.3.1.min.js"></script>
 	<script src="../libs/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 	<script src="../js/popper.min.js"></script>
@@ -45,5 +16,51 @@
 	<script src="../js/trains.js"></script>
 	<script src="../js/formProcess.js"></script>
 	<script src="../js/popup.js"></script>
+</head>
+<body style="min-width: 200px;">
+	<div class="container-fluid" id="container-popup">
+		<div class="row py-2" style="background-color:#ddd;border-bottom:5px solid #bdbbbb;">
+			<div class="col-auto p-0 pl-3">
+				<i class="fa fa-subway fa-1x text-secondary"></i>
+			</div>
+			<div class="col">
+				<h6 class="font-weight-bold text-secondary text-center app-name"></h6>
+			</div>
+		</div>
+		<div class="row border-bottom border-top border-light pt-2">
+			<div class="col text-center">
+				<div class="d-flex justify-content-center">
+					<label class="switch">
+						<input class="switch-input" type="checkbox" id="extention_status_popup" status="OFF">
+						<span class="switch-label" data-on="On" data-off="Off"></span>
+						<span class="switch-handle"></span>
+					</label>
+				</div>
+			</div>
+			<div class="col text-center">
+				<div class="btn-group d-flex" role="group">
+					<button class="btn btn-secondary btn-sm w-100" id="openTrips"><i class="fa fa-folder-open mr-2"></i>Open Trips</button>
+					<button class="btn btn-primary btn-sm w-100" id="openNew"><i class="fa fa-plus-circle mr-2"></i>Add New</button>
+				</div>
+			</div>
+		</div>
+		<div class="border-bottom my-2"></div>
+		<div class="popup-menu">
+			<nav class="nav flex-column">
+				<a class="nav-link" href="mailto:mukesh3797+extension@gmail.com" title="Support">Support</a>
+				<a class="nav-link" href="mailto:mukesh3797+extension@gmail.com" title="Report Bug">Report Bug</a>
+				<a class="nav-link" href="mailto:mukesh3797+extension@gmail.com" title="Feedback - Suggestions">Feedback / Suggestions</a>
+			</nav>
+		</div>
+		<div class="border-bottom p-2"></div>
+		<div class="row my-3">
+			<div class="col m-1 text-center">
+				<span class="app-version"></span>
+			</div>
+		</div>
+		<div class="row mt-3" id="active_booking">
+
+		</div>
+	</div>
 </body>
 </html>

@@ -15,6 +15,7 @@
 	<script src="../libs/fontawesome-free-5.1.1-web/js/all.min.js"></script>
 	<script src="../js/aes.js"></script>
 	<script src="../js/constant.js"></script>
+	<!-- <script src="../js/background.js"></script> -->
 	<script src="../js/stations.js"></script>
 	<script src="../js/trains.js"></script>
 	<script src="../js/formProcess.js"></script>
@@ -28,7 +29,7 @@
 						<a href="./booking_form.html?tab=new"><i class="fa fa-subway fa-3x text-secondary"></i></a>
 					</div>
 					<div class="col">
-						<h2 class="font-weight-bold text-secondary">SuperFast Tatkal</h2>
+						<h2 class="font-weight-bold text-secondary app-name"></h2>
 						<p class="text-muted text-md">A IRCTC Train Tatkal Booking Extention by - <a href="http://patelworld.in/" target="_blank">patelworld.in</a></p>
 					</div>
 				</div>
@@ -58,20 +59,20 @@
 		</nav>
 		<div class="tab-content" id="nav-tabContent">
 			<div class="tab-pane fade border border-top-0 p-2 show active" id="nav-new" role="tabpanel" aria-labelledby="nav-home-tab" style="min-height: 80vh;">
-				<form id="booking_form" method="GET" action="#">
+				<form id="booking_form" method="POST">
 					<div class="row mt-2">
 						<div class="col">
-							<div class="card border-info">
+							<div class="card border-info" card-for="form_name">
 								<div class="card-header font-weight-bold py-1 px-3 bg-info text-white">
 									<i class="fa fa-bookmark mr-2"></i>Save Booking Detail With Name
 								</div>
 								<div class="card-body">
 									<div class="form-row">
-										<div class="form-group col-md-6">
+										<div class="form-group col-md-4">
 											<label for="formName" class="col-form-label col-form-label-sm required">Form Name (Bookmark)</label>
-											<input type="text" class="form-control form-control-sm" id="formName" placeholder="Form Name" name="booking_form_name" maxlength="20" pattern="[\w\s]*" title="form name should be alphanumeric only">
+											<input type="text" class="form-control form-control-sm" id="formName" placeholder="Form Name" name="booking_form_name" maxlength="20" pattern="[\w\s]*" title="form name should be alphanumeric only" required="true">
 										</div>
-										<div class="form-group col-md-6">
+										<div class="form-group col-md-8">
 											<label for="formComment" class="col-form-label col-form-label-sm">Comment (optional)</label>
 											<input type="text" class="form-control form-control-sm" id="formComment" placeholder="Comment" name="booking_form_comment">
 										</div>
@@ -82,7 +83,7 @@
 					</div>
 					<div class="row mt-2">
 						<div class="col-sm-3">
-							<div class="card border-dark">
+							<div class="card border-dark" card-for="login">
 								<div class="card-header py-1 px-3 bg-dark text-white font-weight-bold">
 									<i class="fa fa-lock mr-2"></i>IRCTC Login Details
 								</div>
@@ -101,7 +102,7 @@
 							</div>
 						</div>
 						<div class="col-sm-9">
-							<div class="card border-success">
+							<div class="card border-success" card-for="jdetail">
 								<div class="card-header py-1 px-3 bg-success text-white font-weight-bold">
 									<i class="fa fa-subway mr-2"></i>Journey Planner
 									<span class="badge badge-dark float-right">Search Detail</span>
@@ -166,7 +167,7 @@
 					</div>
 					<div class="row mt-2">
 						<div class="col">
-							<div class="card border-primary">
+							<div class="card border-primary" card-for="passenger">
 								<div class="card-header py-1 px-3 bg-primary text-white font-weight-bold">
 									<i class="fa fa-id-card mr-2"></i>All Details
 								</div>
@@ -179,7 +180,7 @@
 													<th scope="col">Name</th>
 													<th scope="col">Age</th>
 													<th scope="col">Gender</th>
-													<th scope="col">Birth</th>
+													<th scope="col">Berth</th>
 													<th scope="col">Food</th>
 													<th scope="col">Bed Roll</th>
 													<th scope="col">Senior Citizen</th>
@@ -227,7 +228,7 @@
 					</div>
 					<div class="row mt-2">
 						<div class="col">
-							<div class="card border-warning">
+							<div class="card border-warning" card-for="booking_option">
 								<div class="card-header bg-warning py-1 px-3 font-weight-bold">
 									<i class="fa fa-filter mr-2"></i>Booking Options
 								</div>
@@ -286,7 +287,7 @@
 					</div>
 					<div class="row mt-2">
 						<div class="col">
-							<div class="card border-info" id="seq_card">
+							<div class="card border-info" id="seq_card" card-for="seq_question">
 								<div class="card-header bg-info py-1 px-3 font-weight-bold">
 									<i class="fas fa-question mr-2"></i>Sequrity Questions (optional)
 								</div>
@@ -297,39 +298,35 @@
 												<li>
 													<div class="form-group">
 														<label for="">Please Enter your register date of birth in <b>ddMMyyyy</b> format</label>
-														<input type="text" class="form-control form-control-sm" name="dob" maxlength="8">
+														<input type="text" class="form-control form-control-sm" data-field="dob" maxlength="8">
 													</div>
 												</li>
 												<li>
 													<div class="form-group">
 														<label for="">Please Enter your register user <b>login id</b></label>
-														<input type="text" class="form-control form-control-sm" name="login_id">
+														<input type="text" class="form-control form-control-sm" data-field="login_id">
 													</div>
 												</li>
 												<li>
 													<div class="form-group">
 														<label for="">Please Enter your register <b>email ID</b></label>
-														<input type="email" class="form-control form-control-sm" name="email_id">
+														<input type="email" class="form-control form-control-sm" data-field="email_id">
 													</div>
 												</li>
 												<li>
 													<div class="form-group">
 														<label for="">Please Enter your register <b>mobile number</b></label>
-														<input type="text" class="form-control form-control-sm" name="mob_no" maxlength="10">
+														<input type="text" class="form-control form-control-sm" data-field="mob_no" maxlength="10">
 													</div>
 												</li>
 												<li>
 													<div class="form-group">
 														<label for="">Did You registered for IRCTC Ewallet Feature ?</label>
 														<div class="radio">
-															<label class="">
-																<input type="radio" class="" name="ewallet" value="Y"> Yes
-															</label>
+															<label><input type="radio" name="ewallet" value="Yes" checked> Yes</label>
 														</div>
 														<div class="radio">
-															<label class="">
-																<input type="radio" class="" name="ewallet" value="N" checked="true"> No
-															</label>
+															<label><input type="radio" name="ewallet" value="No"> No</label>
 														</div>
 													</div>
 												</li>
@@ -337,7 +334,7 @@
 										</div>
 										<div class="col-6">
 											<label class="switch float-right">
-												<input class="switch-input" type="checkbox" id="enable_sq" status="OFF">
+												<input class="switch-input" type="checkbox" id="enable_sq" status="ON" checked>
 												<span class="switch-label" data-on="On" data-off="Off"></span>
 												<span class="switch-handle"></span>
 											</label>
@@ -349,7 +346,7 @@
 					</div>
 					<div class="row mt-2">
 						<div class="col">
-							<div class="card border-dark">
+							<div class="card border-dark" card-for="payment_gateway">
 								<div class="card-header py-1 px-3 bg-dark text-white font-weight-bold">
 									<i class="fa fa-credit-card mr-2"></i>Payment Option
 								</div>
@@ -429,11 +426,11 @@
 			</div>
 		</div>
 	</div>
-	<div class="modal fade" id="note-alert" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+	<div class="modal fade" id="note-alert" tabindex="-1" role="dialog" aria-labelledby="note-alert-CenterTitle" aria-hidden="true" data-backdrop="static">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalCenterTitle"><span class="text-secondary">Knowledge Base</span> Shortcuts</h5>
+					<h5 class="modal-title" id="note-alert-CenterTitle"><span class="text-secondary">Knowledge Base</span> Shortcuts</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -442,49 +439,32 @@
 					<div class="col">
 						<p class="text-italic">Please keep in mind we are supporting two shortcuts while booking to fill the forms.</p>
 						<p><kbd><kbd>Alt</kbd> + <kbd>A</kbd></kbd> <span><strong class="text-primary"> [Simple Fill]</strong> : which fill the area one step</span></p>
-						<p><kbd><kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>A</kbd></kbd><span><strong class="text-primary"> [Force Fill]</strong> : which fill the all input once with updated value on current url</span></p>
-						<p class="text-danger mt-5">Note: Please make sure <kbd><kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>A</kbd></kbd> sortcut should be pressed once any changes done in SuperFast Tatkal Booking form while booking.</p>
+						<p><kbd><kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>A</kbd></kbd><span><strong class="text-primary"> [Force Fill]</strong> : which fill the all input once with updated value on current booking.l</span></p>
+						<p class="text-danger mt-5">Note: Please make sure <kbd><kbd>Shift</kbd> + <kbd>Alt</kbd> + <kbd>A</kbd></kbd> sortcut should be pressed once any changes done in SuperFast Tatkal Booking form while booking. Avoid to press this again and again it may lead session out.</p>
 					</div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" id="finalSave">Final Save</button>
+					<button type="button" class="btn btn-primary" id="shortcut-note">Got it</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="modal fade" id="confirmSave" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+	<div class="modal fade" id="confirmSave" tabindex="-1" role="dialog" aria-labelledby="confirmSaveCenterTitle" aria-hidden="true" data-backdrop="static">
+		<div class="modal-dialog modal-dialog-centered modal-sm" role="document">
 			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="exampleModalCenterTitle">PLease Confirm</h5>
+				<div class="modal-header p-2 bg-warning">
+					<h6 class="modal-title" id="confirmSaveCenterTitle">PLease Confirm</h6>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 				<div class="modal-body">
-					<div class="col">
-						<div class="card border-info">
-							<div class="card-header font-weight-bold py-1 px-3 bg-info text-white">
-								<i class="fa fa-bookmark mr-2"></i>Save Booking Detail With Name
-							</div>
-							<div class="card-body">
-								<div class="form-row">
-									<div class="form-group col-md-6">
-										<label for="formName" class="col-form-label col-form-label-sm required">Form Name (Bookmark)</label>
-										<input type="text" class="form-control form-control-sm" id="formName" placeholder="Form Name" name="booking_form_name" maxlength="20" pattern="[\w\s]*" title="form name should be alphanumeric only">
-									</div>
-									<div class="form-group col-md-6">
-										<label for="formComment" class="col-form-label col-form-label-sm">Comment (optional)</label>
-										<input type="text" class="form-control form-control-sm" id="formComment" placeholder="Comment" name="booking_form_comment">
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+					<p id="error-msg">Form Name already present. Do you want to update?</p>
 				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-primary">Final Save</button>
+				<div class="modal-footer p-2">
+					<button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary btn-sm" id="finalSave">Final Save</button>
+					<a class="nav-link" href="mailto:mukesh3797+extension@gmail.com">Support</a>
 				</div>
 			</div>
 		</div>

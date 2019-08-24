@@ -9,6 +9,16 @@ const IRCTC_STATION_LIST = "https://www.irctc.co.in/eticketing/StationLinguistic
 // https://www.irctc.co.in/eticketing/StationLinguisticNames?hl=en
 // http://www.indianrail.gov.in/mail_express_trn_list.html
 
+const STORAGE_KEY_PREFIX = "SuperFastTatkal";
+
+const SUPPORT_EMAIL = "mukesh3797+extension@gmail.com";
+const br = "%0d%0a";
+const support_email_message = `Hi,`+br+`I want support regarding this extention.`+br+`Name:`+br+`Mobile:`;
+const bugReport_email_message = `Hi,`+br+`I wanted to intimate you regarding the bug i found in this app. Please Fix this as soon as possible.`+br+`Name:`+br+`Mobile:`;
+const feedSugges_email_message = `Hi,`+br+`I want to inform you that I am very happy this app and it's wokring fine with me.`+br+`Name:`+br+`Mobile:`;
+
+const PRODUCTION = false;
+
 let weeks = ["", "Monday", "Tuesday", "Wednesday", "Thrusday", "Friday", "Saturday", "Sunday"];
 let M_to_month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -48,7 +58,7 @@ let valid_quota = {
 	"SS": "SR.CITIZEN",
 	"LD": "LADIES",
 	"HP": "DIVYAANG",
-	"TK": "TATKAL",
+	"TQ": "TATKAL",
 	"PT": "PREMIUM TATKAL"
 };
 
@@ -95,91 +105,131 @@ let card_tmpl = `
 				`;
 
 let passenger_row = `
-<tr>
-	<td>
-		<input data-field="p_name" class="form-control form-control-sm" placeholder="Passenger #{{pcount}}" maxlength="16" value="" type="text" pattern="[\w\s]*" title="Name should be alphanumeric only">
-	</td>
-	<td>
-		<input data-field="p_age" class="form-control form-control-sm" value="" type="text" pattern="[\d]*" title="Age shoud be 5-99 only" min="1" max="3">
-	</td>
-	<td>
-		<select data-field="p_gender" class="form-control form-control-sm">
-			<option value="NONE">Select</option>
-			<option value="M">Male</option>
-			<option value="F">Female</option>
-			<option value="T">Transgender</option>
-		</select>
-	</td>
-	<td>
-		<select data-field="p_choice" class="form-control form-control-sm">
-			<option value="NONE">No Preference</option>
-			<optgroup label="(SL, 3A, 2A) seats">
-				<option value="LB">LOWER</option>
-				<option value="MB">MIDDLE</option>
-				<option value="UB">UPPER</option>
-				<option value="SL">SIDE LOWER</option>
-				<option value="SU">SIDE UPPER</option>
-			</optgroup>
-			<optgroup label="(2S, CC) seats">
-				<option value="WS">WINDOW SIDE</option>
-			</optgroup>
-			<optgroup label="(1A) seats">
-				<option value="CB">CABIN</option>
-				<option value="CP">COUPE</option>
-			</optgroup>
-		</select>
-	</td>
-	<td>
-		<select data-field="p_food" class="form-control form-control-sm">
-		    <option selected value="V">Veg</option>
-		    <option value="NV">Non-Veg</option>
-		    <option value="D">No Food</option>
-		</select>
-	</td>
-	<td><input type="checkbox" data-field="p_bedroll"></td>
-	<td>
-	    <select data-feild="p_senior" disabled="true" class="form-control form-control-sm">
-	        <option selected value="1">Avail Concession</option>
-	        <option value="2">Forgo 50% Concession</option>
-	        <option value="3">Forgo Full Concession</option>
-	    </select>
-	</td>
-	<td><input type="checkbox" data-field="opt_berth" checked="checked" disabled="true">
-	<td>
-		<span data-action="reset_row"><i class="fa fa-undo" aria-hidden="true"></i></span>
-	</td>
-</tr>
-`;
+					<tr>
+						<td>
+							<input data-field="p_name" class="form-control form-control-sm" placeholder="Passenger #{{pcount}}" maxlength="16" value="" type="text">
+						</td>
+						<td>
+							<input data-field="p_age" class="form-control form-control-sm" value="" type="text" maxlength="3">
+						</td>
+						<td>
+							<select data-field="p_gender" class="form-control form-control-sm">
+								<option value="NONE">Select</option>
+								<option value="M">Male</option>
+								<option value="F">Female</option>
+								<option value="T">Transgender</option>
+							</select>
+						</td>
+						<td>
+							<select data-field="p_choice" class="form-control form-control-sm">
+								<option value="NONE">No Preference</option>
+								<optgroup label="(SL, 3A, 2A) seats">
+									<option value="LB">LOWER</option>
+									<option value="MB">MIDDLE</option>
+									<option value="UB">UPPER</option>
+									<option value="SL">SIDE LOWER</option>
+									<option value="SU">SIDE UPPER</option>
+								</optgroup>
+								<optgroup label="(2S, CC) seats">
+									<option value="WS">WINDOW SIDE</option>
+								</optgroup>
+								<optgroup label="(1A) seats">
+									<option value="CB">CABIN</option>
+									<option value="CP">COUPE</option>
+								</optgroup>
+							</select>
+						</td>
+						<td>
+							<select data-field="p_food" class="form-control form-control-sm">
+							    <option selected value="V">Veg</option>
+							    <option value="NV">Non-Veg</option>
+							    <option value="D">No Food</option>
+							</select>
+						</td>
+						<td><input type="checkbox" data-field="p_bedroll"></td>
+						<td>
+						    <select data-feild="p_senior" disabled="true" class="form-control form-control-sm">
+						        <option selected value="1">Avail Concession</option>
+						        <option value="2">Forgo 50% Concession</option>
+						        <option value="3">Forgo Full Concession</option>
+						    </select>
+						</td>
+						<td><input type="checkbox" data-field="opt_berth" checked="checked" disabled="true">
+						<td>
+							<span data-action="reset_row"><i class="fa fa-undo" aria-hidden="true"></i></span>
+						</td>
+					</tr>
+					`;
 
 let child_passenger_row = `
-	<tr>
-		<td>
-			<input data-field="p_name" class="form-control form-control-sm" placeholder="Passenger #{{pcount}}" maxlength="16" value="" type="text" pattern="[\w\s]*" title="Name should be alphanumeric only">
-		</td>
-		<td>
-			<select class="form-control form-control-sm" data-field="age">
-				<option value="NONE" selected>Age</option>
-				<option value="0">Below one year</option>
-				<option value="1">One year</option>
-				<option value="2">Two years</option>
-				<option value="3">Three years</option>
-				<option value="4">Four years</option>
-			</select>
-		</td>
-		<td>
-			<select data-field="gender" class="form-control form-control-sm">
-				<option value="NONE">Select</option>
-				<option value="M">Male</option>
-				<option value="F">Female</option>
-				<option value="T">Transgender</option>
-			</select>
-		</td>
-		<td>
-			<span data-action="reset_row"><i class="fa fa-undo" aria-hidden="true"></i></span>
-		</td>
-	</tr>
-`;
+						<tr>
+							<td>
+								<input data-field="p_name" class="form-control form-control-sm" placeholder="Passenger #{{pcount}}" maxlength="16" value="" type="text">
+							</td>
+							<td>
+								<select class="form-control form-control-sm" data-field="age">
+									<option value="NONE" selected>Age</option>
+									<option value="0">Below one year</option>
+									<option value="1">One year</option>
+									<option value="2">Two years</option>
+									<option value="3">Three years</option>
+									<option value="4">Four years</option>
+								</select>
+							</td>
+							<td>
+								<select data-field="gender" class="form-control form-control-sm">
+									<option value="NONE">Select</option>
+									<option value="M">Male</option>
+									<option value="F">Female</option>
+									<option value="T">Transgender</option>
+								</select>
+							</td>
+							<td>
+								<span data-action="reset_row"><i class="fa fa-undo" aria-hidden="true"></i></span>
+							</td>
+						</tr>
+						`;
 
+let CARD_POPUP = `
+				<div class="col-sm-4 py-2 px-2">
+					<div class="card card-dark">
+						<div class="card-header px-2 py-1">
+							<span><i class="far fa-eye mr-2 text-muted"></i><a class="link pointer" data-action="edit" data-hash="{{hash}}">{{form_name}}</a></span>
+						</div>
+						<div class="card-body p-2">
+							<div class="row text-center font-weight-bold">
+								<div class="col">{{from}}</div>
+								<div class="col"><i class="fa fa-train"></i></div>
+								<div class="col">{{to}}</div>
+							</div>
+							<p class="text-center p-0 m-0 text-md text-secondary"><strong>{{train_no}}</strong> : <span>{{train_name}}</span></p>
+							<div class="border-bottom my-2"></div>
+							<div class="row">
+								<div class="col text-center">
+									<span class="m-badge badge-dark">{{j_date}}</span><br>
+									<span class="text-uppercase">Adult</span><br>
+									<span style="font-size: 25px;" class="font-weight-bold">{{psgn_count}}</span>
+								</div>
+								<div class="col text-center">
+									<span class="m-badge badge-info text-uppercase">{{j_day}}</span><br>
+									<span class="text-uppercase">Child</span><br>
+									<span style="font-size: 25px;" class="font-weight-bold">{{psgn_ch_count}}</span>
+								</div>
+								<div class="col-sm-12 text-center">
+									<span class="m-badge badge-info text-uppercase">{{class}}</span>
+									<span class="m-badge badge-dark text-uppercase">{{quota}}</span>
+								</div>
+							</div>
+							<div class="border-bottom my-2"></div>
+							<div class="btn-group d-flex" role="group">
+								<button class="btn btn-success btn-sm w-100" data-action="triggerBooking" data-hash="{{hash}}"><i class="fab fa-superpowers mr-2"></i>Book</button>
+								<button class="btn btn-warning btn-sm w-100" data-action="edit" data-hash="{{hash}}"><i class="fa fa-edit mr-2"></i>Edit</button>
+								<button class="btn btn-danger btn-sm w-100" data-action="delete" data-hash="{{hash}}"><i class="fa fa-trash-alt mr-2"></i>Delete</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				`;
 
 (function($){
 	var Toaster = $('<div/>').addClass('toaster').css({
