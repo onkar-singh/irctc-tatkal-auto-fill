@@ -3,24 +3,23 @@ let extention_status = false;
 
 $(function(){
 	// chrome.storage.sync.set({booking_data: {}});
-	let hash = $_GET('hash');
 	initApp();
-	renderPaymentBlock();
-	updatePendingView();
-	checkExtentionSwitch();
-
 	getBookingData(function(allSavedBookings){
 		BOOKING_DATA = allSavedBookings || {};
 	});
 
+	let hash = $_GET('hash');
 	if(null !== hash){
 		console.log('Hash');
+		renderPaymentBlock();
 		getBookingData(renderFormWithData, hash);
 	}else if($_GET('tab') == 'trips'){
 		console.log('Trips');
+		updatePendingView();
 		$('.nav-tabs a[aria-controls="nav-pending"]').tab('show');
 	}else if($_GET('tab') == 'new'){
 		console.log('New');
+		renderPaymentBlock();
 		$('.nav-tabs a[aria-controls="nav-new"]').tab('show');
 		// gaPage('/booking_form.html');
 		$('#formName').focus();
@@ -28,6 +27,7 @@ $(function(){
 });
 
 const initApp = function(){
+	checkExtentionSwitch();
 	$('.app-version').text('version - '+ chrome.app.getDetails().version);
 	$('.app-name').text(chrome.app.getDetails().name);
 
@@ -111,7 +111,7 @@ const initApp = function(){
 			$('#coach_preferred_no').removeAttr('readonly');
 		}
 		else{
-			$('#coach_preferred_no').attr('readonly', true);
+			$('#coach_preferred_no').val('').attr('readonly', true);
 		}
 	});
 }
@@ -225,6 +225,7 @@ const updatePendingView = function(renderHash = null){
 			$.each(b_data, function(k,v){
 				// console.log(v.booking_form_name);
 				let html_temp = card_tmpl;
+				console.log(v.j_date);
 				jd_parts = v.j_date.split('-');
 				let temp = {
 					hash: k,
@@ -238,7 +239,7 @@ const updatePendingView = function(renderHash = null){
 					psgn_count: v.psngr.A.length,
 					psgn_ch_count: v.psngr.C.length,
 					class:v.coach_class,
-					quota: quota[v.booking_quota]
+					quota: valid_quota[v.booking_quota]
 				};
 
 				$.each(temp, function(k,v){
@@ -450,9 +451,14 @@ const formJSON = function(){
 	};
 	let form_data = $('#booking_form').serializeArray();
 	$.each(Object.keys(form_data), function(k,v){
-		formJson[form_data[k].name] = form_data[k].value;
 		if(form_data[k].name === 'IRCTC_pwd')
 			formJson[form_data[k].name] = encrypt(form_data[k].value, form_data[k].name);
+		else if($.inArray(form_data[k].name, ["auto_upgradation", "confirm_berths"]) != -1)
+			formJson[form_data[k].name] = $('[name="'+form_data[k].name+'"]').is(':checked');
+		else if(form_data[k].name === 'coach_preferred')
+			formJson[form_data[k].name] = $('[name="'+form_data[k].name+'"]').is(':checked') ;//? $('[name="coach_preferred_no"]').val() : false;
+		else
+			formJson[form_data[k].name] = form_data[k].value;
 	});
 
 	$('#pasenger-table tbody tr').each(function(k, tr){
@@ -514,15 +520,13 @@ const renderFormWithData = function(json){
 			v.A.forEach(fillPassengerA);
 			v.C.forEach(fillPassengerC);
 		}else if(-1 != $.inArray(k, checkBox)){
-			console.log(k);
-			if(true === v){
-				$('[name="'+k+'"]').attr({'checked': true});
-			}
+			$('[name="'+k+'"]').attr({'checked': v});
 		}else if(-1 != $.inArray(k, radioBox)){
-			// console.log('[name="'+k+'"] [value="'+v+'"]');
 			$('[name="'+k+'"][value="'+v+'"]').attr({'checked': true});
 		}else if(k === 'IRCTC_pwd'){
 			$('[name="'+ k + '"]').val(decrypt(v, k));
+		}else if(k === 'insurance_choice'){
+			(v === 'YES') ? $('#insuranceY').prop('checked', true) : $('#insuranceN').prop('checked', true);
 		}else{
 			$('[name="'+ k + '"]').val(v);
 		}
@@ -530,6 +534,7 @@ const renderFormWithData = function(json){
 			renderPaymentBank(v);
 			$('[name="bank_name"]').val(json.bank_name);
 		}
+
 
 		if(k === 'seq_question' && v !== false){
 			$('[data-field="dob"]').val(v.dob);

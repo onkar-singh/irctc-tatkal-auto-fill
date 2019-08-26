@@ -67,7 +67,7 @@ let card_tmpl = `
 				<div class="col-sm-4 py-2 px-2">
 					<div class="card card-dark">
 						<div class="card-header px-2 py-1">
-							<span><i class="far fa-eye mr-2 text-muted"></i><a class="link pointer" data-action="edit" data-hash="{{hash}}">{{form_name}}</a></span>
+							<span><a class="link pointer" data-action="edit" data-hash="{{hash}}"><i class="far fa-eye mr-2 text-muted"></i><span>{{form_name}}</span></a></span>
 						</div>
 						<div class="card-body p-2">
 							<div class="row text-center font-weight-bold">
@@ -77,13 +77,13 @@ let card_tmpl = `
 							</div>
 							<p class="text-center p-0 m-0 text-md text-secondary"><strong>{{train_no}}</strong> : <span>{{train_name}}</span></p>
 							<div class="border-bottom my-2"></div>
-							<div class="row">
-								<div class="col text-center">
+							<div class="row m-0">
+								<div class="col text-center mx-2">
 									<span class="m-badge badge-dark">{{j_date}}</span><br>
 									<span class="text-uppercase">Adult</span><br>
 									<span style="font-size: 25px;" class="font-weight-bold">{{psgn_count}}</span>
 								</div>
-								<div class="col text-center">
+								<div class="col text-center mx-2">
 									<span class="m-badge badge-info text-uppercase">{{j_day}}</span><br>
 									<span class="text-uppercase">Child</span><br>
 									<span style="font-size: 25px;" class="font-weight-bold">{{psgn_ch_count}}</span>
@@ -95,7 +95,7 @@ let card_tmpl = `
 							</div>
 							<div class="border-bottom my-2"></div>
 							<div class="btn-group d-flex" role="group">
-								<button class="btn btn-success btn-sm w-100" data-action="triggerBooking" data-hash="{{hash}}"><i class="fab fa-superpowers mr-2"></i>Book</button>
+								<button class="btn btn-success btn-sm w-100" data-action="triggerBooking" data-hash="{{hash}}"><i class="fab fa-superpowers mr-2"></i>Book Now</button>
 								<button class="btn btn-warning btn-sm w-100" data-action="edit" data-hash="{{hash}}"><i class="fa fa-edit mr-2"></i>Edit</button>
 								<button class="btn btn-danger btn-sm w-100" data-action="delete" data-hash="{{hash}}"><i class="fa fa-trash-alt mr-2"></i>Delete</button>
 							</div>
