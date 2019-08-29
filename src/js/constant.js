@@ -124,20 +124,11 @@ let passenger_row = `
 						<td>
 							<select data-field="p_choice" class="form-control form-control-sm">
 								<option value="NONE">No Preference</option>
-								<optgroup label="(SL, 3A, 2A) seats">
 									<option value="LB">LOWER</option>
 									<option value="MB">MIDDLE</option>
 									<option value="UB">UPPER</option>
 									<option value="SL">SIDE LOWER</option>
 									<option value="SU">SIDE UPPER</option>
-								</optgroup>
-								<optgroup label="(2S, CC) seats">
-									<option value="WS">WINDOW SIDE</option>
-								</optgroup>
-								<optgroup label="(1A) seats">
-									<option value="CB">CABIN</option>
-									<option value="CP">COUPE</option>
-								</optgroup>
 							</select>
 						</td>
 						<td>
@@ -149,8 +140,9 @@ let passenger_row = `
 						</td>
 						<td><input type="checkbox" data-field="p_bedroll"></td>
 						<td>
-						    <select data-feild="p_senior" disabled="true" class="form-control form-control-sm">
-						        <option selected value="1">Avail Concession</option>
+						    <select data-field="p_senior" disabled="true" class="form-control form-control-sm">
+						        <option selected value="0">Senior Citizen Concession</option>
+						        <option value="1">Avail Concession</option>
 						        <option value="2">Forgo 50% Concession</option>
 						        <option value="3">Forgo Full Concession</option>
 						    </select>

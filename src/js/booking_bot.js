@@ -102,13 +102,15 @@ const fillForceUpdate = function(){
 	if(page === 1){
 		$('[placeholder="From*"]').val('');
 	}else if(page === 2){
-
+		modifySearch();
 	}else if(page === 3){
-
+		fillPassengersDetail();
 	}else if(page === 4){
 
 	}else if(page === 5){
 
+	}else if(page === 6){
+		window.location.href = STEP1_URL;
 	}
 	watcher = true;
 	// shortcut = false;
@@ -122,9 +124,29 @@ function modifySearch(){
 	origin.dispatchEvent(new Event('keydown'));
 	origin.dispatchEvent(new Event('input'));
 
-	destination.value = bookingActive.from_station;
+	destination.value = bookingActive.to_station;
 	destination.dispatchEvent(new Event('keydown'));
 	destination.dispatchEvent(new Event('input'));
+
+	// update coach class
+	let classCaret = document.querySelectorAll('[formcontrolname="journeyClass"] .fa-caret-down')[0];
+	classCaret.click();
+	let li = document.querySelectorAll('[formcontrolname="journeyClass"] ul li');
+	li.forEach(function(v){
+		let li_text = $(v).text();
+		let cclass = li_text.substr(li_text.indexOf("(")).replace("(", "").replace(")","");
+		if(cclass == bookingActive.coach_class){
+			$(v).trigger('click');
+		}
+	});
+
+	// update journey date
+	journeydate = document.querySelectorAll("[placeholder='Journey Date(dd-mm-yyyy)*']")[1];
+	journeydate.value = bookingActive.j_date;
+	journeydate.dispatchEvent(new Event('keydown'));
+	journeydate.dispatchEvent(new Event('input'));
+	// trigger modify button
+	document.querySelectorAll('app-modify-search form button')[0].click();
 }
 
 function getPageStep(){
@@ -139,6 +161,8 @@ function getPageStep(){
 		return 4;;
 	}else if(url_now === STEP5_URL){
 		return 5;
+	}else if(url_now === ERROR_URL){
+		return 6;
 	}
 	return 0;
 }
@@ -414,8 +438,14 @@ function fillPassengersDetail(){
 		setPassengerValue(input_select[0], passenger.name);
 		setPassengerValue(input_select[1], passenger.age);
 		setPassengerValue(input_select[2], passenger.gender);
-		if(passenger.choice != "")
-			setPassengerValue(input_select[3], passenger.choice);
+		if(passenger.berth != "NONE")
+			setPassengerValue(input_select[3], passenger.berth);
+		else
+			setPassengerValue(input_select[3], "");
+
+		if(passenger.age >= 60){
+			setPassengerValue(input_select[5], passenger.scitizon);
+		}
 	});
 
 
@@ -466,7 +496,8 @@ function fillPassengersDetail(){
 
 	// insurance mark ad YES
 	// $('#travelInsuranceOptedYes').prop('checked', true).trigger('change');
-	document.querySelectorAll('#travelInsuranceOptedYes')[0].checked = true;
+	if(document.querySelectorAll('#travelInsuranceOptedYes').length > 0 && bookingActive.insurance_choice == "YES")
+		$('#travelInsuranceOptedYes').click();
 	// $('#travelInsuranceOptedYes')[0].dispatchEvent(new Event('change'));
 
 	// Mark as done

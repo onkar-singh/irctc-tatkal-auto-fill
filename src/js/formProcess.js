@@ -54,7 +54,7 @@ const initApp = function(){
 		if(this.value >= 60){
 			target.prop('disabled', false);
 		}else{
-			target.val(1).prop('disabled', true);
+			target.val(0).prop('disabled', true);
 		}
 	});
 
@@ -573,6 +573,9 @@ const fillPassengerA = function(record){
 		target.find('[data-field="p_choice"]').val(record.berth);
 		target.find('[data-field="p_food"]').val(record.food);
 		target.find('[data-field="p_bedroll"]').prop('checked', (record.bedroll) ? true : false);
+		if(record.age >= 60){
+			target.find('[data-field="p_senior"]').removeAttr('disabled').val(record.scitizon);
+		}
 		fill_PA_index++;
 	}
 }
