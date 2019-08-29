@@ -11,7 +11,7 @@
     "content_scripts": [
         {
             "css": ["css/custom-style.min.css"],
-            "js": ["js/jquery-3.3.1.min.js", "js/constant.js", "js/trains.js", "js/booking_bot.js"],
+            "js": ["js/jquery-3.3.1.min.js", "js/aes.js", "js/constant.js", "js/trains.js", "js/booking_bot.js"],
             "matches": ["http://*.irctc.co.in/*", "https://*.irctc.co.in/*"],
             "run_at": "document_end"
         }

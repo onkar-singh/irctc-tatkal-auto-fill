@@ -1,25 +1,29 @@
 
-let booking_data = {};
+let bookingActive = {};
 let loop = 0;
 let watcher = false;
 let shortcut = false;
 let class_interval = false;
+let timer = false;
 
 document.body.onload = function(){
 	chrome.storage.sync.get(['extention_status'], function(result) {
 		if(typeof result.extention_status != 'undefined')
 			watcher = result.extention_status;
 		if(true === watcher){
-			chrome.storage.sync.get(['booking_default'], function(result) {
-				hours = (new Date()).getHours();
-				booking_data = result.booking_default;
-				if(booking_data.booking_quota == 'GN' && (hours == 10 || hours == 11)){
+			chrome.storage.sync.get(['booking_active'], function(result) {
+				bookingActive = result.booking_active;
+				// fillSearchDetail();
+				$.toast("Booking Started you need to <strong>click</strong> only three palce and two captcha");
+				waitLoop();
+				// hours = (new Date()).getHours();
+				/*if(bookingActive.booking_quota == 'GN' && (hours == 10 || hours == 11)){
 					$.toast("Booking Can't Started because it's Tatkal Time and you are tring to book General ticke. please try after tatkal time.");
 				}else{
 					fillSearchDetail();
 					$.toast("Booking Started you need to <strong>click</strong> only three palce and two captcha");
 					waitLoop();
-				}
+				}*/
 			});
 		}
 	});
@@ -80,76 +84,47 @@ window.onkeyup = function(e){
     	}
     	shortcut = false;
    	}else if(pressed == 'ShiftAlt65'){
-   		chrome.storage.sync.get(['booking_default'], function(result) {
-   			booking_data = result.booking_default;
-   		});
-    	let page = getPageStep();
-    	console.log('Page='+ page);
-    	shortcut = true;
-    	if(page === 1){
-
-    		/*step_need = detectStep();
-    		console.log(step_need);
-    		if(step_need == 'login-open' || step_need == 'login-fill'){
-    			fillLogin();
-    		}else if(step_need == 'login-wait'){
-    			$.toast("Proceed Manually [Fill Login Captcha and login]");
-    		}else if(step_need == 'fill-search'){
-    			fillSearchDetail();
-    		}else if(step_need == 'search-btn-trigger'){
-    			triggerSearchBtn();
-    		}*/
-    	}else if(page === 2){
-    		modifySearch();
-    		/*selectQuota();
-    		selectTrainCard();
-    		selectCoachClass();
-    		triggerAvailBtn();
-    		triggerBookNowBtn();*/
-    	}else if(page === 3){
-
-    	}else if(page === 4){
-
-    	}else if(page === 5){
-
-    	}
-    	shortcut = false;
+   		fillForceUpdate();
     }
 }
 
-function modifySearch(){
-	console.log(booking_data);
+const fillForceUpdate = function(){
+	// clearTimeout(timer);
+	watcher = false;
+	chrome.storage.sync.get(['booking_active'], function(result) {
+		console.log(result);
+		bookingActive = result.booking_active;
+		console.log(bookingActive);
+	});
 
+	let page = getPageStep();
+	// shortcut = true;
+	if(page === 1){
+		$('[placeholder="From*"]').val('');
+	}else if(page === 2){
+
+	}else if(page === 3){
+
+	}else if(page === 4){
+
+	}else if(page === 5){
+
+	}
+	watcher = true;
+	// shortcut = false;
+}
+
+function modifySearch(){
 	origin = document.querySelectorAll("p-autocomplete[id='origin']")[0].querySelectorAll('input')[0];
 	destination = document.querySelectorAll("p-autocomplete[id='destination']")[0].querySelectorAll('input')[0];
 
-	origin.value = booking_data.from_station;
+	origin.value = bookingActive.from_station;
 	origin.dispatchEvent(new Event('keydown'));
 	origin.dispatchEvent(new Event('input'));
 
-	destination.value = booking_data.from_station;
+	destination.value = bookingActive.from_station;
 	destination.dispatchEvent(new Event('keydown'));
 	destination.dispatchEvent(new Event('input'));
-
-	/*let origin = document.querySelector('p-autocomplete#origin input');
-	let destination = document.querySelector('p-autocomplete#destination input');
-
-	*/
-
-	// $('p-autocomplete#destination input').val(booking_data.to_station);
-
-	// $('[formcontrolname="journeyClass"] .fa-caret-down').trigger('click');
-	// $('[formcontrolname="journeyClass"] li:contains("('+booking_data.coach_class+')")').trigger('click');
-	// console.log($('[formcontrolname="journeyClass"]'));
-	// console.log($('[formcontrolname="journeyClass"] span'));
-	// document.querySelectorAll('[formcontrolname="journeyClass"] .fa-caret-down')[0].click();
-	// class_interval = setInterval(function(){
-	// 	$('[formcontrolname="journeyClass"] span:contains("'+booking_data.coach_class+'")');
-	// 	clearInterval(class_interval);
-	// }, 500);
-	// $('[formcontrolname="journeyClass"] span:contains(\'("+ booking_data.coach_class +")\')').parent().trigger('click');
-
-	// $('p-autocomplete#journeyDate input').val(booking_data.j_date).trigger('keyup').trigger('input').trigger('change');
 }
 
 function getPageStep(){
@@ -192,7 +167,7 @@ function detectStep(){
 		}
 	}else if(url_now === STEP2_URL){
 		// set-quota
-		quota_rexEx = new RegExp(valid_quota[booking_data.booking_quota]);
+		quota_rexEx = new RegExp(valid_quota[bookingActive.booking_quota]);
 		q = $('.search_div label').html();
 		quota = q;
 		if(false === quota_rexEx.test(quota))
@@ -204,7 +179,7 @@ function detectStep(){
 				// match coach class
 				class_select = document.querySelectorAll('.train_avl_enq_box[selected-train="true"] [formcontrolname="classInput"]')[0];
 				c_class = class_select.value;
-				class_regEx = new RegExp(booking_data.coach_class);
+				class_regEx = new RegExp(bookingActive.coach_class);
 				if(false == class_regEx.test(c_class)){
 					return 'select-coach-class';
 				}
@@ -233,10 +208,10 @@ function detectStep(){
 		}else{
 			header = document.querySelectorAll('.stepwizard-step[payment-method="selected"]')[0].attributes['selected-header'].value;
 			payment_banks = document.querySelectorAll('p-tabpanel #'+header)[0].querySelectorAll('.payment_box');
-			if(booking_data.bank_name == 'NONE'){
+			if(bookingActive.bank_name == 'NONE'){
 				return 'user-bank-not-found';
 			}
-			user_bank = booking_data.bank_name.trim().toLowerCase();
+			user_bank = bookingActive.bank_name.trim().toLowerCase();
 			// console.log(user_bank);
 			bank_regEx = new RegExp(user_bank);
 			// console.log(payment_banks);
@@ -261,6 +236,8 @@ function detectStep(){
 		// TODO: select-payment-opt
 		// TODO: select-bank
 		// TODO: pay-now
+	}else if(url_now === ERROR_URL){
+		window.location.href = STEP1_URL;
 	}else{
 		// TODO: need to auto-fill payment credential on bank site
 		return 'unknown';
@@ -272,10 +249,10 @@ function fillLogin(){
 	userId = document.getElementById("userId");
 	pwd = document.getElementById("pwd");
 
-	userId.value = booking_data.IRCTC_username;
+	userId.value = bookingActive.IRCTC_username;
 	userId.dispatchEvent(new Event('input'));
 
-	pwd.value = booking_data.IRCTC_pwd;
+	pwd.value = decrypt(bookingActive.IRCTC_pwd, 'IRCTC_pwd');
 	pwd.dispatchEvent(new Event('input'));
 
 	document.getElementById("loginText").click();
@@ -291,31 +268,31 @@ function fillSearchDetail(){
 	journeydate = document.querySelectorAll("[placeholder='Journey Date(dd-mm-yyyy)*']")[1];
 	classCaret = document.getElementById('journeyClass').querySelectorAll('.fa-caret-down')[0];
 
-	// fromStation.value = booking_data.from_station;
-	fromStation.value = booking_data.from_station;
+	// fromStation.value = bookingActive.from_station;
+	fromStation.value = bookingActive.from_station;
 	fromStation.dispatchEvent(new Event('keydown'));
 	fromStation.dispatchEvent(new Event('input'));
 
-	toStation.value = booking_data.to_station;
+	toStation.value = bookingActive.to_station;
 	// toStation.value = "GAYA JN - GAYA";
 	toStation.dispatchEvent(new Event('keydown'));
 	toStation.dispatchEvent(new Event('input'));
 	toStation.click();
 
-	journeydate.value = booking_data.j_date;
+	journeydate.value = bookingActive.j_date;
 	journeydate.dispatchEvent(new Event('keydown'));
 	journeydate.dispatchEvent(new Event('input'));
 
 	classCaret.click();
 	// class_list  = ["EA","1A","2A","3A","EC","FC","3E","CC","SL","2S"];
-	$("#journeyClass span:contains('"+ booking_data.coach_class +"')").parent().trigger('click');
+	$("#journeyClass span:contains('"+ bookingActive.coach_class +"')").parent().trigger('click');
 	// searchSubmit.click();
 	$.toast('Journey Detail Filled', "SUCCESS");
 	// gaEvent("IRCTC_STATE", "clicked", "journey detail filled");
 }
 
 function triggerSearchBtn(){
-	if(true === booking_data.auto_proceed || true == shortcut){
+	if(true === bookingActive.auto_proceed || true == shortcut){
 		// searchSubmit = document.querySelectorAll('[type="submit"]')[3];
 		searchSubmit = document.querySelectorAll('[type="submit"][label="Find Trains"]')[0];
 		searchSubmit.click();
@@ -331,7 +308,7 @@ function selectQuota(){
 	search_quota_div = document.querySelectorAll('.search_div')[0];
 	search_quota_div.querySelectorAll('.ui-dropdown-trigger')[0].click();
 	quota_item = search_quota_div.querySelectorAll('.ui-dropdown-item');
-	regEx_quota = new RegExp(valid_quota[booking_data.booking_quota]);
+	regEx_quota = new RegExp(valid_quota[bookingActive.booking_quota]);
 	for(let i=0; i<quota_item.length; i++){
 		// console.log(quota_item[i]);
 		// console.log(quota_item[i].outerHTML);
@@ -348,7 +325,7 @@ function selectQuota(){
 function selectTrainCard(){
 	// Select Train form list
 	let availableTrains = $('.train_avl_enq_box');
-	let train_no = (booking_data.train.split(":")[0]).trim();
+	let train_no = (bookingActive.train.split(":")[0]).trim();
 	let regEx_TrainNo = new RegExp('\('+ train_no +'\)');
 	let train_match_at = false;
 	$.each(availableTrains, function(k, v){
@@ -371,7 +348,7 @@ function selectTrainCard(){
 
 function selectCoachClass(){
 	class_select = document.querySelectorAll('.train_avl_enq_box[selected-train="true"] [formcontrolname="classInput"]')[0];
-	regEx_class = new RegExp('\('+ booking_data.coach_class +'\)');
+	regEx_class = new RegExp('\('+ bookingActive.coach_class +'\)');
 	$.each(class_select.children, function(k,v){
 		if(regEx_class.test(v.innerHTML)){
 			class_select.value = v.value;
@@ -383,7 +360,7 @@ function selectCoachClass(){
 }
 
 function triggerAvailBtn(){
-	if(true === booking_data.auto_proceed || true == shortcut){
+	if(true === bookingActive.auto_proceed || true == shortcut){
 		document.querySelectorAll('.train_avl_enq_box[selected-train="true"] button')[0].click();
 		$.toast("Checking Availability..");
 	}else{
@@ -393,8 +370,8 @@ function triggerAvailBtn(){
 }
 
 function triggerBookNowBtn(){
-	if(true === booking_data.auto_proceed || true == shortcut){
-		b_date = booking_data.j_date.split('-');
+	if(true === bookingActive.auto_proceed || true == shortcut){
+		b_date = bookingActive.j_date.split('-');
 		b_date[1] = M_to_month[b_date[1] - 1];
 		date_d_M_Y = b_date.join(' ');
 		// console.log(date_d_M_Y);
@@ -415,10 +392,10 @@ function triggerBookNowBtn(){
 
 // TODO: fill passengers detail
 function fillPassengersDetail(){
-	// console.log(booking_data.psngr['A']);
+	// console.log(bookingActive.psngr['A']);
 	apf = document.querySelectorAll('app-passenger');
-	booking_data.psngr['A'] = booking_data.psngr['A'].filter((obj) => obj );
-	ap_count = booking_data.psngr['A'].length;
+	bookingActive.psngr['A'] = bookingActive.psngr['A'].filter((obj) => obj );
+	ap_count = bookingActive.psngr['A'].length;
 	let need_more_A = 0;
 	if(apf.length < ap_count){
 		need_more_A = ap_count - apf.length;
@@ -432,7 +409,7 @@ function fillPassengersDetail(){
 		}
 	}
 	apf_updated = document.querySelectorAll('app-passenger');
-	$.each(booking_data.psngr['A'], function(k, passenger){
+	$.each(bookingActive.psngr['A'], function(k, passenger){
 		input_select = apf_updated[k].querySelectorAll('.form-group input,select');
 		setPassengerValue(input_select[0], passenger.name);
 		setPassengerValue(input_select[1], passenger.age);
@@ -442,10 +419,10 @@ function fillPassengersDetail(){
 	});
 
 
-	// console.log(booking_data.psngr['C']);
+	// console.log(bookingActive.psngr['C']);
 	cpf = document.querySelectorAll('.passengerDiv [formarrayname="infantList"] .infant_box');
-	booking_data.psngr['C'] = booking_data.psngr['C'].filter((obj) => obj );
-	cp_count = booking_data.psngr['C'].length;
+	bookingActive.psngr['C'] = bookingActive.psngr['C'].filter((obj) => obj );
+	cp_count = bookingActive.psngr['C'].length;
 	let need_mode_C = 0;
 	if(cpf.length < cp_count){
 		need_mode_C = cp_count - cpf.length;
@@ -458,7 +435,7 @@ function fillPassengersDetail(){
 	}
 
 	cpf_updated = document.querySelectorAll('.passengerDiv [formarrayname="infantList"] .infant_box');
-	$.each(booking_data.psngr['C'], function(l, passenger){
+	$.each(bookingActive.psngr['C'], function(l, passenger){
 		input_select = cpf_updated[l].querySelectorAll('.form-group input,select');
 		setPassengerValue(input_select[0], passenger.name);
 		setPassengerValue(input_select[1], passenger.age);
@@ -467,25 +444,25 @@ function fillPassengersDetail(){
 
 	// console.log(booking_data);
 	mobile_no = document.querySelectorAll('#mobileNumber')[0];
-	mobile_no.value = booking_data.mobile_no;
+	mobile_no.value = bookingActive.mobile_no;
 
 	// Booking Options
-	if(true === booking_data.auto_upgradation){
+	if(true === bookingActive.auto_upgradation){
 		// console.log($('[name="autoUpgradation"]'));
 		$('[name="autoUpgradation"]').prop('checked', true);
 	}
-	if(true === booking_data.confirm_berths){
+	if(true === bookingActive.confirm_berths){
 		// console.log($('[name="confirmberths"]'));
 		$('[name="confirmberths"]').prop('checked', true);
 	}
-	if(true === booking_data.coach_preferred){
+	if(true === bookingActive.coach_preferred){
 		// console.log($('[name="coachPreferred"]'));
 		$('[name="coachPreferred"]').prop('checked', true);
 		// console.log($('[formcontrolname="coachId"]'));
-		$('[formcontrolname="coachId"]').val(booking_data.coach_preferred_no);
+		$('[formcontrolname="coachId"]').val(bookingActive.coach_preferred_no);
 	}
 
-	$('[formcontrolname="reservationChoice"][value="'+ booking_data.reservation_choice +'"]').prop('checked', true);
+	$('[formcontrolname="reservationChoice"][value="'+ bookingActive.reservation_choice +'"]').prop('checked', true);
 
 	// insurance mark ad YES
 	// $('#travelInsuranceOptedYes').prop('checked', true).trigger('change');
@@ -511,7 +488,7 @@ function setPassengerValue(element, value) {
 }
 
 function reviewDone(){
-	if(true === booking_data.auto_proceed){
+	if(true === bookingActive.auto_proceed){
 		review_btns = 	document.querySelectorAll('app-review-booking [type="submit"]');
 		$.each(review_btns, function(k,b){
 			if(b.innerText == "Continue Booking"){
@@ -525,10 +502,9 @@ function reviewDone(){
 	}
 }
 
-
 function selectPaymentMethod(){
 	available_payment_method_li = document.querySelectorAll('app-payment form ul li a');
-	pay_mod_regEx = new RegExp(payment_opt[booking_data.pay_mod].replace(/\s/g,'').toLowerCase(), 'i');
+	pay_mod_regEx = new RegExp(payment_opt[bookingActive.pay_mod].replace(/\s/g,'').toLowerCase(), 'i');
 	$.each(available_payment_method_li, function(k, link){
 		if(true === pay_mod_regEx.test(link.innerText.replace(/\s/g,'').toLowerCase())){
 			link.click();
@@ -546,7 +522,7 @@ function selectPaymentMethod(){
 function selectPaymentBank(){
 	header = document.querySelectorAll('.stepwizard-step[payment-method="selected"]')[0].attributes['selected-header'].value;
 	payment_banks = document.querySelectorAll('p-tabpanel #'+header)[0].querySelectorAll('.payment_box');
-	bank_regEx = new RegExp(booking_data.bank_name.trim().toLowerCase());
+	bank_regEx = new RegExp(bookingActive.bank_name.trim().toLowerCase());
 	for(let j=0; j < payment_banks.length; j++){
 		bank_name = (payment_banks[j].querySelectorAll('label span')[0].innerText).trim().toLowerCase();
 		if(bank_regEx.test(bank_name)){
@@ -560,7 +536,7 @@ function selectPaymentBank(){
 
 function triggerMakePayment(){
 	bank_node = document.querySelectorAll('.payment_box[bank-index="found"]');
-	if(bank_node.length > 0 && (true === booking_data.auto_proceed || true == shortcut)){
+	if(bank_node.length > 0 && (true === bookingActive.auto_proceed || true == shortcut)){
 		bank_node[0].querySelector('button').click();
 		$.toast("Payment Initiated", "SUCCESS");
 	}
@@ -575,8 +551,8 @@ function waitLoop(){
 		return false;
 	}
 
-	// console.log(booking_data);
 	step_need = detectStep();
+	console.log(step_need);
 	if(step_need == 'login-open' || step_need == 'login-fill'){
 		fillLogin();
 	}else if(step_need == 'login-wait'){
@@ -610,5 +586,5 @@ function waitLoop(){
 	}else if(step_need == 'make-payment-btn-trigger'){
 		triggerMakePayment();
 	}
-	setTimeout(waitLoop, 500);
+	timer = setTimeout(waitLoop, 500);
 }

@@ -269,16 +269,15 @@ const updatePendingView = function(renderHash = null){
 			$('[data-action="triggerBooking"]').click(function(){
 				if(true === extention_status){
 					let hash = $(this).attr('data-hash');
-
 					getBookingData(function(booking_json){
+						chrome.storage.sync.set({booking_active: booking_json});
+						BOOKING_DATA['active'] = booking_json;
 						console.log(booking_json);
-						chrome.storage.sync.set({booking_default: booking_json});
 						chrome.tabs.create({
 							url:'https://www.irctc.co.in/nget/train-search',
 							active: true
 						});
 					}, hash);
-
 					gaEvent("BOOKING_FORM", "clicked", "Booking Trigger");
 				}
 			});
@@ -321,7 +320,8 @@ const getAvailableTrains = function(){
 }
 
 const openBlankForm = function(){
-	$('#nav-home-tab').tab('show');
+	// $('#nav-home-tab').tab('show');
+	window.location.href = window.location.origin + window.location.pathname + '?tab=new';
 }
 
 const openAlertModel = function(){
@@ -376,10 +376,22 @@ const updateBookingData = function(key = null, formJson = null, type='new'){
 			}else{
 				gaEvent("BOOKING_FORM", "clicked", "Booking Save");
 			}
-			$('button[type="reset"]').trigger('click');
+			// $('button[type="reset"]').trigger('click');
+			console.log(formJson);
+			chrome.storage.sync.get(['booking_active'], function(active){
+				if(key === btoa(active.booking_active.booking_form_name)){
+					chrome.storage.sync.set({'booking_active': formJson}, function(){
+						// chrome.storage.sync.get(['booking_active'], function(active){ console.log(active.booking_active);});
+					});
+				}else{
+					console.log('not match');
+				}
+			});
 			window.location.href = window.location.origin + window.location.pathname + '?tab=trips';
 		});
 	});
+
+
 }
 
 /*const saveBookingForm = function(){
@@ -575,13 +587,13 @@ const fillPassengerC = function(record){
 	}
 }
 
-const encrypt = function(value, key=null){
+/*const encrypt = function(value, key=null){
 	return CryptoJS.AES.encrypt(value, STORAGE_KEY_PREFIX + "-" +key).toString();
 }
 
 const decrypt = function(value, key=null){
 	return CryptoJS.AES.decrypt(value, STORAGE_KEY_PREFIX + "-" +key).toString(CryptoJS.enc.Utf8);
-}
+}*/
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
 	if("Extention OFF" === message){

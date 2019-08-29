@@ -3,6 +3,7 @@ const STEP2_URL = "https://www.irctc.co.in/nget/train-list";
 const STEP3_URL = "https://www.irctc.co.in/nget/psgninput";
 const STEP4_URL = "https://www.irctc.co.in/nget/reviewBooking";
 const STEP5_URL = "https://www.irctc.co.in/nget/bkgPaymentOptions";
+const ERROR_URL = "https://www.irctc.co.in/nget/error";
 
 const IRCTC_STATION_LIST = "https://www.irctc.co.in/eticketing/StationLinguisticNames?hl=en";
 // https://www.irctc.co.in/eticketing/StationLinguisticNames?hl=en_hi
@@ -307,3 +308,12 @@ _gaq.push(['_setAccount', 'UA-54657154-2']);
   var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 })();
 
+
+
+const encrypt = function(value, key=null){
+	return CryptoJS.AES.encrypt(value, STORAGE_KEY_PREFIX + "-" +key).toString();
+}
+
+const decrypt = function(value, key=null){
+	return CryptoJS.AES.decrypt(value, STORAGE_KEY_PREFIX + "-" +key).toString(CryptoJS.enc.Utf8);
+}
