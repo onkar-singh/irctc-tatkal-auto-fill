@@ -18,7 +18,7 @@ const support_email_message = `Hi,`+br+`I want support regarding this extention.
 const bugReport_email_message = `Hi,`+br+`I wanted to intimate you regarding the bug i found in this app. Please Fix this as soon as possible.`+br+`Name:`+br+`Mobile:`;
 const feedSugges_email_message = `Hi,`+br+`I want to inform you that I am very happy this app and it's wokring fine with me.`+br+`Name:`+br+`Mobile:`;
 
-const PRODUCTION = false;
+const PRODUCTION = true;
 
 let weeks = ["", "Monday", "Tuesday", "Wednesday", "Thrusday", "Friday", "Saturday", "Sunday"];
 let M_to_month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -261,6 +261,18 @@ let CARD_POPUP = `
 
 // Standard Google Universal Analytics code
 
+var _gaq = _gaq || [];
+_gaq.push(['_setAccount', 'UA-54657154-2']);
+
+(function() {
+  var ga = document.createElement('script'); ga.type = 'text/javascript';
+  ga.async = true;
+  ga.src = 'https://ssl.google-analytics.com/ga.js';
+  var s = document.getElementsByTagName('script')[0];
+  s.parentNode.insertBefore(ga, s);
+})();
+
+
 /*(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -270,35 +282,17 @@ ga('create', 'UA-54657154-2', 'auto');
 ga('send', 'pageview', '/booking_form.html');
 */
 function gaPage(pageName){
-	return;
-	console.debug("PageView Logged =", pageName);
-	 _gaq.push(['_trackPageview', pageName]);
-	// ga('send', 'pageview', pageName);
+	if(PRODUCTION === true){
+		_gaq.push(['_trackPageview', pageName]);
+	}
 }
 
 function gaEvent(categoryName, actionName, labelName){
-	return;
-	console.debug([categoryName, actionName, labelName]);
-	_gaq.push(['_trackEvent', categoryName, actionName, labelName]);
-	// _trackEvent(category, action, opt_label, opt_value, opt_noninteraction)
-	/*ga('send', {
-		hitType: 'event',
-		eventCategory: 'TatkalExtention',
-		eventAction: eventName,
-		eventLabel: 'testEvent'
-	});*/
+	if(PRODUCTION === true){
+		_gaq.push(['_trackEvent', categoryName, actionName, labelName]);
+	}
 }
 
-
-var _gaq = _gaq || [];
-_gaq.push(['_setAccount', 'UA-54657154-2']);
-// _gaq.push(['_trackPageview']);
-
-(function() {
-  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-  ga.src = 'https://ssl.google-analytics.com/ga.js';
-  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-})();
 
 
 

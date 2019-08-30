@@ -10,18 +10,17 @@ $(function(){
 
 	let hash = $_GET('hash');
 	if(null !== hash){
-		console.log('Hash');
 		renderPaymentBlock();
+		gaPage('/booking_form.html?tab=hash');
 		getBookingData(renderFormWithData, hash);
 	}else if($_GET('tab') == 'trips'){
-		console.log('Trips');
 		updatePendingView();
 		$('.nav-tabs a[aria-controls="nav-pending"]').tab('show');
+		gaPage('/booking_form.html?tab=trips');
 	}else if($_GET('tab') == 'new'){
-		console.log('New');
 		renderPaymentBlock();
 		$('.nav-tabs a[aria-controls="nav-new"]').tab('show');
-		// gaPage('/booking_form.html');
+		gaPage('/booking_form.html?tab=new');
 		$('#formName').focus();
 	}
 });
@@ -117,7 +116,7 @@ const initApp = function(){
 }
 
 const redirectTab = function(this_){
-	window.location.href = './booking_form.html?tab='+$(this_.target).attr('aria-tab');
+	window.location.href = './booking_form.html?tab=' + $(this_.target).attr('aria-tab');
 }
 
 const resetPassengerRow = function(this_){
@@ -147,7 +146,6 @@ const resetPassengerRow = function(this_){
 const renderPaymentBlock = function(){
 	$('#payment-method-radio').html('');
 	$.each(payment_opt, function(pc, ptext){
-		// time_now = (new Date()).getTime();
 		let input_radio = $('<input/>').addClass('form-check-input').attr({
 			'type': "radio",
 			"name": "pay_mod",
@@ -158,7 +156,6 @@ const renderPaymentBlock = function(){
 		let radio_label = $('<label/>').addClass('form-check-label').attr({
 			"for": "pay_mod_"+pc
 		}).text(ptext);
-		// console.log(['Inarray = ',$.inArray(pc, permit_payment)]);
 		if(-1 == $.inArray(pc, permit_payment)){
 			return true;
 			input_radio.prop('disabled', true);
@@ -223,9 +220,7 @@ const updatePendingView = function(renderHash = null){
 	getBookingData(function(b_data){
 		if(typeof b_data !== 'undefined' && Object.keys(b_data).length > 0){
 			$.each(b_data, function(k,v){
-				// console.log(v.booking_form_name);
 				let html_temp = card_tmpl;
-				console.log(v.j_date);
 				jd_parts = v.j_date.split('-');
 				let temp = {
 					hash: k,
@@ -306,9 +301,7 @@ const getAvailableTrains = function(){
 		$.ajax({
 			type: 'GET',
 			url: 'https://erail.in/rail/getTrains.aspx?Station_From=GAYA&Station_To=PNBE&Cache=true',
-			// data: {'stn1': stn1,'stn2':stn2},
 			dataType: 'JSONP',
-			// crossDomain : true,
 			success: function(resp){
 				console.log(resp);
 			},
@@ -320,7 +313,6 @@ const getAvailableTrains = function(){
 }
 
 const openBlankForm = function(){
-	// $('#nav-home-tab').tab('show');
 	window.location.href = window.location.origin + window.location.pathname + '?tab=new';
 }
 
@@ -332,7 +324,6 @@ const openAlertModel = function(){
 const checkHash = function(){
 	let key = btoa($('#formName').val());
 	getBookingData(function(resp){
-		// BOOKING_DATA = booking_data || {};
 		if(typeof resp[key]!=='undefined'){
 			$('#note-alert').modal('hide');
 			$('#confirmSave').modal('show');
@@ -376,12 +367,9 @@ const updateBookingData = function(key = null, formJson = null, type='new'){
 			}else{
 				gaEvent("BOOKING_FORM", "clicked", "Booking Save");
 			}
-			// $('button[type="reset"]').trigger('click');
-			console.log(formJson);
 			chrome.storage.sync.get(['booking_active'], function(active){
 				if(key === btoa(active.booking_active.booking_form_name)){
 					chrome.storage.sync.set({'booking_active': formJson}, function(){
-						// chrome.storage.sync.get(['booking_active'], function(active){ console.log(active.booking_active);});
 					});
 				}else{
 					console.log('not match');
@@ -394,45 +382,7 @@ const updateBookingData = function(key = null, formJson = null, type='new'){
 
 }
 
-/*const saveBookingForm = function(){
-	let key = btoa($('#formName').val());
-	$('#note-alert').modal('hide');
-	getBookingData(function(booking_data){
-		booking_data = booking_data || {};
-		let status=true;
-		let old = false;
-		if(typeof booking_data[key]!=='undefined'){
-			old = true;
-			status = confirm('Form Name already present. Do you want to update?');
-		}
-		if(status === true){
-			booking_data[key] = formJSON();
-			// console.log(booking_data[key]);
-			chrome.storage.sync.set({"booking_data": booking_data}, function() {
-				// chrome.storage.sync.set({booking_default: booking_data[key]});
-				// alert('Your Form successfully saved with "'+ $('#formName').val() +'"');
-				$.toast({
-					heading: 'Form Save',
-					text: 'Your Form successfully saved with <strong>'+ $('#formName').val() +'</strong>',
-					position: 'bottom-right',
-					stack: false
-				});
-				updatePendingView();
-				$('button[type="reset"]').trigger('click');
-				$('[href="#nav-pending"]').tab('show');
-			});
-		}
-		if(old){
-			gaEvent("BOOKING_FORM", "clicked", "Booking Update");
-		}else{
-			gaEvent("BOOKING_FORM", "clicked", "Booking Save");
-		}
-	});
-	return false;
-}
-*/
 const formJSON = function(){
-
 	let	formJson = {
 		"auto_upgradation": false,
 		"auto_proceed": false,
@@ -440,26 +390,6 @@ const formJSON = function(){
 		"coach_preferred": false,
 		"seq_question": false,
 		"psngr": {"C" :[], "A": []},
-		// new format json
-		/*"form": {
-			"name": $('[name="booking_form_name"]').val(),
-			 "comment": $('[name="booking_form_comment"]').val()
-		},
-		"login": {
-			"username": $('[name="IRCTC_username"]').val(),
-			"password": $('[name="IRCTC_pwd"]').val()
-		},
-		"jdetail": {
-			"stn_from": $('[name="from_station"]').val(),
-			"stn_to": $('[name="to_station"]').val(),
-			"j_date": $('[name="j_date"]').val(),
-			"train": $('[name="train"]').val(),
-			"coach_class": $('[name="coach_class"]').val(),
-			"booking_quota": $('[name="booking_quota"]').val(),
-			"boarding_stn": $('[name="boarding_stn"]').val(),
-			"mobile_no": $('[name="mobile_no"]').val(),
-		},
-		"passenger": {"A": [], "C": []},*/
 	};
 	let form_data = $('#booking_form').serializeArray();
 	$.each(Object.keys(form_data), function(k,v){
@@ -526,7 +456,6 @@ const getBookingData = function(callback = false, key = false){
 
 const renderFormWithData = function(json){
 	$('[type="reset"]').trigger('click');
-	console.log(json);
 	$.each(json, function(k,v){
 		if(k == 'psngr'){
 			v.A.forEach(fillPassengerA);
@@ -547,7 +476,6 @@ const renderFormWithData = function(json){
 			$('[name="bank_name"]').val(json.bank_name);
 		}
 
-
 		if(k === 'seq_question' && v !== false){
 			$('[data-field="dob"]').val(v.dob);
 			$('[data-field="login_id"]').val(v.login_id);
@@ -559,7 +487,6 @@ const renderFormWithData = function(json){
 			$('#enable_sq').prop('checked', false);
 		}
 	});
-	// $('[href="#nav-new"]').trigger('click');
 }
 
 let fill_PA_index = 0;
@@ -589,14 +516,6 @@ const fillPassengerC = function(record){
 		fill_CA_index++;
 	}
 }
-
-/*const encrypt = function(value, key=null){
-	return CryptoJS.AES.encrypt(value, STORAGE_KEY_PREFIX + "-" +key).toString();
-}
-
-const decrypt = function(value, key=null){
-	return CryptoJS.AES.decrypt(value, STORAGE_KEY_PREFIX + "-" +key).toString(CryptoJS.enc.Utf8);
-}*/
 
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse){
 	if("Extention OFF" === message){

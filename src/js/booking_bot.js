@@ -89,16 +89,12 @@ window.onkeyup = function(e){
 }
 
 const fillForceUpdate = function(){
-	// clearTimeout(timer);
 	watcher = false;
 	chrome.storage.sync.get(['booking_active'], function(result) {
-		console.log(result);
 		bookingActive = result.booking_active;
-		console.log(bookingActive);
 	});
 
 	let page = getPageStep();
-	// shortcut = true;
 	if(page === 1){
 		$('[placeholder="From*"]').val('');
 	}else if(page === 2){
@@ -108,12 +104,12 @@ const fillForceUpdate = function(){
 	}else if(page === 4){
 
 	}else if(page === 5){
-
+		selectPaymentMethod();
+		selectPaymentBank();
 	}else if(page === 6){
 		window.location.href = STEP1_URL;
 	}
 	watcher = true;
-	// shortcut = false;
 }
 
 function modifySearch(){
@@ -285,20 +281,16 @@ function fillLogin(){
 
 // TODO: fill search detail
 function fillSearchDetail(){
-	// fromStation = document.querySelectorAll("[placeholder='From*']")[0];
-	// toStation = document.querySelectorAll("[placeholder='To*']")[0];
 	fromStation = document.querySelectorAll("p-autocomplete[id='origin']")[0].querySelectorAll('input')[0];
 	toStation = document.querySelectorAll("p-autocomplete[id='destination']")[0].querySelectorAll('input')[0];
 	journeydate = document.querySelectorAll("[placeholder='Journey Date(dd-mm-yyyy)*']")[1];
 	classCaret = document.getElementById('journeyClass').querySelectorAll('.fa-caret-down')[0];
 
-	// fromStation.value = bookingActive.from_station;
 	fromStation.value = bookingActive.from_station;
 	fromStation.dispatchEvent(new Event('keydown'));
 	fromStation.dispatchEvent(new Event('input'));
 
 	toStation.value = bookingActive.to_station;
-	// toStation.value = "GAYA JN - GAYA";
 	toStation.dispatchEvent(new Event('keydown'));
 	toStation.dispatchEvent(new Event('input'));
 	toStation.click();
@@ -308,23 +300,19 @@ function fillSearchDetail(){
 	journeydate.dispatchEvent(new Event('input'));
 
 	classCaret.click();
-	// class_list  = ["EA","1A","2A","3A","EC","FC","3E","CC","SL","2S"];
 	$("#journeyClass span:contains('"+ bookingActive.coach_class +"')").parent().trigger('click');
-	// searchSubmit.click();
 	$.toast('Journey Detail Filled', "SUCCESS");
-	// gaEvent("IRCTC_STATE", "clicked", "journey detail filled");
+	gaEvent("IRCTC_STATE", "clicked", "journey detail filled");
 }
 
 function triggerSearchBtn(){
 	if(true === bookingActive.auto_proceed || true == shortcut){
-		// searchSubmit = document.querySelectorAll('[type="submit"]')[3];
 		searchSubmit = document.querySelectorAll('[type="submit"][label="Find Trains"]')[0];
 		searchSubmit.click();
 		$.toast("Journey Search done");
-		// gaEvent("IRCTC_STATE", "clicked", "journey detail proceed");
+		gaEvent("IRCTC_STATE", "clicked", "journey detail proceed");
 	}else{
 		$.toast('Proceed Manually [Search Journey]');
-		// console.log('Proceed Manually [Search Journey]');
 	}
 }
 
@@ -334,12 +322,10 @@ function selectQuota(){
 	quota_item = search_quota_div.querySelectorAll('.ui-dropdown-item');
 	regEx_quota = new RegExp(valid_quota[bookingActive.booking_quota]);
 	for(let i=0; i<quota_item.length; i++){
-		// console.log(quota_item[i]);
-		// console.log(quota_item[i].outerHTML);
 		if(regEx_quota.test(quota_item[i].outerHTML)){
 			quota_item[i].click();
 			$.toast("Quota Selected", "SUCCESS");
-			// gaEvent("IRCTC_STATE", "clicked", "quota selected");
+			gaEvent("IRCTC_STATE", "clicked", "quota selected");
 			break;
 		}
 	}
@@ -364,7 +350,7 @@ function selectTrainCard(){
 		target_train_list.style = "background-color:yellow !important;border-color:#3C4637 !important;";
 		target_train_list.setAttribute('selected-train', true);
 		$.toast("Target Train Found");
-		// gaEvent("IRCTC_STATE", "clicked", "train selected");
+		gaEvent("IRCTC_STATE", "clicked", "train selected");
 	}else{
 		$.toast("Train no <b>["+ train_no +"]</b> not found for this trip, please change train", 'ERROR');
 	}
@@ -388,7 +374,6 @@ function triggerAvailBtn(){
 		document.querySelectorAll('.train_avl_enq_box[selected-train="true"] button')[0].click();
 		$.toast("Checking Availability..");
 	}else{
-		// console.log('Proceed Manually [Check Availability]');
 		$.toast("Proceed Manually [Check Availability]");
 	}
 }
@@ -398,10 +383,8 @@ function triggerBookNowBtn(){
 		b_date = bookingActive.j_date.split('-');
 		b_date[1] = M_to_month[b_date[1] - 1];
 		date_d_M_Y = b_date.join(' ');
-		// console.log(date_d_M_Y);
 		book_now_btn = $('.train_avl_enq_box[selected-train="true"] td:contains("'+date_d_M_Y+'") button[type="submit"]');
 		book_now_div = book_now_btn.parent('div');
-		// book_now_div.attr('style','visibility: hidden;');
 		if(true == /visible/.test(book_now_div.attr('style'))){
 			book_now_btn.trigger('click');
 		}else{
@@ -410,13 +393,11 @@ function triggerBookNowBtn(){
 	}
 	else{
 		$.toast("Proceed Manually [Book Now]");
-		// console.log('Proceed Manually [Book Now]');
 	}
 }
 
 // TODO: fill passengers detail
 function fillPassengersDetail(){
-	// console.log(bookingActive.psngr['A']);
 	apf = document.querySelectorAll('app-passenger');
 	bookingActive.psngr['A'] = bookingActive.psngr['A'].filter((obj) => obj );
 	ap_count = bookingActive.psngr['A'].length;
@@ -449,7 +430,6 @@ function fillPassengersDetail(){
 	});
 
 
-	// console.log(bookingActive.psngr['C']);
 	cpf = document.querySelectorAll('.passengerDiv [formarrayname="infantList"] .infant_box');
 	bookingActive.psngr['C'] = bookingActive.psngr['C'].filter((obj) => obj );
 	cp_count = bookingActive.psngr['C'].length;
@@ -472,37 +452,31 @@ function fillPassengersDetail(){
 		setPassengerValue(input_select[2], passenger.gender);
 	});
 
-	// console.log(booking_data);
 	mobile_no = document.querySelectorAll('#mobileNumber')[0];
 	mobile_no.value = bookingActive.mobile_no;
 
 	// Booking Options
 	if(true === bookingActive.auto_upgradation){
-		// console.log($('[name="autoUpgradation"]'));
 		$('[name="autoUpgradation"]').prop('checked', true);
 	}
 	if(true === bookingActive.confirm_berths){
-		// console.log($('[name="confirmberths"]'));
 		$('[name="confirmberths"]').prop('checked', true);
 	}
 	if(true === bookingActive.coach_preferred){
-		// console.log($('[name="coachPreferred"]'));
 		$('[name="coachPreferred"]').prop('checked', true);
-		// console.log($('[formcontrolname="coachId"]'));
 		$('[formcontrolname="coachId"]').val(bookingActive.coach_preferred_no);
 	}
 
 	$('[formcontrolname="reservationChoice"][value="'+ bookingActive.reservation_choice +'"]').prop('checked', true);
 
 	// insurance mark ad YES
-	// $('#travelInsuranceOptedYes').prop('checked', true).trigger('change');
 	if(document.querySelectorAll('#travelInsuranceOptedYes').length > 0 && bookingActive.insurance_choice == "YES")
 		$('#travelInsuranceOptedYes').click();
-	// $('#travelInsuranceOptedYes')[0].dispatchEvent(new Event('change'));
 
 	// Mark as done
 	document.querySelectorAll('.stepwizard-step')[0].setAttribute('passenger-info', 'filled');
 	// TODO: Scroll page and focus to captcha
+	nlp_focus();
 	$.toast("Passenger Details Filled, [Enter Captcha]", "SUCCESS");
 }
 
@@ -517,6 +491,10 @@ function setPassengerValue(element, value) {
 		element.dispatchEvent(new Event('change'));
 	}
 }
+
+const nlp_focus = function(){
+	$('#nlpAnswer').focus();
+};
 
 function reviewDone(){
 	if(true === bookingActive.auto_proceed){
@@ -544,8 +522,7 @@ function selectPaymentMethod(){
 			$.toast("Payment Method Selected");
 			return false;
 		}else{
-			console.log('payment method not matching');
-			console.log([link.innerText, payment_opt]);
+			// $.toast('Payment method not matching');
 		}
 	});
 }
@@ -583,7 +560,7 @@ function waitLoop(){
 	}
 
 	step_need = detectStep();
-	console.log(step_need);
+	// console.log(step_need);
 	if(step_need == 'login-open' || step_need == 'login-fill'){
 		fillLogin();
 	}else if(step_need == 'login-wait'){
@@ -605,6 +582,7 @@ function waitLoop(){
 	}else if(step_need == 'fill-passenger'){
 		fillPassengersDetail();
 	}else if(step_need == 'wait-passenger-captcha'){
+		nlp_focus();
 		$.toast('Proceed Manually [Fill Captcha and click Continue]');
 	}else if(step_need == 'wait-review'){
 		reviewDone();
