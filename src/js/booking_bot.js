@@ -13,17 +13,8 @@ document.body.onload = function(){
 		if(true === watcher){
 			chrome.storage.sync.get(['booking_active'], function(result) {
 				bookingActive = result.booking_active;
-				// fillSearchDetail();
 				$.toast("Booking Started you need to <strong>click</strong> only three palce and two captcha");
 				waitLoop();
-				// hours = (new Date()).getHours();
-				/*if(bookingActive.booking_quota == 'GN' && (hours == 10 || hours == 11)){
-					$.toast("Booking Can't Started because it's Tatkal Time and you are tring to book General ticke. please try after tatkal time.");
-				}else{
-					fillSearchDetail();
-					$.toast("Booking Started you need to <strong>click</strong> only three palce and two captcha");
-					waitLoop();
-				}*/
 			});
 		}
 	});
@@ -43,7 +34,7 @@ window.onkeyup = function(e){
     if(e.altKey)
     	pressed += 'Alt';
     pressed += e.keyCode;
-    console.log(pressed);
+    // console.log(pressed);
 
    	if(pressed === 'Alt65'){
    		shortcut = true;

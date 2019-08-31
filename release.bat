@@ -1,6 +1,7 @@
 @ECHO OFF
 ECHO Please wait we are working on release process...
 set /p release_version="Enter Release Version: "
+set app_name = "SuperTatkal-ChromeExtention"
 set temp_release="%~dp0releases\temp\"%release_version%\
 mkdir %temp_release%
 xcopy "%~dp0README.md" %temp_release%"README.md"
