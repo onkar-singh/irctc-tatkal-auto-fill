@@ -218,6 +218,7 @@ const $_GET = function(key){
 const updatePendingView = function(renderHash = null){
 	$('#booking_card').html('');
 	getBookingData(function(b_data){
+		console.log(b_data);
 		if(typeof b_data !== 'undefined' && Object.keys(b_data).length > 0){
 			$.each(b_data, function(k,v){
 				let html_temp = card_tmpl;
@@ -324,13 +325,16 @@ const openAlertModel = function(){
 const checkHash = function(){
 	let key = btoa($('#formName').val());
 	getBookingData(function(resp){
-		if(typeof resp[key]!=='undefined'){
+		console.log(key);
+		console.log(resp);
+		if(typeof resp === 'undefined' || typeof resp[key] === 'undefined'){
+			updateBookingData(key, formJSON());
+			console.log('saving');
+			$('#note-alert').modal('hide');
+		}else{
 			$('#note-alert').modal('hide');
 			$('#confirmSave').modal('show');
 			return false;
-		}else{
-			updateBookingData(key, formJSON());
-			$('#note-alert').modal('hide');
 		}
 	});
 }
@@ -359,6 +363,10 @@ const updateBookingData = function(key = null, formJson = null, type='new'){
 	}
 	getBookingData(function(resp){
 		BOOKING_DATA[key] = formJson;
+
+		if(typeof resp === 'undefined')
+			resp = {};
+
 		resp[key] = formJson;
 		chrome.storage.sync.set({booking_data: resp}, function() {
 			updatePendingView();
@@ -383,6 +391,7 @@ const updateBookingData = function(key = null, formJson = null, type='new'){
 }
 
 const formJSON = function(){
+
 	let	formJson = {
 		"auto_upgradation": false,
 		"auto_proceed": false,

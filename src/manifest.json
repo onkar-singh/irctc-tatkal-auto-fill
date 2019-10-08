@@ -30,5 +30,5 @@
     "optional_permissions": [ "webRequest", "webRequestBlocking", "identity" ],
     "permissions": [ "https://*.irctc.co.in/*", "http://*.irctc.co.in/*", "storage", "tabs", "activeTab", "gcm"],
     "short_name": "IRCTC Tatkal Auto fill",
-    "version": "1.0.0"
+    "version": "1.0.2"
 }
