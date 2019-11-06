@@ -1,8 +1,6 @@
 $(function(){
 	$('#version').text('version - '+ chrome.app.getDetails().version);
 	$('#app-name').text(chrome.app.getDetails().name);
-	// TODO: get current targeted ticket in UI
-
 	initPopup();
 	gaPage('/popup.html');
 })
@@ -53,14 +51,6 @@ const initPopup = function(){
 			}, 500);
 		});
 	});
-
-
-	/*document.onkeyup = function(e) {
-		if (e.which == 120) {
-			$('[data-action="triggerBooking"]').trigger('click');
-			gaEvent("POPUP", "Hot Key", "Booking Trigger");
-		}
-	};*/
 }
 
 const renderPopupCards = function(){
@@ -170,11 +160,3 @@ const renderPopupCards = function(){
 
 	});
 };
-
-/*const sendMessage= function(tab){
-	let msg = {'key': "ExtentionStatus"};
-	chrome.tabs.sendMessage(tab.id, msg);
-}*/
-
-
-

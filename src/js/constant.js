@@ -1,14 +1,16 @@
 const STEP1_URL = "https://www.irctc.co.in/nget/train-search";
-const STEP2_URL = "https://www.irctc.co.in/nget/train-list";
-const STEP3_URL = "https://www.irctc.co.in/nget/psgninput";
-const STEP4_URL = "https://www.irctc.co.in/nget/reviewBooking";
-const STEP5_URL = "https://www.irctc.co.in/nget/bkgPaymentOptions";
+const STEP2_URL = "https://www.irctc.co.in/nget/booking/train-list";
+const STEP3_URL = "https://www.irctc.co.in/nget/booking/psgninput";
+const STEP4_URL = "https://www.irctc.co.in/nget/booking/reviewBooking";
+const STEP5_URL = "https://www.irctc.co.in/nget/payment/bkgPaymentOptions";
 const ERROR_URL = "https://www.irctc.co.in/nget/error";
+
 
 const IRCTC_STATION_LIST = "https://www.irctc.co.in/eticketing/StationLinguisticNames?hl=en";
 // https://www.irctc.co.in/eticketing/StationLinguisticNames?hl=en_hi
 // https://www.irctc.co.in/eticketing/StationLinguisticNames?hl=en
 // http://www.indianrail.gov.in/mail_express_trn_list.html
+
 
 const STORAGE_KEY_PREFIX = "SuperFastTatkal";
 
