@@ -14,7 +14,7 @@
             "js": ["js/jquery-3.3.1.min.js", "js/aes.js", "js/constant.js", "js/trains.js", "js/booking_bot.js"],
             "matches": ["http://*.irctc.co.in/*", "https://*.irctc.co.in/*"],
             "run_at": "document_end"
-        }
+        }        
     ],
     "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
     "description": "A auto-fill extension to process IRCTC Tatkaal booking to avoid user form entry at Tatkaal booking. by [http://patelworld.in]",
@@ -30,5 +30,5 @@
     "optional_permissions": [ "webRequest", "webRequestBlocking", "identity" ],
     "permissions": [ "https://*.irctc.co.in/*", "http://*.irctc.co.in/*", "storage", "tabs", "activeTab", "gcm"],
     "short_name": "IRCTC Tatkal Auto fill",
-    "version": "1.0.3"
+    "version": "1.0.4"
 }

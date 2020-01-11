@@ -17,7 +17,7 @@ document.body.onload = function(){
 				waitLoop();
 			});
 		}
-	});
+	});	
 };
 
 /**
@@ -159,7 +159,7 @@ function detectStep(){
 	if(url_now === STEP1_URL){
 		if(true === $('#loginText').is(":visible")){
 			if(true === $('app-login p-dialog div').is(':visible')){
-				if($('#userId').val() == "" || $('#pwd').val() == "")
+				if($('#userId').val() !== bookingActive.IRCTC_username || $('#pwd').val() !== bookingActive.IRCTC_pwd)
 					return 'login-fill';	// login-fill
 				else
 					return 'login-wait';	//login-wait

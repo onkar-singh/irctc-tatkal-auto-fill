@@ -5,6 +5,11 @@ const STEP4_URL = "https://www.irctc.co.in/nget/booking/reviewBooking";
 const STEP5_URL = "https://www.irctc.co.in/nget/payment/bkgPaymentOptions";
 const ERROR_URL = "https://www.irctc.co.in/nget/error";
 
+/**
+ * Payments URL
+ */
+const CARD_HDFC_DEBIT = 'https://securepayments.fssnet.co.in/hdfcbankb/paymentpage.htm';
+
 
 const IRCTC_STATION_LIST = "https://www.irctc.co.in/eticketing/StationLinguisticNames?hl=en";
 // https://www.irctc.co.in/eticketing/StationLinguisticNames?hl=en_hi
