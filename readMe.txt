@@ -12,6 +12,18 @@ run release.bat as administrator
 git tag
 git tag v0.0.0
 git push origin v0.0.0
-enter username: mukesh_gam_m@yahoo.com
+enter username: mukesh_gam_m@yahoo.com / patelnwd
 pass: 
 #-------------------------------------------------------------------------
+
+
+#-------------------------------------------------
+#   deleting tag
+#-------------------------------------------------
+LOCAL: 
+	git tag -d <tag_name>
+	ex. git tag -d v2.0
+Remote: 
+	git push --delete origin tagname
+
+

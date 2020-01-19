@@ -1,5 +1,8 @@
 let BOOKING_DATA = {};
 let extention_status = false;
+let timeout_error;
+const REGEX_MOBILE = /^\d{10}$/;
+
 
 $(function(){
 	// chrome.storage.sync.set({booking_data: {}});
@@ -318,18 +321,52 @@ const openBlankForm = function(){
 }
 
 const openAlertModel = function(){
-	$('#note-alert').modal('show');
-	return false;
+	try {
+		validateFormInput();
+		$('#note-alert').modal('show');		
+		return false;
+	} catch (e) {
+		$.toast(e, 'ERROR');
+		$('body #toast').removeAttr('hidden');		
+		clearTimeout(timeout_error);
+		timeout_error = setTimeout(() => {
+			let fout_time = 1500;
+			$('body #toast').fadeOut(fout_time);
+			setTimeout(() => { $('body #toast').remove(); }, fout_time + 500);			
+		}, 3000);
+		return false;
+	}
 }
+
+const validateFormInput = () => {
+	let temp_data = formJSON();
+	if(-1 == temp_data.from_station.search(/-/i)){
+		$('#from_station').focus();
+		throw "Invalid from station given";
+	}else if(-1 == temp_data.to_station.search(/-/i)){
+		$('#to_station').focus();
+		throw "Invalid To Station given";
+	}else if(temp_data.j_date == ""){
+		$('#j_date').focus();
+		throw "Journey date missing, Please provide journey date";
+	}else if(-1 == temp_data.train.search(/:/i)){
+		$('#train').focus();
+		throw "Invalid Train no given";
+	}else if(-1 == temp_data.boarding_stn.search(/-/i)){
+		$('#boarding_stn').focus();
+		throw "Invalid Boarding Station";
+	}else if(!temp_data.mobile_no.match(REGEX_MOBILE)){
+		$('#mobile_no').focus();
+		throw "Mobile number should be only 10 digit of number";
+	}
+	return true;
+} 
 
 const checkHash = function(){
 	let key = btoa($('#formName').val());
 	getBookingData(function(resp){
-		console.log(key);
-		console.log(resp);
 		if(typeof resp === 'undefined' || typeof resp[key] === 'undefined'){
 			updateBookingData(key, formJSON());
-			console.log('saving');
 			$('#note-alert').modal('hide');
 		}else{
 			$('#note-alert').modal('hide');
